@@ -104,12 +104,14 @@ app.post('/uplink_from_helium', (req, res) => {
     .catch(err => logger.error(err))
     .then(json => {
             let authorization_header = 'Bearer ' + json.access_token;
-            logger.info(`UL: DevEUI: ${devEUI}: Authorization header received from DX-API:\n ${authorization_header}`);
+            logger.info(`UL: DevEUI: ${devEUI}: Authorization header received from DX-API`);
+            // logger.info(authorization_header);
             return authorization_header;
     })
     .catch(err => logger.error(err))
     .then(authorization_header => {
-        logger.info(`UL: DevEUI: ${devEUI}: Message translated for TPXLE:\n ${JSON.stringify(translated_body, null, 2)}`);
+        logger.info(`UL: DevEUI: ${devEUI}: Message translated for TPXLE`);
+        // logger.info(JSON.stringify(translated_body, null, 2));
         return fetch(
             TPXLE_FEED_URL,
             {
@@ -198,5 +200,5 @@ app.get('/test', (req, res) => {
 });
 
 app.listen(NIT_SERVER_PORT, () => {
-  logger.info(`Example app listening at http://localhost:${NIT_SERVER_PORT}`);
+  logger.info(`TPXLE NIT is listening at http://localhost:${NIT_SERVER_PORT}`);
 });
