@@ -7,6 +7,7 @@ import winston from 'winston';
 import 'winston-daily-rotate-file';
 
 import { uplink, downlink } from './nit-helium.js';
+import { createSecureContext } from 'tls';
 
 const NIT_SERVER_PORT = 8081;
 const TPXLE_FEED_URL = "https://dx-api.thingpark.io/location/latest/api/feeds";
@@ -25,6 +26,8 @@ const logger = winston.createLogger({
         dirname: '/var/log/nit',
         filename: 'error-%DATE%.log',
         datePattern: 'YYYY-MM-DD_HH',
+        createSymlink: true,
+        symlinkName: 'error-current.log',
         frequency: '3h',
         maxFiles: '2d',
         level: 'error',
@@ -33,6 +36,8 @@ const logger = winston.createLogger({
         dirname: '/var/log/nit',
         filename: 'info-%DATE%.log',
         datePattern: 'YYYY-MM-DD_HH',
+        createSymlink: true,
+        symlinkName: 'info-current.log',
         frequency: '3h',
         maxFiles: '2d',
         level: 'info',
@@ -61,7 +66,7 @@ const getAsync = promisify(redis_client.get).bind(redis_client);
 app.use(json())
 app.post('/uplink_from_helium', (req, res) => {
 
-    let devEUI = req.body.dev_eui;
+    let devEUI = req.body.dev_eui.toLowerCase();
 
     logger.info(`UL: DevEUI: ${devEUI}: UL message received from Helium.`);
 
@@ -141,7 +146,7 @@ app.post('/uplink_from_helium', (req, res) => {
 
 app.post('/downlink_to_helium', (req, res) => {
 
-    let devEUI = req.body.deveui;
+    let devEUI = req.body.deveui.toLowerCase();
 
     logger.info(`DL: DevEUI: ${devEUI}: DL message received from TPXLE.`);
 
@@ -160,7 +165,7 @@ app.post('/downlink_to_helium', (req, res) => {
     .then(helium_downlink_url => {
         logger.info(`DL: DevEUI: ${devEUI}: helium_downlink_url retreived from DB: ${helium_downlink_url}`);
         if (!helium_downlink_url) {
-            throw new Error(`DevEUI: ${devEUI}: downlink url for this DevEUI does not exist in the DB yet`);
+            throw new Error(`DL: DevEUI: ${devEUI}: downlink url for this DevEUI does not exist in the DB yet`);
         }
         return fetch(
             helium_downlink_url,
