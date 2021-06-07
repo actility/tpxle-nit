@@ -3,11 +3,15 @@ version: "3.9"
 services:
 
   app:
-    image: nherbert/tpxle-nit:0.0.1
+    # image: actility/tpxle-nit:0.0.1
     container_name: tpxle_nit_app
     volumes:
       - ./log:/var/log/nit
     working_dir: /usr/src/nit
+
+    entrypoint: ["tail"]
+    command: ["-f","/dev/null"]
+
     ports:
       - 8081:8081
 
