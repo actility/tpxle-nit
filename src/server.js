@@ -24,17 +24,17 @@ const logger = winston.createLogger({
       new winston.transports.DailyRotateFile({
         dirname: '/var/log/nit',
         filename: 'error-%DATE%.log',
-        datePattern: 'YYYY-MM-DDTHH:mm',
+        datePattern: 'YYYY-MM-DD_HH',
         frequency: '3h',
-        maxFiles: '7d',
+        maxFiles: '2d',
         level: 'error',
       }),
       new winston.transports.DailyRotateFile({
         dirname: '/var/log/nit',
         filename: 'info-%DATE%.log',
-        datePattern: 'YYYY-MM-DDTHH:mm',
+        datePattern: 'YYYY-MM-DD_HH',
         frequency: '3h',
-        maxFiles: '7d',
+        maxFiles: '2d',
         level: 'info',
       })
     ],
