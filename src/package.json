@@ -5,7 +5,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "NODE_ENV=prod node server.js",
+    "debug": "NODE_ENV=dev node server.js"
   },
   "author": "Norbert Herbert",
   "license": "ISC",
@@ -13,6 +14,7 @@
     "express": "^4.17.1",
     "moment": "^2.29.1",
     "node-fetch": "^2.6.1",
-    "redis": "^3.1.2"
+    "redis": "^3.1.2",
+    "winston": "^3.3.3"
   }
 }
