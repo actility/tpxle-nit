@@ -4,7 +4,7 @@ services:
 
   app:
     build: .
-    # image: actility/tpxle-nit:0.0.1
+    image: actility/tpxle-nit:0.0.1
     container_name: tpxle_nit_app
 
     volumes:

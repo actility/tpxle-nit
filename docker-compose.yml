@@ -3,7 +3,8 @@ version: "3.9"
 services:
 
   app:
-    # image: actility/tpxle-nit:0.0.1
+    build: .
+    image: actility/tpxle-nit:0.0.1
     container_name: tpxle_nit_app
     volumes:
       - ./log:/var/log/nit
