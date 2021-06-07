@@ -8,13 +8,14 @@ services:
     container_name: tpxle_nit_app
 
     #### FOR DEVELOPMENT ####
-    # volumes:
-    #   - ./src:/usr/src/app
-    # environment:
-    #   NODE_ENV: development
-    # working_dir: /usr/src/app
-    # entrypoint: ["tail"]
-    # command: ["-f","/dev/null"]
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./src:/usr/src/nit
+      - ./log:/var/log/nit
+    working_dir: /usr/src/nit
+    entrypoint: ["tail"]
+    command: ["-f","/dev/null"]
     #########################
 
     ports:
