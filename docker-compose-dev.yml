@@ -3,11 +3,26 @@ version: "3.9"
 services:
 
   app:
+    build: .
     image: nherbert/tpxle-nit:0.0.1
     container_name: tpxle_nit_app
+
     volumes:
+      - ./src:/usr/src/nit
+
+      #### FOR DEVELOPMENT ####  
       - ./log:/var/log/nit
+      #########################
+
     working_dir: /usr/src/nit
+  
+    #### FOR DEVELOPMENT ####
+    environment:
+      NODE_ENV: dev
+    entrypoint: ["tail"]
+    command: ["-f","/dev/null"]
+    #########################
+
     ports:
       - 8081:8081
 

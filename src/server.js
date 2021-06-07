@@ -3,7 +3,8 @@ import { stringify } from 'querystring';
 import fetch from 'node-fetch';
 import { createClient } from 'redis';
 import { promisify } from 'util';
-import winston from "winston";
+import winston from 'winston';
+import 'winston-daily-rotate-file';
 
 import { uplink, downlink } from './nit-helium.js';
 
@@ -18,8 +19,24 @@ const logger = winston.createLogger({
     format: winston.format.simple(),
     // defaultMeta: { service: 'nit' },
     transports: [
-      new winston.transports.File({ filename: '/var/log/fns/error.log', level: 'error' }),
-      new winston.transports.File({ filename: '/var/log/fns/combined.log', level: 'info' }),
+      // new winston.transports.File({ filename: '/var/log/nit/error.log', level: 'error' }),
+      // new winston.transports.File({ filename: '/var/log/nit/combined.log', level: 'info' }),
+      new winston.transports.DailyRotateFile({
+        dirname: '/var/log/nit',
+        filename: 'error-%DATE%.log',
+        datePattern: 'YYYY-MM-DDTHH:mm',
+        frequency: '3h',
+        maxFiles: '7d',
+        level: 'error',
+      }),
+      new winston.transports.DailyRotateFile({
+        dirname: '/var/log/nit',
+        filename: 'info-%DATE%.log',
+        datePattern: 'YYYY-MM-DDTHH:mm',
+        frequency: '3h',
+        maxFiles: '7d',
+        level: 'info',
+      })
     ],
 });
 if (process.env.NODE_ENV !== 'prod') {

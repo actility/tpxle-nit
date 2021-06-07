@@ -1,6 +1,6 @@
 # Helium Network Interface Translator for ThingPark X Location Engine
 
-## Easy installation without building the app
+## Option #1: Easy installation without building the app
 0. Make sure that beyond docker engine you have [docker-compose](https://docs.docker.com/compose/install/) available on your platform.  
 1. Create a flolder structure for the configuration, the persistent db and for the logs of the app:
     ```
@@ -8,8 +8,8 @@
     mkdir -p tpxle-nit/log
     cd tpxle-nit
     ```
-1. Download the `docker-compose-prod.yml` file from this repo.
-   Execute the following command from the previously created `tpxle-nit` folder.
+1. Download the `docker-compose.yml` file from this repo.
+   Execute the following command from the previously created `tpxle-nit` folder:
     ```
     curl https://raw.githubusercontent.com/actility/thingpark-integrations/main/3_NS-NIT-tpLS/NIT/helium/NIT_nodejs_example/docker-compose-prod.yml -o docker-compose.yml
     ```
@@ -33,10 +33,13 @@
     }
     ```
 
-## Build and test the app in a development environment
+## Option #2: Build the app locally
 ### Installation
 
 1. Clone this repo and enter to the folder of this project
+    ```
+    git clone https://github.com/actility/tpxle-nit.git
+    ```
 2. Build the docker images:
     ```
     docker-compose build
