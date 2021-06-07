@@ -1,1 +1,6 @@
+.vs/
+node_modules/
+log/*
+redis-data/*
+
 private*/
