@@ -2,9 +2,10 @@
 
 ## Easy installation without building the app
 0. Make sure that beyond docker engine you have [docker-compose](https://docs.docker.com/compose/install/) available on your platform.  
-1. Create a flolder structure for the config and the persistent db of the app:
+1. Create a flolder structure for the configuration, the persistent db and for the logs of the app:
     ```
     mkdir -p tpxle-nit/redis-data
+    mkdir -p tpxle-nit/log
     cd tpxle-nit
     ```
 1. Download the `docker-compose-prod.yml` file from this repo.
@@ -14,7 +15,7 @@
     ```
 2. Run the following command from the same directory the `docker-compose.yml` file is located.
     ```
-    docker-compose up -detach
+    docker-compose up --detach
     ```
 3. Check if the server is working
     ```
