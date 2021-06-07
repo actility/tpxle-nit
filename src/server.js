@@ -61,12 +61,14 @@ const getAsync = promisify(redis_client.get).bind(redis_client);
 app.use(json())
 app.post('/uplink_from_helium', (req, res) => {
 
-    logger.info(`UL message received from DevEUI: ${req.body.dev_eui}`);
+    let devEUI = req.body.dev_eui;
 
-    setAsync(`helium_downlink_urls:${req.body.dev_eui}`, req.body.downlink_url)
+    logger.info(`UL: DevEUI: ${devEUI}: UL message received from Helium.`);
+
+    setAsync(`helium_downlink_urls:${devEUI}`, req.body.downlink_url)
     .catch(err => logger.error(err))
     .then(redis_save_status => {
-        logger.info(`Downlink URL for DevEUI:${req.body.dev_eui} saved to db.`);
+        logger.info(`UL: DevEUI: ${devEUI}: Helium downlink URL saved to db.`);
     })
 
     let translated_body;
@@ -96,18 +98,18 @@ app.post('/uplink_from_helium', (req, res) => {
     )
     .catch(err => logger.error(err))
     .then(res1 => {
-        logger.info(`Token requested from DX-API. Response status: ${res1.status} ${res1.statusText}`);
+        logger.info(`UL: DevEUI: ${devEUI}: Token requested from DX-API. Response status: ${res1.status} ${res1.statusText}`);
         return res1.json()
     })
     .catch(err => logger.error(err))
     .then(json => {
             let authorization_header = 'Bearer ' + json.access_token;
-            logger.info(`Authorization header received from DX-API:\n ${authorization_header}`);
+            logger.info(`UL: DevEUI: ${devEUI}: Authorization header received from DX-API:\n ${authorization_header}`);
             return authorization_header;
     })
     .catch(err => logger.error(err))
     .then(authorization_header => {
-        logger.info(`Message translated for TPXLE:\n ${JSON.stringify(translated_body, null, 2)}`);
+        logger.info(`UL: DevEUI: ${devEUI}: Message translated for TPXLE:\n ${JSON.stringify(translated_body, null, 2)}`);
         return fetch(
             TPXLE_FEED_URL,
             {
@@ -122,7 +124,7 @@ app.post('/uplink_from_helium', (req, res) => {
     })
     .catch(err => logger.error(err))
     .then( res2 => {
-        logger.info(`Message forwarded to TPXLE. Response Status: ${res2.status} ${res2.statusText}`);
+        logger.info(`UL: DevEUI: ${devEUI}: Message forwarded to TPXLE. Response Status: ${res2.status} ${res2.statusText}`);
         return res2.text();
     })
     .catch(err => logger.error(err))
@@ -137,7 +139,9 @@ app.post('/uplink_from_helium', (req, res) => {
 
 app.post('/downlink_to_helium', (req, res) => {
 
-    logger.info(`DL message received from TPXLE. Destination DevEUI: ${req.body.deveui}`);
+    let devEUI = req.body.deveui;
+
+    logger.info(`DL: DevEUI: ${devEUI}: DL message received from TPXLE.`);
 
     let translated_body;
     try {
@@ -149,12 +153,12 @@ app.post('/downlink_to_helium', (req, res) => {
         return;
     }
 
-    getAsync(`helium_downlink_urls:${req.body.deveui}`)
+    getAsync(`helium_downlink_urls:${devEUI}`)
     .catch(err => logger.error(err))
     .then(helium_downlink_url => {
-        logger.info(`helium_downlink_url retreived from DB: ${helium_downlink_url}`);
+        logger.info(`DL: DevEUI: ${devEUI}: helium_downlink_url retreived from DB: ${helium_downlink_url}`);
         if (!helium_downlink_url) {
-            throw new Error(`downlink url for dev_eui:${req.body.deveui} does not exist in the DB yet`)
+            throw new Error(`DevEUI: ${devEUI}: downlink url for this DevEUI does not exist in the DB yet`);
         }
         return fetch(
             helium_downlink_url,
@@ -169,7 +173,7 @@ app.post('/downlink_to_helium', (req, res) => {
     })
     .catch(err => logger.error(err))
     .then(res1 => {
-        logger.info(`Downlink for DevEUI ${req.body.deveui} sent to Helium. Response status: ${res1.status} ${res1.statusText}`);
+        logger.info(`DL: DevEUI: ${devEUI}: Downlink forwarded to Helium. Response status: ${res1.status} ${res1.statusText}`);
         return res1.text()
     })
     .catch(err => logger.error(err))
