@@ -8,10 +8,6 @@ services:
     volumes:
       - ./log:/var/log/nit
     working_dir: /usr/src/nit
-
-    entrypoint: ["tail"]
-    command: ["-f","/dev/null"]
-
     ports:
       - 8081:8081
 
