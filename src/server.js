@@ -16,7 +16,12 @@ const DXAPI_TOKEN_REQUEST_URL = "https://dx-api.thingpark.io/admin/latest/api/oa
 const logger = winston.createLogger({
     level: 'info',
     // format: winston.format.json(),
-    format: winston.format.simple(),
+    // format: winston.format.simple(),
+    format: winston.format.combine(
+        // winston.format.colorize({ all: true }),
+        winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss'} ),
+        winston.format.printf(info => `[${info.timestamp}] ${info.level}: ${info.message}`)
+    ),
     // defaultMeta: { service: 'nit' },
     transports: [
       // new winston.transports.File({ filename: '/var/log/nit/error.log', level: 'error' }),
