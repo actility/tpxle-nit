@@ -1,0 +1,9 @@
+
+NIT_SERVER_PORT: 8081
+REDIS_HOST: 'redis'
+REDIS_PORT: 6379
+LOG_LEVEL: debug   # error | warn | info | http | verbose | debug | silly
+
+
+TPXLE_FEED_URL: 'https://dx-api.thingpark.io/location/latest/api/feeds'
+DXAPI_TOKEN_REQUEST_URL: 'https://dx-api.thingpark.io/admin/latest/api/oauth/token'

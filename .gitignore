@@ -1,6 +1,7 @@
 .vs/
 node_modules/
-log/*
-redis-data/*
+.env
+*.log
+*.rdb
 
 private*/

@@ -6,9 +6,25 @@ services:
     build: .
     image: actility/tpxle-nit:0.0.1
     container_name: tpxle_nit_app
+
     volumes:
-      - ./log:/var/log/nit
-    working_dir: /usr/src/nit
+      - ./src:/opt/tpxle-nit/src
+      - ./config:/opt/tpxle-nit/config
+      - ./log:/opt/tpxle-nit/log
+    working_dir: /opt/tpxle-nit/src
+
+    #### FOR PRODUCTION ####
+    environment:
+      NODE_ENV: production
+    ########################
+
+    #### FOR DEVELOPMENT ####
+    # environment:
+    #   NODE_ENV: development
+    # entrypoint: ["tail"]
+    # command: ["-f","/dev/null"]
+    #########################
+
     ports:
       - 8081:8081
 
@@ -17,5 +33,5 @@ services:
     container_name: tpxle_nit_redis
     volumes:
       - ./redis-data:/data
-    ports:
-      - "6379:6379"
+#    ports:
+#      - 6379:6379

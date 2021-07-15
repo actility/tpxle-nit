@@ -1,9 +1,10 @@
 FROM node:16-alpine
 
-RUN mkdir -p /usr/src/nit
-RUN mkdir -p /var/log/nit
+RUN mkdir -p /opt/tpxle-nit/src
+RUN mkdir -p /opt/tpxle-nit/config
+RUN mkdir -p /opt/tpxle-nit/log
 
-WORKDIR /usr/src/nit
+WORKDIR /opt/tpxle-nit/src
 
 COPY ./src .
 

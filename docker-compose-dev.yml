@@ -8,17 +8,19 @@ services:
     container_name: tpxle_nit_app
 
     volumes:
-      - ./src:/usr/src/nit
+      - ./src:/opt/tpxle-nit/src
+      - ./config:/opt/tpxle-nit/config
+      - ./log:/opt/tpxle-nit/log
+    working_dir: /opt/tpxle-nit/src
 
-      #### FOR DEVELOPMENT ####  
-      - ./log:/var/log/nit
-      #########################
+    #### FOR PRODUCTION ####
+    # environment:
+    #   NODE_ENV: production
+    ########################
 
-    working_dir: /usr/src/nit
-  
     #### FOR DEVELOPMENT ####
     environment:
-      NODE_ENV: dev
+      NODE_ENV: development
     entrypoint: ["tail"]
     command: ["-f","/dev/null"]
     #########################
@@ -31,5 +33,5 @@ services:
     container_name: tpxle_nit_redis
     volumes:
       - ./redis-data:/data
-    ports:
-      - "6379:6379"
+#    ports:
+#      - 6379:6379

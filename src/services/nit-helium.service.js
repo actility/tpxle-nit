@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-let uplink = body => {
+let translate_uplink = body => {
 
     let feeds = {
         // deviceEUI: "",                                     // mandatory
@@ -107,7 +107,7 @@ let uplink = body => {
 
 }
 
-let downlink = body => {
+let translate_downlink = body => {
 
     return {
         // "dev_eui": body.deveui.toLowerCase(),
@@ -119,6 +119,6 @@ let downlink = body => {
 }
 
 export {
-    uplink,
-    downlink
+    translate_uplink,
+    translate_downlink
 };
