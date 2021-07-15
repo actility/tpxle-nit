@@ -42,64 +42,66 @@ let translate_uplink = body => {
         }
     }
          
-    try {
+    if (body.end_device_ids?.dev_eui) {
         feeds.deviceEUI = body.end_device_ids.dev_eui;
-    } catch (err) {
+    } else {
         throw new Error("Missing property: end_device_ids.dev_eui");
     }
 
-    try {
+    if (body.received_at) {
         feeds.time = moment(body.received_at).format();
         feeds.solverInput.receptionTime = feeds.time;
-    } catch (err) {}
+    }
 
-    try {
-        feeds.solverInput.sequenceNumber = body.uplink_message.f_cnt;
-    } catch (err) {}
+    if (body.uplink_message) {
 
-    try {
-        feeds.solverInput.port = body.uplink_message.f_port;
-    } catch (err) {}
-        
-    try {
-        feeds.payload.payloadEncoded = Buffer.from(body.uplink_message.frm_payload, 'base64').toString('hex');
-    } catch (err) {}
-
-    try {
-        feeds.solverInput.SF = body.uplink_message.settings.data_rate.lora.spreading_factor;;
-    } catch (err) {}
-
-    let gateways;
-    try {
-        gateways = body.uplink_message.rx_metadata;
-    } catch (err) {}
-    if (gateways && Array.isArray(gateways)) {
-        let packet;
-        for (let i=0; i<gateways.length; i++) {
-            packet = {};
-            try { 
-                packet.baseStationId = gateways[i].gateway_ids.gateway_id; 
-            } catch (err) {}
-            try { 
-                packet.SNR = gateways[i].snr; 
-            } catch (err) {}
-            try { 
-                packet.RSSI = gateways[i].rssi; 
-            } catch (err) {}
-
-
-            try { 
-                packet.antennaCoordinates = [ 
-                    gateways[i].location.longitude,
-                    gateways[i].location.latitude
-                ];
-                try {
-                    packet.antennaCoordinates.push(gateways[i].location.altitude);
-                } catch (err) {}
-            } catch (err) {}
-
-            feeds.solverInput.packets.push(packet);
+        if (body.uplink_message.f_cnt) {
+            feeds.solverInput.sequenceNumber = body.uplink_message.f_cnt;
         }
+
+        if (body.uplink_message.f_port) {
+            feeds.solverInput.port = body.uplink_message.f_port;
+        }
+            
+        if (body.uplink_message.frm_payload) {
+            feeds.payload.payloadEncoded = Buffer.from(body.uplink_message.frm_payload, 'base64').toString('hex');
+        }
+
+        if (body.uplink_message.settings?.data_rate?.lora?.spreading_factor) {
+            feeds.solverInput.SF = body.uplink_message.settings.data_rate.lora.spreading_factor;
+        }    
+
+        let gateways = body.uplink_message.rx_metadata;
+        if (gateways && Array.isArray(gateways)) {
+            let packet;
+            for (let i=0; i<gateways.length; i++) {
+                packet = {};
+                if(gateways[i].gateway_ids?.gateway_id) { 
+                    packet.baseStationId = gateways[i].gateway_ids.gateway_id; 
+                }
+                if (gateways[i].snr) { 
+                    packet.SNR = gateways[i].snr; 
+                }
+                if (gateways[i].rssi) { 
+                    packet.RSSI = gateways[i].rssi; 
+                }
+
+                if ( gateways[i].location ) {
+                    if ( gateways[i].location.longitude && gateways[i].location.latitude ) {
+                        packet.antennaCoordinates = [ 
+                            gateways[i].location.longitude,
+                            gateways[i].location.latitude
+                        ];
+                        if (gateways[i].location.altitude) {
+                            packet.antennaCoordinates.push(gateways[i].location.altitude);
+                        }
+                    }
+                }
+
+                feeds.solverInput.packets.push(packet);
+            }
+        }
+
     }
 
     return feeds;
