@@ -7,7 +7,6 @@ RUN mkdir -p /opt/tpxle-nit/log
 WORKDIR /opt/tpxle-nit/src
 
 COPY ./src .
-RUN npm install -g npm@latest
 RUN npm install
 
 CMD ["npm", "start"]
