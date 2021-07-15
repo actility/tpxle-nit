@@ -61,6 +61,7 @@ export const send_to_tpxle_async = async (translatedBody, clientID, clientSecret
         return; 
     };
     logger.debug(`UL: DevEUI: ${devEUI}: Message forwarded to TPXLE. Response Status: ${tpxleResponse.status} ${tpxleResponse.statusText}`);
+    logger.debug(JSON.stringify(translatedBody, null, 4));
 
     let tpxleResponseText;
     try {

@@ -58,7 +58,7 @@
 
 - Connect to the fNS container via CLI:  
     ```
-    $ attach.sh
+    $ ./attach.sh
     ```
 
 - Check if the server is running:  
