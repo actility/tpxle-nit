@@ -1,4 +1,7 @@
 import express from 'express';
+
+import logger from '../logger.js';
+
 const router = express.Router();
 
 import { uplink_from_helium, downlink_to_helium } from '../controllers/helium.controller.js'
