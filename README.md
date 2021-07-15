@@ -3,7 +3,13 @@
 ## Build and install the server
 0. Make sure that beyond docker engine you have [docker-compose](https://docs.docker.com/compose/install/) available on your platform.
 1. Clone this repo and enter to the folder of this project
-2. Edit the configuration files in the config folder (update the config.global.yml file)
+
+    ```
+    $ git clone https://github.com/actility/tpxle-nit
+    $ cd tpxle-nit
+    ```
+
+2. For customised configuration edit the configuration files in the config folder (update the config.global.yml file)
 3. Build the docker images:
 
     Execute the following command from the project root where the docker-compose.yml file is located
