@@ -7,14 +7,14 @@
 Since you are planning to use a 3rd party network server, you dont have to provision your devices with the correct AppSKey. We recommend you using "00000000000000000000000000000000" as ApppSKey. The only important data you need to be accurate with is the DevEUI so that our platform can assign your device to your account.
 
 4. Create a new HTTP (webhook) integration on the Helium/TTN Console with the following parameters:
-  - [Helium Console](https://console.helium.com/welcome): 
-    - Url (for Helium): https://community.thingpark.io/tpxle-nit/uplink_from_helium
-    - Header: "x-client-id: community-api/<YOUR_THINGPARK_COMMUNITY_USER_ID>"
-    - Header: "x-client-secret: <YOUR_THINGPARK_COMMUNITY_PASSWORD>"
-  - [TTN Console](https://id.thethingsnetwork.org/oidc/interaction/NGGKQ1_7r3B1K8kdISJuS): 
-    - Url (for TTN): https://community.thingpark.io/tpxle-nit/uplink_from_ttn
-    - Header: "x-client-id: community-api/<YOUR_THINGPARK_COMMUNITY_USER_ID>"
-    - Header: "x-client-secret: <YOUR_THINGPARK_COMMUNITY_PASSWORD>"
+    - [Helium Console](https://console.helium.com/welcome): 
+      - Url (for Helium): https://community.thingpark.io/tpxle-nit/uplink_from_helium
+      - Header: "x-client-id: community-api/<YOUR_THINGPARK_COMMUNITY_USER_ID>"
+      - Header: "x-client-secret: <YOUR_THINGPARK_COMMUNITY_PASSWORD>"
+    - [TTN Console](https://id.thethingsnetwork.org/oidc/interaction/NGGKQ1_7r3B1K8kdISJuS): 
+      - Url (for TTN): https://community.thingpark.io/tpxle-nit/uplink_from_ttn
+      - Header: "x-client-id: community-api/<YOUR_THINGPARK_COMMUNITY_USER_ID>"
+      - Header: "x-client-secret: <YOUR_THINGPARK_COMMUNITY_PASSWORD>"
  
 5. Configure the ThingPark X Location Engine (TPX LE) Binder Module through the DX Location API so that tracker commands are forwarded to the right connector module:
   - Log in to [ThingPark DX API](https://dx-api.thingpark.io/getstarted/#/) with your ThingPark Community Credentials.
