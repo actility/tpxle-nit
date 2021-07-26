@@ -1,4 +1,8 @@
-# Connect ThingPark X Loction Engine 3rd Party Network connector setup guide
+# ThingPark X Loction Engine Network Interface Trnslator setup guide
+
+The ThingPark X Loction Engine Network Interface Trnslator (TPXLE-NIT) can be used with Abeeway devices connected through Helium and TTN networks.
+An instance of this interface translator is already hosted at Actility cloud and can be tested to connect Abeeway Devices to the [Abeeway Device Manager](https://dev1.thingpark.com/thingpark/abeewayDeviceAnalyzer/index.php?dxprofile=community) application.
+The following steps explain how to set up this connectivity.
 
 1. [Sing up](https://community.thingpark.org/) for a new ThingPark Community account.
 
