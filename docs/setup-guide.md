@@ -56,10 +56,10 @@ Since you are planning to use a 3rd party network server, you dont have to provi
    - Click on the *Send Request* button just at the right of the drop-down menu item.  
      This should generate a downlink command that will switch the tracker to SOS mode. 
 
-[1] https://community.thingpark.org/
-[2] https://community.thingpark.io/
-[3] https://dev1.thingpark.com/thingpark/abeewayDeviceAnalyzer/index.php?dxprofile=community
-[4] https://console.helium.com/welcome
-[5] https://id.thethingsnetwork.org/oidc/interaction/NGGKQ1_7r3B1K8kdISJuS
-[6] https://dx-api.thingpark.io/getstarted/#/
+[1]: https://community.thingpark.org/
+[2]: https://community.thingpark.io/
+[3]: https://dev1.thingpark.com/thingpark/abeewayDeviceAnalyzer/index.php?dxprofile=community
+[4]: https://console.helium.com/welcome
+[5]: https://id.thethingsnetwork.org/oidc/interaction/NGGKQ1_7r3B1K8kdISJuS
+[6]: https://dx-api.thingpark.io/getstarted/#/
 
