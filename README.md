@@ -82,28 +82,9 @@
     ```
 ## Use the server
 
-- Test if the server works
-    ```
-    curl localhost:8081/test
-    ```
-
 1.	Check if the connector works here:  
     https://localhost:8081/test  
     There is an online version of this tool available at https://community.thingpark.io/tpxle-nit/  
     If you install under your domain, please update the urls in the next steps.  
 
-2.	Create a new integration on the Helium/TTN Console with the following parameters:  
-    Url for Helium: https://community.thingpark.io/tpxle-nit/uplink_from_helium  
-    Url for TTN: https://community.thingpark.io/tpxle-nit/uplink_from_ttn  
-    Header: "x-client-id: <YOUR_CLIENT_ID>"  
-    Header: "x-client-secret: <YOUR_CLIENT_SECRET>"  
-    (I suggest creating API-Only credentials to every Helium user.)  
-
-3.	Configure the TPX-LE Binder Module through the DX-API so that tracker commands are forwarded to the following URL:  
-    URL for Helium: https://community.thingpark.io/tpxle-nit/downlink_to_helium  
-    URL for TTN: https://community.thingpark.io/tpxle-nit/downlink_to_ttn  
-
-4.	Test the integration:  
-    Wait until the tracker sends a few UL messages  
-    Verify on Helium/TTN Console that UL messages are forwarded to the integration you created earlier  
-    Login to ADM and fin your trackers on the map.  
+2.	[TPXLE-NIT Setup Guide](docs/tpxle-setup-guide.md)
