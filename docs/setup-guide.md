@@ -60,6 +60,6 @@ Since you are planning to use a 3rd party network server, you dont have to provi
 [2]: https://community.thingpark.io/
 [3]: https://dev1.thingpark.com/thingpark/abeewayDeviceAnalyzer/index.php?dxprofile=community
 [4]: https://console.helium.com/welcome
-[5]: https://id.thethingsnetwork.org/oidc/interaction/NGGKQ1_7r3B1K8kdISJuS
+[5]: https://console.cloud.thethings.network/
 [6]: https://dx-api.thingpark.io/getstarted/#/
 
