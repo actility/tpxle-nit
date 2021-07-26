@@ -87,4 +87,4 @@
     There is an online version of this tool available at https://community.thingpark.io/tpxle-nit/  
     If you install under your domain, please update the urls in the next steps.  
 
-2.	[TPXLE-NIT Setup Guide](docs/tpxle-setup-guide.md)
+2.	[TPXLE-NIT Setup Guide](docs/tpxle-nit-setup-guide.md)
