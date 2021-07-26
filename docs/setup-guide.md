@@ -49,8 +49,9 @@ Since you are planning to use a 3rd party network server, you dont have to provi
     - Login to [Abeeway Device Manager (ADM)](https://dev1.thingpark.com/thingpark/abeewayDeviceAnalyzer/index.php?dxprofile=community) with your ThingPark Community Credentials, select your devices and find your trackers on the map.
       - If you cannot see any devices in the list after you logged, in then you trackers has not sent any messages to ADM yet.
 
-7. Test the downlinklink integration:
-    - Login to [Abeeway Device Manager (ADM)](https://dev1.thingpark.com/thingpark/abeewayDeviceAnalyzer/index.php?dxprofile=community) with your ThingPark Community Credentials, select your devices and click on *Device Configuration* tab at the top of the ADM GUI.
+7. Test the downlinlink integration:
+    - Login to [Abeeway Device Manager (ADM)](https://dev1.thingpark.com/thingpark/abeewayDeviceAnalyzer/index.php?dxprofile=community) with your ThingPark Community Credentials and select your devices.
+    - Click on the *Device Configuration* tab at the top of the ADM GUI.
     - Click on the drop-dowm menu item at the bottom left of the page and select the *Start SOS mode* option.
     - Click on the *Send Request* button just at the right of the drop-down menu item.  
-    This should generate a downlink command that witt switch the tracket to SOS mode. 
+      This should generate a downlink command that will switch the tracker to SOS mode. 
