@@ -61,7 +61,7 @@ Since you are planning to use a 3rd party network server, you dont have to provi
 
     ![202-dxapi-loggedin](images/202-dxapi-loggedin.jpg)
 
-  - Under the ***BinderConfig*** title click on *POST /binderConfigs*
+  - Under the ***BinderConfig*** title click on ***POST /binderConfigs***
 
     ![203-dxapi-locationAPI](images/203-dxapi-locationAPI.jpg)  
 
