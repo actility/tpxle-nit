@@ -59,14 +59,13 @@ Since you are planning to use a 3rd party network server, you dont have to provi
           "callbackURL": "https://community.thingpark.io/tpxle-nit/downlink_to_helium"
         }
         ```
-      - for TTN:
-        ```
-        {
-          "deviceEUIList": "*",
-          "callbackURL": "https://community.thingpark.io/tpxle-nit/downlink_to_ttn"
-        }
-        ```
-
+    - for TTN:
+      ```
+      {
+        "deviceEUIList": "*",
+        "callbackURL": "https://community.thingpark.io/tpxle-nit/downlink_to_ttn"
+      }
+      ```
       ![205-dxapi-binderConfigPostTryitout.png](images/205-dxapi-binderConfigPostTryitout.png)
 
   - Click on the *Execute* button under the text area.  
@@ -74,15 +73,28 @@ Since you are planning to use a 3rd party network server, you dont have to provi
 ## 7. Test the uplink integration:
   - Wait until the tracker sends a few UL messages.
   - Verify on Helium/TTN Console that UL messages are forwarded to the integration you created earlier.
-  - Login to [Abeeway Device Manager (ADM)][3] with your ThingPark Community Credentials, select your devices and find your trackers on the map.
-    - If you cannot see any devices in the list after you logged, in then you trackers has not sent any messages to ADM yet.
+  - Login to [Abeeway Device Manager (ADM)][3] with your ThingPark Community Credentials.
+
+    ![301-adm-login.png](images/301-adm-login.png) 
+
+  - Select your devices.  
+    If you cannot see any devices in the list after you logged, in then you trackers have not sent any messages to ADM yet. 
+
+    ![302-adm-selectDevice.png](images/302-adm-selectDevice.png)
+
+  - Find your trackers on the map.
+
+    ![303-adm-map.png](images/303-adm-map.png)
 
 ## 8. Test the downlinlink integration:
   - Login to [Abeeway Device Manager (ADM)][3] with your ThingPark Community Credentials and select your devices.
   - Click on the *Device Configuration* tab at the top of the ADM GUI.
   - Click on the drop-dowm menu item at the bottom left of the page and select the *Start SOS mode* option.
   - Click on the *Send Request* button just at the right of the drop-down menu item.  
-    This should generate a downlink command that will switch the tracker to SOS mode. 
+    This should generate a downlink command that will switch the tracker to SOS mode.
+      
+    ![304-adm-deviceConfiguration.png](images/304-adm-deviceConfiguration.png)
+
 
 [1]: https://community.thingpark.org/
 [2]: https://community.thingpark.io/
