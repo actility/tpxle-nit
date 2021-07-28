@@ -102,7 +102,7 @@ Since you are planning to use a 3rd party network server, you dont have to provi
 
   - Find your trackers on the map.
 
-    ![303-adm-map](images/303-adm-map.png)
+    ![303-adm-map](images/303-adm-map.jpg)
 
 ## 8. Test the downlinlink integration:
   - Login to [Abeeway Device Manager (ADM)][3] with your ThingPark Community Credentials and select your devices.
