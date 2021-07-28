@@ -8,12 +8,12 @@ The following steps explain how to set up this connectivity.
 
 [Sing up][1]
 
-![101-tpcp-signUp.png](images/101-tpcp-signUp.png)
+![101-tpcp-signUp](images/101-tpcp-signUp.png)
 
 ## 2. Sign in with your new account to the ThingPark Community Console.
 [ThingPark Community Console][2]
 
-![102-tpcp-signIn.png](images/102-tpcp-signIn.png)
+![102-tpcp-signIn](images/102-tpcp-signIn.png)
 
 ## 3. Create a fake application
 
@@ -21,7 +21,7 @@ Before adding your devices to the platform you need to create an Application. Th
 
 - Click on ***Applications>Create*** on the side bar menu and select ***https:// Generic Application***
 
-  ![103-tpcp-createApp01.png](images/103-tpcp-createApp01.png)
+  ![103-tpcp-createApp01](images/103-tpcp-createApp01.jpg)
 
 - Fill in the form according to the following screenshot:
 
