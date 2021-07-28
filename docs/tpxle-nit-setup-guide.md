@@ -25,7 +25,7 @@ Before adding your devices to the platform you need to create an Application. Th
 
 - Fill in the form according to the following screenshot:
 
-  ![104-tpcp-createApp02.png](images/104-tpcp-createApp02.png)
+  ![104-tpcp-createApp02](images/104-tpcp-createApp02.png)
 
 - Save the new application
 
@@ -34,13 +34,13 @@ Since you are planning to use a 3rd party network server, you dont have to provi
 
 - Click on ***Devices>Create*** on the side bar menu and select ***Abeeway***
 
-  ![105-tpcp-createDevice01.png](images/105-tpcp-createDevice01.png)
+  ![105-tpcp-createDevice01](images/105-tpcp-createDevice01.jpg)
 
 - Fill in the form according to the following screenshots. (Please replace the DevEUI with your Device's real DevEUI.)
 
-  ![106-tpcp-createDevice01.png](images/106-tpcp-createDevice02.png)
+  ![106-tpcp-createDevice01](images/106-tpcp-createDevice02.png)
 
-  ![107-tpcp-createDevice01.png](images/107-tpcp-createDevice03.png)
+  ![107-tpcp-createDevice01](images/107-tpcp-createDevice03.png)
 
 ## 5. Create a new HTTP (webhook) integration on the Helium/TTN Console with the following parameters:
   - [Helium Console][4]: 
@@ -55,19 +55,19 @@ Since you are planning to use a 3rd party network server, you dont have to provi
 ## 6. Configure the ThingPark X Location Engine (TPX LE) Binder Module through the DX Location API so that tracker commands are forwarded to the right connector module:
   - Log in to [ThingPark DX API][6] with your ThingPark Community Credentials.
 
-    ![201-dxapi-login.png](images/201-dxapi-login.png)
+    ![201-dxapi-login](images/201-dxapi-login.png)
 
   - Click on ***DX Location API > Swagger UI***
 
-    ![202-dxapi-loggedin.png](images/202-dxapi-loggedin.png)
+    ![202-dxapi-loggedin](images/202-dxapi-loggedin.jpg)
 
   - Under the ***BinderConfig*** title click on *POST /binderConfigs*
 
-    ![203-dxapi-locationAPI.png](images/203-dxapi-locationAPI.png)  
+    ![203-dxapi-locationAPI](images/203-dxapi-locationAPI.jpg)  
 
   - Click on the ***Try it out*** button.
 
-    ![204-dxapi-binderConfigPost.png](images/204-dxapi-binderConfigPost.png)
+    ![204-dxapi-binderConfigPost](images/204-dxapi-binderConfigPost.jpg)
 
   - Insert the following text into the textarea:
     - for Helium:
@@ -84,7 +84,7 @@ Since you are planning to use a 3rd party network server, you dont have to provi
         "callbackURL": "https://community.thingpark.io/tpxle-nit/downlink_to_ttn"
       }
       ```
-      ![205-dxapi-binderConfigPostTryitout.png](images/205-dxapi-binderConfigPostTryitout.png)
+      ![205-dxapi-binderConfigPostTryitout](images/205-dxapi-binderConfigPostTryitout.jpg)
 
   - Click on the ***Execute*** button under the text area.  
 
@@ -93,16 +93,16 @@ Since you are planning to use a 3rd party network server, you dont have to provi
   - Verify on Helium/TTN Console that UL messages are forwarded to the integration you created earlier.
   - Login to [Abeeway Device Manager (ADM)][3] with your ThingPark Community Credentials.
 
-    ![301-adm-login.png](images/301-adm-login.png) 
+    ![301-adm-login](images/301-adm-login.png) 
 
   - Select your devices.  
     If you cannot see any devices in the list after you logged, in then you trackers have not sent any messages to ADM yet. 
 
-    ![302-adm-selectDevice.png](images/302-adm-selectDevice.png)
+    ![302-adm-selectDevice](images/302-adm-selectDevice.jpg)
 
   - Find your trackers on the map.
 
-    ![303-adm-map.png](images/303-adm-map.png)
+    ![303-adm-map](images/303-adm-map.png)
 
 ## 8. Test the downlinlink integration:
   - Login to [Abeeway Device Manager (ADM)][3] with your ThingPark Community Credentials and select your devices.
@@ -111,7 +111,7 @@ Since you are planning to use a 3rd party network server, you dont have to provi
   - Click on the ***Send Request*** button just at the right of the drop-down menu item.  
     This should generate a downlink command that will switch the tracker to SOS mode.
       
-    ![304-adm-deviceConfiguration.png](images/304-adm-deviceConfiguration.png)
+    ![304-adm-deviceConfiguration](images/304-adm-deviceConfiguration.jpg)
 
 
 [1]: https://community.thingpark.org/
