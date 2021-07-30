@@ -1,25 +1,23 @@
-/****************
+/** ***************
  * REDIS CLIENT
- ****************/
+ *************** */
 
 import { createClient } from 'redis';
 import { promisify } from 'util';
 
-import cfg from './config.js'; 
+import cfg from './config.js';
 import logger from './logger.js';
 
-
-
 export const redisClient = createClient({
-    host: cfg.REDIS_HOST, // 'redis',
-    port: cfg.REDIS_PORT, // 6379
-    // password: '<password>'
+  host: cfg.REDIS_HOST, // 'redis',
+  port: cfg.REDIS_PORT, // 6379
+  // password: '<password>'
 });
-redisClient.on('error', err => {
-    logger.error(`REDIS CLIENT error: \n${err.stack}`);
+redisClient.on('error', (err) => {
+  logger.error(`REDIS CLIENT error: \n${err.stack}`);
 });
 redisClient.on('connect', () => {
-    logger.info(`REDIS CLIENT is connected to Redis Server: ${cfg.REDIS_HOST}:${cfg.REDIS_PORT}`);
+  logger.info(`REDIS CLIENT is connected to Redis Server: ${cfg.REDIS_HOST}:${cfg.REDIS_PORT}`);
 });
 
 export const setAsync = promisify(redisClient.set).bind(redisClient);
