@@ -1,3 +1,7 @@
 {
-    "markdown.extension.tableFormatter.normalizeIndentation": true
+  "terminal.integrated.cwd": "src",
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "markdown.extension.tableFormatter.normalizeIndentation": true
 }
