@@ -4,9 +4,7 @@ import fetch from 'node-fetch';
 import cfg from '../config.js';
 import logger from '../logger.js';
 
-const sendToTPXLEAsync = async (translatedBody, clientID, clientSecret) => {
-  const devEUI = translatedBody.deviceEUI;
-
+const getAccessTokenAsync = async (clientID, clientSecret, devEUI) => {
   /* ** Send accessToken request to DX-API ** */
   let dxapiTokenResponse;
   try {
@@ -24,7 +22,7 @@ const sendToTPXLEAsync = async (translatedBody, clientID, clientSecret) => {
     });
   } catch (err) {
     logger.error(err.stack);
-    return;
+    return undefined;
   }
   logger.debug(
     `UL: DevEUI: ${devEUI}: Token requested from DX-API. Response status: ${dxapiTokenResponse.status} ${dxapiTokenResponse.statusText}`,
@@ -35,9 +33,21 @@ const sendToTPXLEAsync = async (translatedBody, clientID, clientSecret) => {
     accessTokenParsed = await dxapiTokenResponse.json();
   } catch (err) {
     logger.error(err.stack);
-    return;
+    return accessTokenParsed;
   }
   logger.debug(`UL: DevEUI: ${devEUI}: Access Token received from DX-API`);
+  return accessTokenParsed.access_token;
+};
+
+const sendToTPXLEAsync = async (translatedBody, accessToken, clientID, clientSecret) => {
+  const devEUI = translatedBody.deviceEUI;
+  const accessTokenValidated =
+    accessToken || (await getAccessTokenAsync(clientID, clientSecret, devEUI));
+
+  if (!accessTokenValidated) {
+    logger.debug('Unable to get an Access Token for TPXLE.');
+    return;
+  }
 
   /* ** Send traslatedBody to TPX LE ** */
   let tpxleResponse;
@@ -45,7 +55,7 @@ const sendToTPXLEAsync = async (translatedBody, clientID, clientSecret) => {
     tpxleResponse = await fetch(cfg.TPXLE_FEED_URL, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${accessTokenParsed.access_token}`,
+        Authorization: `Bearer ${accessTokenValidated}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(translatedBody),
@@ -54,6 +64,7 @@ const sendToTPXLEAsync = async (translatedBody, clientID, clientSecret) => {
     logger.error(err.stack);
     return;
   }
+  logger.debug(`Bearer ${accessTokenValidated}`);
   logger.debug(
     `UL: DevEUI: ${devEUI}: Message forwarded to TPXLE. Response Status: ${tpxleResponse.status} ${tpxleResponse.statusText}`,
   );

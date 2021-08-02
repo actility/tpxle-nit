@@ -8,12 +8,14 @@ import sendToTPXLEAsync from '../services/send-to-tpxle.js';
 export const uplinkFromHelium = (req, res) => {
   /* ** Check if request body is correct ** */
   const errMsg =
-    'UL: clientID, clientSecret in header and devEUI, downlinkUrl in body are mandatory!';
+    'UL: (accessToken or (clientID and clientSecret)) in header and devEUI, downlinkUrl in body are mandatory!';
+  let accessToken;
   let clientID;
   let clientSecret;
   let devEUI;
   let downlinkUrl;
   try {
+    accessToken = req.headers['x-access-token'];
     clientID = req.headers['x-client-id'];
     clientSecret = req.headers['x-client-secret'];
     devEUI = req.body.dev_eui?.toLowerCase();
@@ -24,7 +26,7 @@ export const uplinkFromHelium = (req, res) => {
     res.status(400).send(errMsg);
     return;
   }
-  if (!(clientID && clientSecret && devEUI && downlinkUrl)) {
+  if (!((accessToken || (clientID && clientSecret)) && devEUI && downlinkUrl)) {
     logger.warn(errMsg);
     res.status(400).send(errMsg);
     return;
@@ -44,7 +46,7 @@ export const uplinkFromHelium = (req, res) => {
     return;
   }
 
-  sendToTPXLEAsync(translatedBody, clientID, clientSecret);
+  sendToTPXLEAsync(translatedBody, accessToken, clientID, clientSecret);
 
   res.status(200).end();
 };

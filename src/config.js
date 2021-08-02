@@ -2,12 +2,14 @@ import fs from 'fs';
 import yaml from 'js-yaml';
 import dotenv from 'dotenv';
 
-dotenv.config({ path: '../config/.env' });
+dotenv.config({ path: new URL('../config/.env', import.meta.url) });
 
 const loadConfig = (configFile) => {
   let config;
   try {
-    config = yaml.load(fs.readFileSync(configFile, 'utf8'));
+    config = yaml.load(
+      fs.readFileSync(new URL(`../config/${configFile}`, import.meta.url), 'utf8'),
+    );
   } catch (err) {
     console.error(`CONFIG FILE error: \n${err.stack}`);
     process.exit(1);
@@ -15,20 +17,20 @@ const loadConfig = (configFile) => {
   return config;
 };
 
-const globalConfig = loadConfig('../config/config.global.yml');
+const globalConfig = loadConfig('config.global.yml');
 let selectedConfig;
 switch (process.env.NODE_ENV) {
   case 'production':
-    selectedConfig = loadConfig('../config/config.production.yml');
+    selectedConfig = loadConfig('config.production.yml');
     break;
   case 'development':
-    selectedConfig = loadConfig('../config/config.development.yml');
+    selectedConfig = loadConfig('config.development.yml');
     break;
   case 'test':
-    selectedConfig = loadConfig('../config/config.test.yml');
+    selectedConfig = loadConfig('config.test.yml');
     break;
   default:
-    selectedConfig = loadConfig('../config/config.development.yml');
+    selectedConfig = loadConfig('config.development.yml');
 }
 
 const config = { ...globalConfig, ...selectedConfig };
