@@ -12,6 +12,7 @@ export const uplinkFromTTN = async (req, res) => {
   let accessToken;
   let clientID;
   let clientSecret;
+  let realm;
   let devEUI;
   let downlinkPush;
   let downlinkReplace;
@@ -20,6 +21,7 @@ export const uplinkFromTTN = async (req, res) => {
     accessToken = req.headers['x-access-token'];
     clientID = req.headers['x-client-id'];
     clientSecret = req.headers['x-client-secret'];
+    realm = req.headers['x-realm'];
     devEUI = req.body.end_device_ids.dev_eui;
     downlinkPush = req.headers['x-downlink-push'];
     downlinkReplace = req.headers['x-downlink-replace'];
@@ -62,7 +64,7 @@ export const uplinkFromTTN = async (req, res) => {
     return;
   }
 
-  sendToTPXLEAsync(translatedBody, accessToken, clientID, clientSecret);
+  sendToTPXLEAsync(translatedBody, accessToken, clientID, clientSecret, realm);
 
   res.status(200).end();
 };

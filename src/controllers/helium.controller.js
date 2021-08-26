@@ -11,6 +11,7 @@ export const uplinkFromHelium = (req, res) => {
     'UL: (accessToken or (clientID and clientSecret)) in header and devEUI, downlinkUrl in body are mandatory!';
   let accessToken;
   let clientID;
+  let realm;
   let clientSecret;
   let devEUI;
   let downlinkUrl;
@@ -18,6 +19,7 @@ export const uplinkFromHelium = (req, res) => {
     accessToken = req.headers['x-access-token'];
     clientID = req.headers['x-client-id'];
     clientSecret = req.headers['x-client-secret'];
+    realm = req.headers['x-realm'];
     devEUI = req.body.dev_eui?.toLowerCase();
     downlinkUrl = req.body.downlink_url;
   } catch (err) {
@@ -46,7 +48,7 @@ export const uplinkFromHelium = (req, res) => {
     return;
   }
 
-  sendToTPXLEAsync(translatedBody, accessToken, clientID, clientSecret);
+  sendToTPXLEAsync(translatedBody, accessToken, clientID, clientSecret, realm);
 
   res.status(200).end();
 };

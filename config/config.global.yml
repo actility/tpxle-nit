@@ -1,9 +1,27 @@
-
 NIT_SERVER_PORT: 8081
-REDIS_HOST: 'redis'
+REDIS_HOST: "redis"
 REDIS_PORT: 6379
-LOG_LEVEL: debug   # error | warn | info | http | verbose | debug | silly
+LOG_LEVEL: debug # error | warn | info | http | verbose | debug | silly
 
+# binder module (swagger)
+# https://dx-api.thingpark.io/location/latest/swagger-ui/index.html?shortUrl=tpdx-location-api-contract.json#/Feed/post_feeds
 
-TPXLE_FEED_URL: 'https://dx-api.thingpark.io/location/latest/api/feeds'
-DXAPI_TOKEN_REQUEST_URL: 'https://dx-api.thingpark.io/admin/latest/api/oauth/token'
+DEV1_FEED_URL: "https://dx-api.thingpark.io/location/latest/api/feeds"
+DEV1_TOKEN_REQUEST_URL: "https://dx-api.thingpark.io/admin/latest/api/oauth/token"
+DEV1_GRANT_TYPE: "client_credentials"
+# DEV1_CLIENT_ID: # x-client-id
+# DEV1_CLIENT_SECRET: # x-client-secret
+DEV1_REALM: dev1
+
+# binder module (swagger)
+# https://le-lab.preview.thingpark.com/location/latest/swagger-ui/index.html?shortUrl=tpdx-location-api-contract.json#/Feed/post_feeds
+
+LELAB_FEED_URL: "https://le-lab.preview.thingpark.com/location/latest/api/feeds"
+LELAB_TOKEN_REQUEST_URL: "https://le-lab.preview.thingpark.com/auth"
+LELAB_GRANT_TYPE: "password"
+LELAB_SCOPE: "openid"
+LELAB_CLIENT_ID: "tpx-le-nit"
+# LELAB_USERNAME: # x-client-id
+# LELAB_PASSWORD: # x-client-secret
+LELAB_REALM: "le-lab" # x-realm
+
