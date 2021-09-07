@@ -4,7 +4,8 @@
     "application_ids": {
       "application_id": "abeeway-tpxle"
     },
-    "dev_eui": "20635F01E10003F5",
+    "dev_eui_01": "20635F01E10003F5",
+    "dev_eui": "20635F017100017B",
     "join_eui": "20635F000A000017",
     "dev_addr": "260B14FD"
   },

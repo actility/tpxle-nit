@@ -39,7 +39,7 @@ const getAccessTokenDev1Async = async (clientID, clientSecret, devEUI) => {
   return accessTokenParsed.access_token;
 };
 
-const getAccessTokenLelabAsync = async (clientID, clientSecret, realm, devEUI) => {
+export const getAccessTokenLelabAsync = async (clientID, clientSecret, realm, devEUI) => {
   /* ** Send accessToken request to DX-API ** */
   let dxapiTokenResponse;
   try {
@@ -89,14 +89,14 @@ const sendToTPXLEAsync = async (translatedBody, accessToken, clientID, clientSec
     accessTokenValidated = await getAccessTokenLelabAsync(
       clientID,
       clientSecret,
-      // cfg.LELAB_REALM,
+      cfg.LELAB_REALM,
       devEUI,
     );
   } else {
     accessTokenValidated = await getAccessTokenDev1Async(
       clientID,
       clientSecret,
-      cfg.DEV1_REALM,
+      // cfg.DEV1_REALM,
       devEUI,
     );
   }

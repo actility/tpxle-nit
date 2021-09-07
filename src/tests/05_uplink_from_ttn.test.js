@@ -19,8 +19,15 @@ const ulBody = fs.readFileSync(
       method: 'POST',
       headers: {
         // 'x-access-token': process.env.ACCESS_TOKEN,
-        'x-client-id': process.env.CLIENT_ID,
-        'x-client-secret': process.env.CLIENT_SECRET,
+
+        // 'x-client-id': process.env.DEV1_CLIENT_ID,
+        // 'x-client-secret': process.env.DEV1_CLIENT_SECRET,
+        // 'x-realm': cfg.DEV1_REALM,
+
+        'x-client-id': process.env.LELAB_CLIENT_ID,
+        'x-client-secret': process.env.LELAB_CLIENT_SECRET,
+        'x-realm': cfg.LELAB_REALM,
+
         'content-type': 'application/json',
         'x-tts-domain': 'eu1.cloud.thethings.network',
         'x-downlink-replace':
