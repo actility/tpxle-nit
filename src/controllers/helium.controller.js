@@ -8,7 +8,7 @@ import sendToTPXLEAsync from '../services/send-to-tpxle.js';
 export const uplinkFromHelium = (req, res) => {
   /* ** Check if request body is correct ** */
   const errMsg =
-    'UL: (accessToken or (clientID and clientSecret)) in header and devEUI, downlinkUrl in body are mandatory!';
+    '(accessToken or (clientID and clientSecret)) in header and devEUI, downlinkUrl in body are mandatory!';
   let accessToken;
   let clientID;
   let realm;
@@ -28,8 +28,14 @@ export const uplinkFromHelium = (req, res) => {
     res.status(400).send(errMsg);
     return;
   }
+
+  if (!devEUI) {
+    logger.warn('UL: Missing DevEUI!');
+    res.status(400).send('Missing DevEUI!');
+    return;
+  }
   if (!((accessToken || (clientID && clientSecret)) && devEUI && downlinkUrl)) {
-    logger.warn(errMsg);
+    logger.warn(`UL: DevEUI: ${devEUI}: ${errMsg}`);
     res.status(400).send(errMsg);
     return;
   }

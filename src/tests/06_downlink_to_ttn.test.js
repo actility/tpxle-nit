@@ -12,8 +12,11 @@ const dlBody = {
   payload: '020402',
 };
 
+// const url = 'https://nano-things.net/tpxle-nit/downlink_to_ttn';
+const url = `http://localhost:${cfg.NIT_SERVER_PORT}/downlink_to_ttn`;
+
 (async () => {
-  const res = await fetch(`http://localhost:${cfg.NIT_SERVER_PORT}/downlink_to_ttn`, {
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',

@@ -8,7 +8,7 @@ import sendToTPXLEAsync from '../services/send-to-tpxle.js';
 export const uplinkFromTTN = async (req, res) => {
   /* ** Check if request body is correct ** */
   const errMsg =
-    'UL: (x-access-token or (x-client-id and x-client-secret)), x-downlink-push, x-downlink-replace, x-downlink-apikey in header and end_device_ids.dev_eui in body are mandatory!';
+    '(x-access-token or (x-client-id and x-client-secret)), x-downlink-push, x-downlink-replace, x-downlink-apikey in header and end_device_ids.dev_eui in body are mandatory!';
   let accessToken;
   let clientID;
   let clientSecret;
@@ -28,8 +28,14 @@ export const uplinkFromTTN = async (req, res) => {
     downlinkApikey = req.headers['x-downlink-apikey'];
   } catch (err) {
     logger.warn(err.stack);
-    logger.warn(errMsg);
+    logger.warn(`UL: ${errMsg}`);
     res.status(400).send(errMsg);
+    return;
+  }
+
+  if (!devEUI) {
+    logger.warn('UL: Missing DevEUI!');
+    res.status(400).send('Missing DevEUI!');
     return;
   }
   if (
@@ -41,7 +47,7 @@ export const uplinkFromTTN = async (req, res) => {
       downlinkApikey
     )
   ) {
-    logger.warn(errMsg);
+    logger.warn(`UL: DevEUI: ${devEUI}: ${errMsg}`);
     res.status(400).send(errMsg);
     return;
   }

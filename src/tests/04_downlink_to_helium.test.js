@@ -12,8 +12,11 @@ const dlBody = {
   payload: '020402',
 };
 
+// const url = 'https://nano-things.net/tpxle-nit/uplink_from_helium';
+const url = `http://localhost:${cfg.NIT_SERVER_PORT}/uplink_from_helium`;
+
 (async () => {
-  const res = await fetch(`http://localhost:${cfg.NIT_SERVER_PORT}/downlink_to_helium`, {
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
