@@ -82,7 +82,7 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
 
 export const tpxleAuth = async (req, res, next) => {
   logger.debug('KAKUKK');
-  logger.debug(JSON.stringify(req.url, null, 4));
+  logger.debug(JSON.stringify(req, null, 4));
   logger.debug(JSON.stringify(req.body, null, 4));
   logger.debug(JSON.stringify(req.headers, null, 4));
   logger.debug(JSON.stringify(req.params, null, 4));
