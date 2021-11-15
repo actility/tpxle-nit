@@ -61,10 +61,6 @@ export const uplinkFromEverynet = async (req, res, next) => {
 
   logger.debug(`UL: DevEUI: ${devEUI}: UL message received from NS.`);
 
-  logger.debug('');
-  logger.debug(JSON.stringify(req.body, null, 4));
-  logger.debug('');
-
   /* ** Save downlink data in db ** */
   DownlinkDataModel.setDLData(nitapikey, devEUI, {
     downlinkApi,
