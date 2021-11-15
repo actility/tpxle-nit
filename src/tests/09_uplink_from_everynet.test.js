@@ -15,8 +15,9 @@ const ulBodyParsed = JSON.parse(ulBody);
 ulBodyParsed.meta.device = process.env.DEV_EUI.toLowerCase();
 ulBody = JSON.stringify(ulBodyParsed);
 
-const url = `https://nano-things.net/tpxle-nit/uplink_from_everynet/${process.env.NITAPIKEY}`;
-// const url = `http://localhost:${cfg.NIT_SERVER_PORT}/uplink_from_everynet/${process.env.NITAPIKEY}`;
+// const url = `https://nano-things.net/tpxle-nit/uplink_from_everynet`;
+// const url = `https://nano-things.net/tpxle-nit/uplink_from_everynet/${process.env.NITAPIKEY}`;
+const url = `http://localhost:${cfg.NIT_SERVER_PORT}/uplink_from_everynet/${process.env.NITAPIKEY}`;
 
 (async () => {
   const res = await fetch(url, {

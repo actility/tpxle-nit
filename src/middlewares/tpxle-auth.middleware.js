@@ -41,9 +41,7 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
 
   let accessToken = await AccessTokensModel.getAccessToken(clientId);
   if (accessToken) {
-    logger.debug(
-      `UL: getAccessTokenAsync: clientId: ${clientId}: Token found in cache: ${accessToken}`,
-    );
+    logger.debug(`UL: getAccessTokenAsync: clientId: ${clientId}: Token found in cache.`);
     return accessToken;
   }
 
@@ -59,7 +57,7 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
     accessToken = dxapiTokenResponseParsed.access_token;
     if (accessToken) {
       logger.debug(
-        `UL: getAccessTokenAsync: clientId: ${clientId}: Token received from token endpoint: ${accessToken}`,
+        `UL: getAccessTokenAsync: clientId: ${clientId}: Token received from token endpoint.`,
       );
       AccessTokensModel.setAccessToken(clientId, accessToken);
       return accessToken;
