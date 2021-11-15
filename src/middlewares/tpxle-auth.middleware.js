@@ -81,9 +81,13 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
 };
 
 export const tpxleAuth = async (req, res, next) => {
-  logger.debug('');
+  logger.debug('KAKUKK');
+  logger.debug(JSON.stringify(req.url, null, 4));
   logger.debug(JSON.stringify(req.body, null, 4));
-  logger.debug('');
+  logger.debug(JSON.stringify(req.headers, null, 4));
+  logger.debug(JSON.stringify(req.params, null, 4));
+  logger.debug(JSON.stringify(req.query, null, 4));
+  logger.debug('KAKUKK');
 
   const accessToken = req.headers['x-access-token'];
   const clientId = req.headers['x-client-id'];
