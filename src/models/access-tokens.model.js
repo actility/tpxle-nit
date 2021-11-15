@@ -8,8 +8,8 @@ export default class AccessTokensModel {
       const key = `access_token:${clientId}`;
       result = await setAsync(key, accessToken);
       expireAsync(key, 600); // 10 min
-      logger.debug(`Access Token saved to db.`);
-      logger.debug(`DBKEY: ${key}:  ${result}`);
+      logger.debug(`Access Token saved to db. DBKEY: ${key}`);
+      // logger.debug(`DBKEY: ${key}:  ${result}`);
     } catch (err) {
       logger.error(`${clientId}: DownlinkDataModel error:\n${err.stack}`);
     }
@@ -22,8 +22,8 @@ export default class AccessTokensModel {
       const key = `access_token:${clientId}`;
       result = await getAsync(key);
       if (result) {
-        logger.debug(`Cached Access Token retreived from db.`);
-        logger.debug(`DBKEY: ${key}:  ${result}`);
+        logger.debug(`Cached Access Token retreived from db. DBKEY: ${key}`);
+        // logger.debug(`DBKEY: ${key}:  ${result}`);
       }
     } catch (err) {
       logger.error(`${clientId}: DownlinkDataModel error:\n${err.stack}`);

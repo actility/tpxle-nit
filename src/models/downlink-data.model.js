@@ -8,8 +8,8 @@ export default class DownlinkDataModel {
       const key = `downlink_data:${nitapikey}:${devEUI.toLowerCase()}`;
       result = await hmsetAsync(key, downlinkData);
       expireAsync(key, 2_592_000); // 30 days
-      logger.debug(`UL: DevEUI: ${devEUI}: downlink Data saved to db.`);
-      logger.debug(`DBKEY: ${key}:  ${JSON.stringify(downlinkData)}`);
+      logger.debug(`UL: DevEUI: ${devEUI}: downlink Data saved to db. DBKEY: ${key}`);
+      // logger.debug(`DBKEY: ${key}:  ${JSON.stringify(downlinkData)}`);
     } catch (err) {
       logger.error(`${devEUI} DownlinkDataModel error:\n${err.stack}`);
     }
@@ -21,8 +21,8 @@ export default class DownlinkDataModel {
     try {
       const key = `downlink_data:${nitapikey}:${devEUI.toLowerCase()}`;
       result = await hgetallAsync(key);
-      logger.debug(`DL: DevEUI: ${devEUI}: Cached Downlink Data retreived from db.`);
-      logger.debug(`DBKEY: ${key}:  ${JSON.stringify(result)}`);
+      logger.debug(`DL: DevEUI: ${devEUI}: Cached Downlink Data retreived from db. DBKEY: ${key}`);
+      // logger.debug(`DBKEY: ${key}:  ${JSON.stringify(result)}`);
     } catch (err) {
       logger.error(`${devEUI} DownlinkDataModel error:\n${err.stack}`);
     }
