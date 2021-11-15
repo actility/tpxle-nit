@@ -93,6 +93,7 @@ export const uplinkFromTTN = async (req, res, next) => {
     sendToTPXLEAsync(translatedBody, req.tpxleToken, realm);
   } catch (err) {
     next(err);
+    return;
   }
 
   res.status(200).end();
