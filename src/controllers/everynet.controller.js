@@ -11,17 +11,17 @@ export const uplinkFromEverynet = async (req, res, next) => {
   /* ** Check if request body is correct ** */
   const errMsg =
     '(x-access-token or (x-client-id and x-client-secret)), x-downlink-api, x-downlink-apikey in header and devEUI in body are mandatory!';
-  // let accessToken;
-  // let clientId;
-  // let clientSecret;
+  let accessToken;
+  let clientId;
+  let clientSecret;
   let realm;
   let devEUI;
   let downlinkApi;
   let downlinkApikey;
   try {
-    // accessToken = req.headers['x-access-token'];
-    // clientId = req.headers['x-client-id'];
-    // clientSecret = req.headers['x-client-secret'];
+    accessToken = req.headers['x-access-token'];
+    clientId = req.headers['x-client-id'];
+    clientSecret = req.headers['x-client-secret'];
     realm = req.headers['x-realm'] || cfg.DEFAULT_REALM;
     devEUI = req.body.meta.device;
     downlinkApi = req.headers['x-downlink-api'];
@@ -33,7 +33,6 @@ export const uplinkFromEverynet = async (req, res, next) => {
     return;
   }
 
-  /*
   if (!devEUI) {
     logger.warn('UL: Missing DevEUI!');
     res.status(400).send('Missing DevEUI!');
@@ -49,7 +48,6 @@ export const uplinkFromEverynet = async (req, res, next) => {
     res.status(400).send(errMsg);
     return;
   }
-  */
 
   const nitapikey = req.params.nitapikey || 'everynet';
   /*

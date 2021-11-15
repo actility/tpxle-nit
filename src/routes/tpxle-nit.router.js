@@ -26,7 +26,7 @@ router.use('/uplink_from_chirpstack/:nitapikey', tpxleAuth);
 router.post('/uplink_from_chirpstack/:nitapikey', uplinkFromChirpstack);
 router.post('/downlink_to_chirpstack/:nitapikey', downlinkToChirpstack);
 
-// router.use('/uplink_from_everynet', tpxleAuth);
+router.use('/uplink_from_everynet', tpxleAuth);
 router.post('/uplink_from_everynet', uplinkFromEverynet);
 router.post('/downlink_to_everynet', downlinkToEverynet);
 
