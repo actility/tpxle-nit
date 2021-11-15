@@ -90,7 +90,7 @@ export const uplinkFromTTN = async (req, res, next) => {
 
   // sendToTPXLEAsync(translatedBody, accessToken, clientId, clientSecret, realm);
   try {
-    sendToTPXLEAsync(translatedBody, req.tpxleToken, realm);
+    sendToTPXLEAsync(translatedBody, req.tpxleToken, realm, clientId);
   } catch (err) {
     next(err);
     return;

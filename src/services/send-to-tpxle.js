@@ -4,8 +4,9 @@ import httpError from 'http-errors';
 
 import cfg from '../config.js';
 import logger from '../logger.js';
+import AccessTokensModel from '../models/access-tokens.model.js';
 
-const sendToTPXLEAsync = async (translatedBody, accessToken, realm) => {
+const sendToTPXLEAsync = async (translatedBody, accessToken, realm, clientId) => {
   const devEUI = translatedBody.deviceEUI;
 
   const options = {
@@ -23,6 +24,13 @@ const sendToTPXLEAsync = async (translatedBody, accessToken, realm) => {
       logger.error(
         `UL: sendToTPXLEAsync: DevEUI: ${devEUI}:  HTTP error happened while forwarding UL to TPXLE: ${tpxleResponse.status}, ${tpxleResponse.statusText}`,
       );
+
+      logger.error(`KAKUKK: ${typeof tpxleResponse.status}`);
+      if (tpxleResponse.status === 401) {
+        logger.error('KAKUKK');
+        AccessTokensModel.deleteAccessToken(clientId);
+      }
+
       throw httpError(500, `HTTP error happened while forwarding UL to TPXLE`);
     }
     const tpxleResponseText = await tpxleResponse.text();
