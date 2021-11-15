@@ -48,15 +48,21 @@ export const uplinkFromChirpstack = async (req, res, next) => {
     return;
   }
 
-  const { nitapikey } = req.params;
+  const nitapikey = req.params.nitapikey || 'chirpstack';
+  /*
   if (!nitapikey) {
     logger.warn(`UL: There is no "nitapikey" parameter in the url.`);
     res.write('There is no "nitapikey" parameter in the url.');
     res.status(400).end();
     return;
   }
+  */
 
   logger.debug(`UL: DevEUI: ${devEUI}: UL message received from NS.`);
+
+  logger.debug('');
+  logger.debug(JSON.stringify(req.body, null, 4));
+  logger.debug('');
 
   /* ** Save downlink data in db ** */
   DownlinkDataModel.setDLData(nitapikey, devEUI, {
@@ -94,13 +100,15 @@ export const downlinkToChirpstack = async (req, res) => {
     return;
   }
 
-  const { nitapikey } = req.params;
+  const nitapikey = req.params.nitapikey || 'chirpstack';
+  /*
   if (!nitapikey) {
     logger.warn(`DL: There is no "nitapikey" parameter in the url.`);
     res.write('There is no "nitapikey" parameter in the url.');
     res.status(400).end();
     return;
   }
+  */
 
   logger.debug(`DL: DevEUI: ${devEUI}: DL message received from TPXLE.`);
 

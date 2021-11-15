@@ -1,5 +1,5 @@
 import express, { json } from 'express';
-import createError from 'http-errors';
+import httpError from 'http-errors';
 
 import cfg from './config.js';
 import logger from './logger.js';
@@ -15,7 +15,7 @@ app.listen(cfg.NIT_SERVER_PORT, () => {
 });
 
 app.use((req, res, next) => {
-  next(createError(404));
+  next(httpError(404));
 });
 
 /*
@@ -26,7 +26,7 @@ app.use((err, req, res, next) => {
 */
 
 app.use((err, req, res, next) => {
-  if (createError.isHttpError(err)) {
+  if (httpError.isHttpError(err)) {
     res.status(err.statusCode).send(err.message);
   } else {
     logger.error(err.stack);
