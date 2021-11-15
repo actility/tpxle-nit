@@ -96,11 +96,13 @@ export const tpxleAuth = async (req, res, next) => {
         `(x-access-token or (x-client-id and x-client-secret)) headers are mandatory!`,
       ),
     );
+    return;
   }
 
   if (!cfg.VALID_REALMS.includes(realm)) {
     logger.error(`UL: Invalid Realm!`);
     next(httpError(400, `Invalid Realm!`));
+    return;
   }
 
   let accessTokenValidated;
@@ -112,6 +114,7 @@ export const tpxleAuth = async (req, res, next) => {
       accessTokenValidated = await getAccessTokenAsync(clientId, clientSecret, realm);
     } catch (err) {
       next(err);
+      return;
     }
   }
 
