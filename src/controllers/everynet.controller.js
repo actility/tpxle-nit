@@ -33,6 +33,15 @@ export const uplinkFromEverynet = async (req, res, next) => {
     return;
   }
 
+  if (!req.body.type) {
+    logger.error('Missing "type" from POST body!');
+    res.status(400).send('Missing "type" from POST body!');
+    return;
+  }
+  if (req.body.type !== 'uplink') {
+    res.status(200).send('Only "uplink" message types are processed.');
+  }
+
   if (!devEUI) {
     logger.warn('UL: Missing DevEUI!');
     res.status(400).send('Missing DevEUI!');
