@@ -26,12 +26,14 @@ router.use('/uplink_from_chirpstack', tpxleAuth);
 router.post('/uplink_from_chirpstack', uplinkFromChirpstack);
 router.post('/downlink_to_chirpstack', downlinkToChirpstack);
 
-// router.use('/uplink_from_everynet', tpxleAuth);
-// router.post('/uplink_from_everynet', uplinkFromEverynet);
+router.use('/uplink_from_everynet', tpxleAuth);
+router.post('/uplink_from_everynet', uplinkFromEverynet);
+/*
 router.post('/uplink_from_everynet', (req, res) => {
   logger.debug(`EVERYNET BODY: ${JSON.stringify(req.body, null, 4)}`);
   res.status(200).end();
 });
+*/
 router.post('/downlink_to_everynet', downlinkToEverynet);
 
 router.use('/uplink_from_helium/:nitapikey', tpxleAuth);

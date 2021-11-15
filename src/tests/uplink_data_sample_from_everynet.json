@@ -1,43 +1,60 @@
 {
+  "type": "uplink",
   "meta": {
-    "network": "75697b95",
-    "packet_hash": "79f664df2c2073af798fa87497305d8d",
-    "application": "70b3d54b17db0106",
-    "device_addr": "36c365b4",
-    "time": 1504806731.256388,
-    "device": "faa73111a2aead2c",
-    "packet_id": "fdbb09021c4523d9f28bb815ca872c70",
-    "gateway": "7c95bd79864622a4"
+    "network": "358b679dd88d47948f6e108677b4b79a",
+    "packet_hash": "2b7e6c49cce00b4cd4210f9f2fbf773e",
+    "application": "20635f000a000017",
+    "device_addr": "1753dcc0",
+    "time": 1636994567.919,
+    "device": "20635f02010000e1",
+    "packet_id": "99576596ecd9f29314af6da755f1110b",
+    "gateway": "b0fd0b7002e20000"
   },
   "params": {
-    "rx_time": 1504806731.249041,
-    "port": 27,
+    "rx_time": 1636994567.7963693,
+    "port": 18,
+    "duplicate": false,
     "radio": {
+      "gps_time": 1321029785756,
+      "delay": 0.06324172019958496,
+      "datarate": 1,
       "modulation": {
         "bandwidth": 125000,
-        "type": 0,
-        "spreading": 12,
-        "coderate": "4/7"
+        "type": "LORA",
+        "spreading": 11,
+        "coderate": "4/5"
       },
       "hardware": {
         "status": 1,
         "chain": 0,
-        "tmst": 514586002,
-        "snr": 5.0,
-        "rssi": -100.0,
+        "tmst": 3824090348,
+        "snr": -7.2,
+        "rssi": -105,
         "channel": 0,
         "gps": {
-          "lat": 59.890445709228516,
-          "lng": 30.258167266845703
+          "lat": -22.90134048461914,
+          "lng": -47.197811126708984,
+          "alt": 690
         }
       },
-      "freq": 868.1,
-      "datarate": 0,
-      "time": 1504806731.249041
+      "time": 1636994567.7963693,
+      "freq": 915.2,
+      "size": 25
     },
-    "counter_up": 120,
-    "payload": "ZGEwOTg3MmI4NmU4NGI4MDg4YzZmMWU4ZjM5NmViODU=",
-    "encrypted_payload": "aiN3/x3Z7wz7NMPq+qoWf/17pq2J3Cx/p1kjvarfLEE="
-  },
-  "type": "uplink"
+    "counter_up": 5907,
+    "lora": {
+      "header": {
+        "class_b": false,
+        "confirmed": false,
+        "adr": true,
+        "ack": false,
+        "adr_ack_req": false,
+        "version": 0,
+        "type": 2
+      },
+      "mac_commands": []
+    },
+    "payload": "BSBEgABAAgIAAwIC",
+    "encrypted_payload": "eRZLGIwEY75Dyw8N"
+  }
 }

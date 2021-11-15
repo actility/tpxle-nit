@@ -51,6 +51,9 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
       logger.error(
         `UL: getAccessTokenAsync: clientId: ${clientId}: HTTP error happened while getting access token: ${dxapiTokenResponse.status}, ${dxapiTokenResponse.statusText}`,
       );
+      if (dxapiTokenResponse.status === 401) {
+        AccessTokensModel.deleteAccessToken(clientId);
+      }
       throw httpError(500, `HTTP Error happened while getting access token`);
     }
     const dxapiTokenResponseParsed = await dxapiTokenResponse.json();

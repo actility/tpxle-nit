@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "network": "75697b95",
+    "packet_hash": "79f664df2c2073af798fa87497305d8d",
+    "application": "70b3d54b17db0106",
+    "device_addr": "36c365b4",
+    "time": 1504806731.256388,
+    "device": "faa73111a2aead2c",
+    "packet_id": "fdbb09021c4523d9f28bb815ca872c70",
+    "gateway": "7c95bd79864622a4"
+  },
+  "params": {
+    "rx_time": 1504806731.249041,
+    "port": 27,
+    "radio": {
+      "modulation": {
+        "bandwidth": 125000,
+        "type": 0,
+        "spreading": 12,
+        "coderate": "4/7"
+      },
+      "hardware": {
+        "status": 1,
+        "chain": 0,
+        "tmst": 514586002,
+        "snr": 5.0,
+        "rssi": -100.0,
+        "channel": 0,
+        "gps": {
+          "lat": 59.890445709228516,
+          "lng": 30.258167266845703
+        }
+      },
+      "freq": 868.1,
+      "datarate": 0,
+      "time": 1504806731.249041
+    },
+    "counter_up": 120,
+    "payload": "ZGEwOTg3MmI4NmU4NGI4MDg4YzZmMWU4ZjM5NmViODU=",
+    "encrypted_payload": "aiN3/x3Z7wz7NMPq+qoWf/17pq2J3Cx/p1kjvarfLEE="
+  },
+  "type": "uplink"
+}

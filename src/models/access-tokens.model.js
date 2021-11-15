@@ -1,4 +1,4 @@
-import { setAsync, getAsync, expireAsync } from '../redis.client.js';
+import { setAsync, getAsync, delAsync, expireAsync } from '../redis.client.js';
 import logger from '../logger.js';
 
 export default class AccessTokensModel {
@@ -10,6 +10,18 @@ export default class AccessTokensModel {
       expireAsync(key, 600); // 10 min
       logger.debug(`Access Token saved to db. DBKEY: ${key}`);
       // logger.debug(`DBKEY: ${key}:  ${result}`);
+    } catch (err) {
+      logger.error(`${clientId}: DownlinkDataModel error:\n${err.stack}`);
+    }
+    return result;
+  }
+
+  static async deleteAccessToken(clientId) {
+    let result;
+    try {
+      const key = `access_token:${clientId}`;
+      result = await delAsync(key);
+      logger.debug(`Access Token deleted from db. DBKEY: ${key}`);
     } catch (err) {
       logger.error(`${clientId}: DownlinkDataModel error:\n${err.stack}`);
     }
