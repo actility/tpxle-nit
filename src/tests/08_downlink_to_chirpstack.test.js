@@ -7,14 +7,13 @@ dotenv.config({ path: new URL('./.env', import.meta.url) });
 
 const dlBody = {
   type: 'downlink',
-  // deveui: process.env.DEV_EUI,
-  deveui: process.env.DEV_EUI_MOBILE_APP,
+  deveui: process.env.DEV_EUI,
   port: '2',
   payload: '020402',
 };
 
-// const url = 'https://nano-things.net/tpxle-nit/downlink_to_ttn';
-const url = `http://localhost:${cfg.NIT_SERVER_PORT}/downlink_to_ttn/${process.env.NITAPIKEY}`;
+// const url = 'https://nano-things.net/tpxle-nit/downlink_to_chirpstack';
+const url = `http://localhost:${cfg.NIT_SERVER_PORT}/downlink_to_chirpstack/${process.env.NITAPIKEY}`;
 
 (async () => {
   const res = await fetch(url, {

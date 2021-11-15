@@ -25,7 +25,11 @@ const logger = winston.createLogger({
 if (process.env.NODE_ENV !== 'production') {
   logger.add(
     new winston.transports.Console({
-      format: winston.format.simple(),
+      format: winston.format.combine(
+        winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        winston.format.printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`),
+      ),
+      // format: winston.format.simple(),
       level: cfg.LOG_LEVEL || 'error',
     }),
   );

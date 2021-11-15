@@ -2,31 +2,29 @@ import fetch from 'node-fetch';
 
 import logger from '../logger.js';
 import DownlinkDataModel from '../models/downlink-data.model.js';
-import { translateUplink, translateDownlink } from '../services/nit-ttn.service.js';
+import { translateUplink, translateDownlink } from '../services/nit-everynet.service.js';
 import sendToTPXLEAsync from '../services/send-to-tpxle.js';
 
 import cfg from '../config.js';
 
-export const uplinkFromTTN = async (req, res, next) => {
+export const uplinkFromEverynet = async (req, res, next) => {
   /* ** Check if request body is correct ** */
   const errMsg =
-    '(x-access-token or (x-client-id and x-client-secret)), x-downlink-push, x-downlink-replace, x-downlink-apikey in header and end_device_ids.dev_eui in body are mandatory!';
+    '(x-access-token or (x-client-id and x-client-secret)), x-downlink-api, x-downlink-apikey in header and devEUI in body are mandatory!';
   let accessToken;
   let clientId;
   let clientSecret;
   let realm;
   let devEUI;
-  let downlinkPush;
-  let downlinkReplace;
+  let downlinkApi;
   let downlinkApikey;
   try {
     accessToken = req.headers['x-access-token'];
     clientId = req.headers['x-client-id'];
     clientSecret = req.headers['x-client-secret'];
     realm = req.headers['x-realm'] || cfg.DEFAULT_REALM;
-    devEUI = req.body.end_device_ids.dev_eui;
-    downlinkPush = req.headers['x-downlink-push'];
-    downlinkReplace = req.headers['x-downlink-replace'];
+    devEUI = req.body.meta.device;
+    downlinkApi = req.headers['x-downlink-api'];
     downlinkApikey = req.headers['x-downlink-apikey'];
   } catch (err) {
     logger.warn(err.stack);
@@ -45,36 +43,25 @@ export const uplinkFromTTN = async (req, res, next) => {
     res.status(400).send('Invalid realm!');
     return;
   }
-  if (
-    !(
-      (accessToken || (clientId && clientSecret)) &&
-      devEUI &&
-      downlinkPush &&
-      downlinkReplace &&
-      downlinkApikey
-    )
-  ) {
+  if (!((accessToken || (clientId && clientSecret)) && devEUI && downlinkApi && downlinkApikey)) {
     logger.warn(`UL: DevEUI: ${devEUI}: ${errMsg}`);
     res.status(400).send(errMsg);
     return;
   }
 
-  const nitapikey = req.params.nitapikey || 'ttn'; // For backward compatibility, we allow not specifying nitapikey in the url!
-  /*
+  const { nitapikey } = req.params;
   if (!nitapikey) {
-    logger.warn(`DL: There is no "nitapikey" parameter in the url.`);
+    logger.warn(`UL: There is no "nitapikey" parameter in the url.`);
     res.write('There is no "nitapikey" parameter in the url.');
     res.status(400).end();
     return;
   }
-  */
 
   logger.debug(`UL: DevEUI: ${devEUI}: UL message received from NS.`);
 
   /* ** Save downlink data in db ** */
   DownlinkDataModel.setDLData(nitapikey, devEUI, {
-    downlinkPush,
-    downlinkReplace,
+    downlinkApi,
     downlinkApikey,
   });
 
@@ -98,7 +85,7 @@ export const uplinkFromTTN = async (req, res, next) => {
   res.status(200).end();
 };
 
-export const downlinkToTTN = async (req, res) => {
+export const downlinkToEverynet = async (req, res) => {
   /* ** Check if request body is correct ** */
   const devEUI = req.body.deveui?.toLowerCase();
   if (!devEUI) {
@@ -108,15 +95,13 @@ export const downlinkToTTN = async (req, res) => {
     return;
   }
 
-  const nitapikey = req.params.nitapikey || 'ttn'; // For backward compatibility, we allow not specifying nitapikey in the url!
-  /*
+  const { nitapikey } = req.params;
   if (!nitapikey) {
     logger.warn(`DL: There is no "nitapikey" parameter in the url.`);
     res.write('There is no "nitapikey" parameter in the url.');
     res.status(400).end();
     return;
   }
-  */
 
   logger.debug(`DL: DevEUI: ${devEUI}: DL message received from TPXLE.`);
 
@@ -148,7 +133,7 @@ export const downlinkToTTN = async (req, res) => {
   /* ** Send downlink frame to NS ** */
   let nsRes;
   try {
-    nsRes = await fetch(downlinkData.downlinkReplace, {
+    nsRes = await fetch(`${downlinkData.downlinkApi}/${devEUI}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${downlinkData.downlinkApikey}`,

@@ -2,29 +2,31 @@ import { setAsync, getAsync, expireAsync } from '../redis.client.js';
 import logger from '../logger.js';
 
 export default class AccessTokensModel {
-  static async setAccessToken(devEUI, accessToken) {
+  static async setAccessToken(clientId, accessToken) {
     let result;
     try {
-      const key = `access_token:${devEUI.toLowerCase()}`;
+      const key = `access_token:${clientId}`;
       result = await setAsync(key, accessToken);
       expireAsync(key, 600); // 10 min
-      logger.debug(`UL: DevEUI: ${devEUI}: Access Token saved to db.`);
+      logger.debug(`Access Token saved to db.`);
+      logger.debug(`DBKEY: ${key}:  ${result}`);
     } catch (err) {
-      logger.error(`AccessTokensModel error:\n${err.stack}`);
+      logger.error(`${clientId}: DownlinkDataModel error:\n${err.stack}`);
     }
     return result;
   }
 
-  static async getAccessToken(devEUI) {
+  static async getAccessToken(clientId) {
     let result;
     try {
-      const key = `access_token:${devEUI.toLowerCase()}`;
+      const key = `access_token:${clientId}`;
       result = await getAsync(key);
+      if (result) {
+        logger.debug(`Cached Access Token retreived from db.`);
+        logger.debug(`DBKEY: ${key}:  ${result}`);
+      }
     } catch (err) {
-      logger.error(`AccessTokensModel error:\n${err.stack}`);
-    }
-    if (result) {
-      logger.debug(`UL: DevEUI: ${devEUI}: Cached Access Token retreived from db.`);
+      logger.error(`${clientId}: DownlinkDataModel error:\n${err.stack}`);
     }
     return result;
   }
