@@ -115,6 +115,7 @@ const translateDownlink = (body) => {
   };
   */
 
+  /*
   const result = {
     meta: {
       // "network": "75697b95",
@@ -133,7 +134,12 @@ const translateDownlink = (body) => {
     },
     type: 'downlink_response',
   };
+  */
 
+  const result = {
+    payload: Buffer.from(body.payload, 'hex').toString('base64'),
+    port: body.port, // ??????? not documented I just guess!!
+  };
   return result;
 };
 

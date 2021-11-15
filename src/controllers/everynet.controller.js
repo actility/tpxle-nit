@@ -133,7 +133,7 @@ export const downlinkToEverynet = async (req, res) => {
   /* ** Send downlink frame to NS ** */
   let nsRes;
   try {
-    nsRes = await fetch(`${downlinkData.downlinkApi}/${devEUI}`, {
+    nsRes = await fetch(`${downlinkData.downlinkApi}/messages/${devEUI}/send-downlink-claim`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${downlinkData.downlinkApikey}`,
