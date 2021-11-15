@@ -49,7 +49,7 @@ export const uplinkFromEverynet = async (req, res, next) => {
     return;
   }
 
-  const nitapikey = req.params.nitapikey || 'everynet';
+  const nitapikey = req.params.nitapikey || 'everynet'; // For backward compatibility, we allow not specifying nitapikey in the url!
   /*
   if (!nitapikey) {
     logger.warn(`UL: There is no "nitapikey" parameter in the url.`);
@@ -101,7 +101,7 @@ export const downlinkToEverynet = async (req, res) => {
     return;
   }
 
-  const nitapikey = req.params.nitapikey || 'everynet';
+  const nitapikey = req.params.nitapikey || 'everynet'; // For backward compatibility, we allow not specifying nitapikey in the url!
   /*
   if (!nitapikey) {
     logger.warn(`DL: There is no "nitapikey" parameter in the url.`);

@@ -48,7 +48,7 @@ export const uplinkFromChirpstack = async (req, res, next) => {
     return;
   }
 
-  const nitapikey = req.params.nitapikey || 'chirpstack';
+  const nitapikey = req.params.nitapikey || 'chirpstack'; // For backward compatibility, we allow not specifying nitapikey in the url!
   /*
   if (!nitapikey) {
     logger.warn(`UL: There is no "nitapikey" parameter in the url.`);
@@ -100,7 +100,7 @@ export const downlinkToChirpstack = async (req, res) => {
     return;
   }
 
-  const nitapikey = req.params.nitapikey || 'chirpstack';
+  const nitapikey = req.params.nitapikey || 'chirpstack'; // For backward compatibility, we allow not specifying nitapikey in the url!
   /*
   if (!nitapikey) {
     logger.warn(`DL: There is no "nitapikey" parameter in the url.`);
