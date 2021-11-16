@@ -27,7 +27,7 @@ const url = `http://localhost:${cfg.NIT_SERVER_PORT}/uplink_from_chirpstack/${pr
       'x-client-id': process.env.DEV1_CLIENT_ID,
       'x-client-secret': process.env.DEV1_CLIENT_SECRET,
       // 'x-client-secret': 'wrongPasswd',
-      'x-realm': 'le-lab1',
+      'x-realm': 'rnd-b2b',
 
       // 'x-client-id': process.env.LELAB_CLIENT_ID,
       // 'x-client-secret': process.env.LELAB_CLIENT_SECRET,

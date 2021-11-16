@@ -7,7 +7,7 @@ export default class AccessTokensModel {
     try {
       const key = `access_token:${clientId}`;
       result = await setAsync(key, accessToken);
-      expireAsync(key, 300); // 5 min
+      expireAsync(key, 120); // 2 min
       logger.debug(`Access Token saved to db. DBKEY: ${key}`);
       // logger.debug(`DBKEY: ${key}:  ${result}`);
     } catch (err) {

@@ -33,7 +33,7 @@ LOG_LEVEL: debug # error | warn | info | http | verbose | debug | silly
 VALID_REALMS:
   - dev1
   - le-lab
-  - le-lab1
+  - rnd-b2b
 
 DEFAULT_REALM: dev1
 
@@ -59,8 +59,8 @@ le-lab: # x-realm  # used for R&D_TPXLE with R&D_Keycloak
   SCOPE: "openid"
   CLIENT_ID: "tpx-le-nit"
 
-le-lab1: # x-realm # used for R&D_TPXLE with R&D_DxAdminAPI
-  SWAGGER_UI: "https://le-lab.preview.thingpark.com/admin/latest/swagger-ui/index.html?shortUrl=tpdx-admin-api-contract.json"
-  TOKEN_REQUEST_URL: "https://le-lab.preview.thingpark.com/admin/latest/api/oauth/token"
-  FEED_URL: "https://le-lab.preview.thingpark.com/location/latest/api/feeds"
+rnd-b2b: # x-realm # used for R&D_TPXLE with R&D_DxAdminAPI
+  SWAGGER_UI: "https://dx-api.preview.thingpark.com/admin/latest/swagger-ui/index.html?shortUrl=tpdx-admin-api-contract.json"
+  TOKEN_REQUEST_URL: "https://dx-api.preview.thingpark.com/admin/latest/api/oauth/token"
+  FEED_URL: "https://dx-api.preview.thingpark.com/location/latest/api/feeds"
   GRANT_TYPE: "client_credentials"
