@@ -59,7 +59,8 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
       logger.debug(
         `UL: getAccessTokenAsync: clientId: ${clientId}: Token received from token endpoint.`,
       );
-      AccessTokensModel.setAccessToken(clientId, accessToken);
+      console.log(accessToken);
+      await AccessTokensModel.setAccessToken(clientId, accessToken);
       return accessToken;
     }
     logger.error(

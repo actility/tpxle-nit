@@ -9,6 +9,8 @@ import AccessTokensModel from '../models/access-tokens.model.js';
 const sendToTPXLEAsync = async (translatedBody, accessToken, realm, clientId) => {
   const devEUI = translatedBody.deviceEUI;
 
+  const url = cfg[realm].FEED_URL;
+
   const options = {
     method: 'POST',
     headers: {
@@ -18,16 +20,17 @@ const sendToTPXLEAsync = async (translatedBody, accessToken, realm, clientId) =>
     body: JSON.stringify(translatedBody),
   };
 
+  // console.log(`URL: ${url}`);
+  // console.log(`OPTIONS: ${JSON.stringify(options, null, 4)}`);
+
   try {
-    const tpxleResponse = await fetch(cfg[realm].FEED_URL, options);
+    const tpxleResponse = await fetch(url, options);
     if (!tpxleResponse.ok) {
       logger.error(
         `UL: sendToTPXLEAsync: DevEUI: ${devEUI}:  HTTP error happened while forwarding UL to TPXLE: ${tpxleResponse.status}, ${tpxleResponse.statusText}`,
       );
 
-      logger.error(`KAKUKK: ${typeof tpxleResponse.status}`);
       if (tpxleResponse.status === 401) {
-        logger.error('KAKUKK');
         AccessTokensModel.deleteAccessToken(clientId);
       }
 

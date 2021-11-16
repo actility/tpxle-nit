@@ -14,43 +14,37 @@ import { uplinkFromEverynet, downlinkToEverynet } from '../controllers/everynet.
 
 const router = express.Router();
 
-router.use('/uplink_from_helium', tpxleAuth);
+router.use('/uplink_from_*', tpxleAuth);
+
+// for legacy users that dont use nit key
+
 router.post('/uplink_from_helium', uplinkFromHelium);
 router.post('/downlink_to_helium', downlinkToHelium);
 
-router.use('/uplink_from_ttn', tpxleAuth);
 router.post('/uplink_from_ttn', uplinkFromTTN);
 router.post('/downlink_to_ttn', downlinkToTTN);
 
-router.use('/uplink_from_chirpstack', tpxleAuth);
 router.post('/uplink_from_chirpstack', uplinkFromChirpstack);
 router.post('/downlink_to_chirpstack', downlinkToChirpstack);
 
-router.use('/uplink_from_everynet', tpxleAuth);
 router.post('/uplink_from_everynet', uplinkFromEverynet);
-/*
-router.post('/uplink_from_everynet', (req, res) => {
-  logger.debug(`EVERYNET BODY: ${JSON.stringify(req.body, null, 4)}`);
-  res.status(200).end();
-});
-*/
 router.post('/downlink_to_everynet', downlinkToEverynet);
 
-router.use('/uplink_from_helium/:nitapikey', tpxleAuth);
+// downlink secured by nitapikey
+
 router.post('/uplink_from_helium/:nitapikey', uplinkFromHelium);
 router.post('/downlink_to_helium/:nitapikey', downlinkToHelium);
 
-router.use('/uplink_from_ttn/:nitapikey', tpxleAuth);
 router.post('/uplink_from_ttn/:nitapikey', uplinkFromTTN);
 router.post('/downlink_to_ttn/:nitapikey', downlinkToTTN);
 
-router.use('/uplink_from_chirpstack/:nitapikey', tpxleAuth);
 router.post('/uplink_from_chirpstack/:nitapikey', uplinkFromChirpstack);
 router.post('/downlink_to_chirpstack/:nitapikey', downlinkToChirpstack);
 
-router.use('/uplink_from_everynet/:nitapikey', tpxleAuth);
 router.post('/uplink_from_everynet/:nitapikey', uplinkFromEverynet);
 router.post('/downlink_to_everynet/:nitapikey', downlinkToEverynet);
+
+// test route
 
 router.get('/test', (req, res) => {
   logger.debug('Test request received on server');
