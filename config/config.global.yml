@@ -37,20 +37,30 @@ VALID_REALMS:
 
 DEFAULT_REALM: dev1
 
-dev1:
-  REALM: dev1 # used for Ecosystem_TPXLE with Ecosystem_DxAdminAPI
+dev1_: # used for Ecosystem_TPXLE with Ecosystem_DxAdminAPI
+  REALM: dev1
+  SWAGGER_UI: "https://community.thingpark.io/thingpark/dx/admin/latest/swagger-ui/index.html?shortUrl=tpdx-admin-tpe-api-contract.json"
+  TOKEN_REQUEST_URL: "https://community.thingpark.io/thingpark/dx/admin/latest/api/oauth/token"
   FEED_URL: "https://dx-api.thingpark.io/location/latest/api/feeds"
+  GRANT_TYPE: "client_credentials"
+
+dev1: # used for Ecosystem_TPXLE with Ecosystem_DxAdminAPI
+  REALM: dev1
+  SWAGGER_UI: "https://dx-api.thingpark.io/admin/latest/swagger-ui/index.html?shortUrl=tpdx-admin-api-contract.json"
   TOKEN_REQUEST_URL: "https://dx-api.thingpark.io/admin/latest/api/oauth/token"
+  FEED_URL: "https://dx-api.thingpark.io/location/latest/api/feeds"
   GRANT_TYPE: "client_credentials"
 
 le-lab: # x-realm  # used for R&D_TPXLE with R&D_Keycloak
-  FEED_URL: "https://le-lab.preview.thingpark.com/location/latest/api/feeds"
+  SWAGGER_UI: "https://le-lab.preview.thingpark.com/admin/latest/swagger-ui/index.html?shortUrl=tpdx-admin-api-contract.json"
   TOKEN_REQUEST_URL: "https://le-lab.preview.thingpark.com/auth"
+  FEED_URL: "https://le-lab.preview.thingpark.com/location/latest/api/feeds"
   GRANT_TYPE: "password"
   SCOPE: "openid"
   CLIENT_ID: "tpx-le-nit"
 
 le-lab1: # x-realm # used for R&D_TPXLE with R&D_DxAdminAPI
-  FEED_URL: "https://le-lab.preview.thingpark.com/location/latest/api/feeds"
+  SWAGGER_UI: "https://le-lab.preview.thingpark.com/admin/latest/swagger-ui/index.html?shortUrl=tpdx-admin-api-contract.json"
   TOKEN_REQUEST_URL: "https://le-lab.preview.thingpark.com/admin/latest/api/oauth/token"
+  FEED_URL: "https://le-lab.preview.thingpark.com/location/latest/api/feeds"
   GRANT_TYPE: "client_credentials"
