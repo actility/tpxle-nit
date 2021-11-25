@@ -41,7 +41,7 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
 
   let accessToken;
 
-  accessToken = await AccessTokensModel.getAccessToken(clientId);
+  accessToken = await AccessTokensModel.getAccessToken(realm, clientId);
   if (accessToken) {
     logger.debug(`UL: getAccessTokenAsync: clientId: ${clientId}: Token found in cache.`);
     return accessToken;
@@ -62,7 +62,7 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
         `UL: getAccessTokenAsync: clientId: ${clientId}: Token received from token endpoint.`,
       );
       console.log(accessToken);
-      await AccessTokensModel.setAccessToken(clientId, accessToken);
+      await AccessTokensModel.setAccessToken(realm, clientId, accessToken);
       return accessToken;
     }
     logger.error(

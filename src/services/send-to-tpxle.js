@@ -25,18 +25,20 @@ const sendToTPXLEAsync = async (translatedBody, accessToken, realm, clientId) =>
 
   try {
     const tpxleResponse = await fetch(url, options);
+    const tpxleResponseText = await tpxleResponse.text();
     if (!tpxleResponse.ok) {
       logger.error(
         `UL: sendToTPXLEAsync: DevEUI: ${devEUI}:  HTTP error happened while forwarding UL to TPXLE: ${tpxleResponse.status}, ${tpxleResponse.statusText}`,
       );
 
+      logger.error(`UL: sendToTPXLEAsync: DevEUI: ${devEUI}: Response Text: ${tpxleResponseText}`);
+
       if (tpxleResponse.status === 401) {
-        AccessTokensModel.deleteAccessToken(clientId);
+        AccessTokensModel.deleteAccessToken(realm, clientId);
       }
 
       throw httpError(500, `HTTP error happened while forwarding UL to TPXLE`);
     }
-    const tpxleResponseText = await tpxleResponse.text();
     logger.debug(
       `UL: sendToTPXLEAsync: DevEUI: ${devEUI}: Message forwarded to TPXLE. ${tpxleResponseText}`,
     );

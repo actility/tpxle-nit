@@ -2,10 +2,10 @@ import { setAsync, getAsync, delAsync, expireAsync } from '../redis.client.js';
 import logger from '../logger.js';
 
 export default class AccessTokensModel {
-  static async setAccessToken(clientId, accessToken) {
+  static async setAccessToken(realm, clientId, accessToken) {
     let result;
     try {
-      const key = `access_token:${clientId}`;
+      const key = `access_token:${realm}:${clientId}`;
       result = await setAsync(key, accessToken);
       expireAsync(key, 240); // 4 min
       logger.debug(`Access Token saved to db. DBKEY: ${key}`);
@@ -16,10 +16,10 @@ export default class AccessTokensModel {
     return result;
   }
 
-  static async deleteAccessToken(clientId) {
+  static async deleteAccessToken(realm, clientId) {
     let result;
     try {
-      const key = `access_token:${clientId}`;
+      const key = `access_token:${realm}:${clientId}`;
       result = await delAsync(key);
       logger.debug(`Access Token deleted from db. DBKEY: ${key}`);
     } catch (err) {
@@ -28,10 +28,10 @@ export default class AccessTokensModel {
     return result;
   }
 
-  static async getAccessToken(clientId) {
+  static async getAccessToken(realm, clientId) {
     let result;
     try {
-      const key = `access_token:${clientId}`;
+      const key = `access_token:${realm}:${clientId}`;
       result = await getAsync(key);
       if (result) {
         logger.debug(`Cached Access Token retreived from db. DBKEY: ${key}`);
