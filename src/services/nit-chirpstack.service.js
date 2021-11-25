@@ -47,10 +47,21 @@ const translateUplink = (body) => {
     throw new Error('Missing property: body.devEUI');
   }
 
-  if (body.rxInfo) {
-    feeds.time = moment(body.rxInfo[0].time).format();
-    feeds.solverInput.receptionTime = feeds.time;
+  let time;
+  if (body.rxInfo && Array.isArray(body.rxInfo)) {
+    if (body.rxInfo[0].time) {
+      time = moment(body.rxInfo[0].time);
+    }
+    if (!time.isValid() && body.rxInfo[0].timeSinceGPSEpoch) {
+      time = moment(parseFloat(body.rxInfo[0].timeSinceGPSEpoch) * 1000);
+    }
   }
+  if (!time.isValid()) {
+    time = moment();
+  }
+
+  feeds.time = time.format();
+  feeds.solverInput.receptionTime = feeds.time;
 
   if (body.fCnt) {
     feeds.solverInput.sequenceNumber = body.fCnt;

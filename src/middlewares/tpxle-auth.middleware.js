@@ -48,6 +48,9 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
   }
 
   try {
+    console.log(url);
+    console.log(JSON.stringify(options, null, 4));
+
     const dxapiTokenResponse = await fetch(url, options);
     if (!dxapiTokenResponse.ok) {
       logger.error(

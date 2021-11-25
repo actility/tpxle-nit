@@ -5,7 +5,7 @@ import cfg from '../config.js';
 
 dotenv.config({ path: new URL('./.env', import.meta.url) });
 
-const testTarget = 'lh'; // 'nt' for nano-things, 'lh' for localhost
+const testTarget = 'nt'; // 'nt' for nano-things, 'lh' for localhost
 const nsName = 'everynet'; // NS Specific !!!
 
 const bodyExampleText = fs.readFileSync(
