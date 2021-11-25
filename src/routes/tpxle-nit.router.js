@@ -1,6 +1,6 @@
 import express from 'express';
 
-import logger from '../logger.js';
+// import logger from '../logger.js';
 
 import { tpxleAuth } from '../middlewares/tpxle-auth.middleware.js';
 
@@ -43,13 +43,5 @@ router.post('/downlink_to_chirpstack/:nitapikey', downlinkToChirpstack);
 
 router.post('/uplink_from_everynet/:nitapikey', uplinkFromEverynet);
 router.post('/downlink_to_everynet/:nitapikey', downlinkToEverynet);
-
-// test route
-
-router.get('/test', (req, res) => {
-  logger.debug('Test request received on server');
-  res.write('The server works\n');
-  res.status(200).end();
-});
 
 export default router;

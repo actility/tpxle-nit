@@ -7,7 +7,7 @@ import sendToTPXLEAsync from '../services/send-to-tpxle.js';
 
 import cfg from '../config.js';
 
-export const uplinkFromHelium = (req, res, next) => {
+export const uplinkFromHelium = async (req, res, next) => {
   /* ** Check if request body is correct ** */
   const errMsg =
     '(accessToken or (clientId and clientSecret)) in header and devEUI, downlinkUrl in body are mandatory!';
@@ -74,7 +74,7 @@ export const uplinkFromHelium = (req, res, next) => {
 
   // sendToTPXLEAsync(translatedBody, accessToken, clientId, clientSecret, realm);
   try {
-    sendToTPXLEAsync(translatedBody, req.tpxleToken, realm, clientId);
+    await sendToTPXLEAsync(translatedBody, req.tpxleToken, realm, clientId);
   } catch (err) {
     next(err);
     return;

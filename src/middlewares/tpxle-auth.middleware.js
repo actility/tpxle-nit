@@ -39,7 +39,9 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
     throw httpError(400, 'Invalid realm.');
   }
 
-  let accessToken = await AccessTokensModel.getAccessToken(clientId);
+  let accessToken;
+
+  accessToken = await AccessTokensModel.getAccessToken(clientId);
   if (accessToken) {
     logger.debug(`UL: getAccessTokenAsync: clientId: ${clientId}: Token found in cache.`);
     return accessToken;
