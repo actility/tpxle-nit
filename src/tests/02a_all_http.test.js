@@ -4,6 +4,7 @@ import examplesHelium from './02b_helium_http_spec.js';
 import examplesTTN from './02c_ttn_http_spec.js';
 import examplesEverynet from './02e_everynet_http_spec.js';
 import examplesChirpstack from './02d_chirpstack_http_spec.js';
+import examplesSenet from './02f_senet_http_spec.js';
 
 (async () => {
   console.log('\nHelium tests:');
@@ -33,6 +34,14 @@ import examplesChirpstack from './02d_chirpstack_http_spec.js';
   console.log('\nChirpstack tests:');
   for (let i = 0; i < examplesChirpstack.length; i += 1) {
     const res = await fetch(examplesChirpstack[i].url, examplesChirpstack[i].options);
+    // console.log(JSON.stringify(example, null, 4));
+    console.log(`Response status: ${res.status} ${res.statusText}`);
+    // console.log(`Response text: ${res.Text}`);
+  }
+
+  console.log('\nSenet tests:');
+  for (let i = 0; i < examplesSenet.length; i += 1) {
+    const res = await fetch(examplesSenet[i].url, examplesSenet[i].options);
     // console.log(JSON.stringify(example, null, 4));
     console.log(`Response status: ${res.status} ${res.statusText}`);
     // console.log(`Response text: ${res.Text}`);

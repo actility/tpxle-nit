@@ -11,6 +11,7 @@ import {
   downlinkToChirpstack,
 } from '../controllers/chirpstack.controller.js';
 import { uplinkFromEverynet, downlinkToEverynet } from '../controllers/everynet.controller.js';
+import { uplinkFromSenet, downlinkToSenet } from '../controllers/senet.controller.js';
 
 const router = express.Router();
 
@@ -23,12 +24,6 @@ router.post('/downlink_to_helium', downlinkToHelium);
 
 router.post('/uplink_from_ttn', uplinkFromTTN);
 router.post('/downlink_to_ttn', downlinkToTTN);
-
-router.post('/uplink_from_chirpstack', uplinkFromChirpstack);
-router.post('/downlink_to_chirpstack', downlinkToChirpstack);
-
-router.post('/uplink_from_everynet', uplinkFromEverynet);
-router.post('/downlink_to_everynet', downlinkToEverynet);
 
 // downlink secured by nitapikey
 
@@ -43,5 +38,8 @@ router.post('/downlink_to_chirpstack/:nitapikey', downlinkToChirpstack);
 
 router.post('/uplink_from_everynet/:nitapikey', uplinkFromEverynet);
 router.post('/downlink_to_everynet/:nitapikey', downlinkToEverynet);
+
+router.post('/uplink_from_senet/:nitapikey', uplinkFromSenet);
+router.post('/downlink_to_senet/:nitapikey', downlinkToSenet);
 
 export default router;

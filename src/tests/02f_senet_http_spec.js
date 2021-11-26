@@ -6,20 +6,20 @@ import cfg from '../config.js';
 dotenv.config({ path: new URL('./.env', import.meta.url) });
 
 const testTarget = process.env.TEST_TARGET; // 'nt' for nano-things, 'lh' for localhost
-const nsName = 'everynet'; // NS Specific !!!
+const nsName = 'senet'; // NS Specific !!!
 
 const bodyExampleText = fs.readFileSync(
   new URL(`./uplink_data_sample_from_${nsName}.json`, import.meta.url),
 );
 
 const bodyDev1 = JSON.parse(bodyExampleText);
-bodyDev1.meta.device = process.env.DEV_EUI.toLowerCase(); // NS Specific !!! "meta.device" field
+bodyDev1.devEui = process.env.DEV_EUI.toLowerCase(); // NS Specific !!! "meta.device" field
 
 const bodyMobileApp = JSON.parse(bodyExampleText);
-bodyMobileApp.meta.device = process.env.DEV_EUI_MOBILE_APP.toLowerCase(); // NS Specific !!! "meta.device" field
+bodyMobileApp.devEui = process.env.DEV_EUI_MOBILE_APP.toLowerCase(); // NS Specific !!! "meta.device" field
 
 const bodyRnd = JSON.parse(bodyExampleText);
-bodyRnd.meta.device = process.env.DEV_EUI_RND.toLowerCase(); // NS Specific !!! "meta.device" field
+bodyRnd.devEui = process.env.DEV_EUI_RND.toLowerCase(); // NS Specific !!! "meta.device" field
 
 const headerCommon = {
   'content-type': 'application/json',

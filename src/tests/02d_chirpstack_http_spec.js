@@ -5,7 +5,7 @@ import cfg from '../config.js';
 
 dotenv.config({ path: new URL('./.env', import.meta.url) });
 
-const testTarget = 'nt'; // 'nt' for nano-things, 'lh' for localhost
+const testTarget = process.env.TEST_TARGET; // 'nt' for nano-things, 'lh' for localhost
 const nsName = 'chirpstack'; // NS Specific !!!
 
 const bodyExampleText = fs.readFileSync(
@@ -25,8 +25,8 @@ const headersDev1AccessToken = {
   'x-access-token': process.env.ACCESS_TOKEN,
   'x-realm': 'dev1',
 
-  'x-downlink-api': process.env.DL_WEBHOOK, // NS Specific !!! Only needed for Everynet and Chirpstack
-  'x-downlink-apikey': 'myDownlinkApiKey', // NS Specific !!! Only needed for Everynet and Chirpstack
+  'x-downlink-api': process.env.DL_WEBHOOK, // NS Specific !!!
+  'x-downlink-apikey': 'myDownlinkApiKey', // NS Specific !!!
 
   'content-type': 'application/json',
 };
@@ -36,8 +36,8 @@ const headersDev1Credentials = {
   'x-client-secret': process.env.DEV1_CLIENT_SECRET,
   'x-realm': 'dev1',
 
-  'x-downlink-api': process.env.DL_WEBHOOK, // NS Specific !!! Only needed for Everynet and Chirpstack
-  'x-downlink-apikey': 'myDownlinkApiKey', // NS Specific !!! Only needed for Everynet and Chirpstack
+  'x-downlink-api': process.env.DL_WEBHOOK, // NS Specific !!!
+  'x-downlink-apikey': 'myDownlinkApiKey', // NS Specific !!!
 
   'content-type': 'application/json',
 };
@@ -47,8 +47,8 @@ const headersKeycloakCredentials = {
   'x-client-secret': process.env.LELAB_CLIENT_SECRET,
   'x-realm': 'le-lab',
 
-  'x-downlink-api': process.env.DL_WEBHOOK, // NS Specific !!! Only needed for Everynet and Chirpstack
-  'x-downlink-apikey': 'myDownlinkApiKey', // NS Specific !!! Only needed for Everynet and Chirpstack
+  'x-downlink-api': process.env.DL_WEBHOOK, // NS Specific !!!
+  'x-downlink-apikey': 'myDownlinkApiKey', // NS Specific !!!
 
   'content-type': 'application/json',
 };
@@ -58,8 +58,8 @@ const headersRndCredentials = {
   'x-client-secret': process.env.DEV1_CLIENT_SECRET,
   'x-realm': 'rnd',
 
-  'x-downlink-api': process.env.DL_WEBHOOK, // NS Specific !!! Only needed for Everynet and Chirpstack
-  'x-downlink-apikey': 'myDownlinkApiKey', // NS Specific !!! Only needed for Everynet and Chirpstack
+  'x-downlink-api': process.env.DL_WEBHOOK, // NS Specific !!!
+  'x-downlink-apikey': 'myDownlinkApiKey', // NS Specific !!!
 
   'content-type': 'application/json',
 };
