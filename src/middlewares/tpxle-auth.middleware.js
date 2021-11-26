@@ -48,8 +48,8 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
   }
 
   try {
-    console.log(url);
-    console.log(JSON.stringify(options, null, 4));
+    // console.log(url);
+    // console.log(JSON.stringify(options, null, 4));
 
     const dxapiTokenResponse = await fetch(url, options);
     if (!dxapiTokenResponse.ok) {
@@ -90,8 +90,14 @@ export const tpxleAuth = async (req, res, next) => {
   const clientSecret = req.headers['x-client-secret'];
   const realm = req.headers['x-realm'] || cfg.DEFAULT_REALM;
 
+  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+  logger.error(`UL: Message received from NS: "${ip}"!`);
+
   if (!(accessToken || (clientId && clientSecret))) {
-    logger.error(`UL: x-access-token or (x-client-id and x-client-secret)) headers are mandatory!`);
+    logger.error(
+      `UL: ${ip}: x-access-token or (x-client-id and x-client-secret)) headers are mandatory!`,
+    );
     next(
       httpError(
         400,
