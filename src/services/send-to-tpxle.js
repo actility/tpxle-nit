@@ -42,6 +42,7 @@ const sendToTPXLEAsync = async (translatedBody, accessToken, realm, clientId) =>
     logger.debug(
       `UL: sendToTPXLEAsync: DevEUI: ${devEUI}: Message forwarded to TPXLE. ${tpxleResponse.status}, ${tpxleResponse.statusText}, ${tpxleResponseText}`,
     );
+    logger.debug(`UL: sendToTPXLEAsync: DevEUI: ${devEUI}: ${options.body}`);
     return tpxleResponseText;
   } catch (err) {
     if (httpError.isHttpError(err)) {
