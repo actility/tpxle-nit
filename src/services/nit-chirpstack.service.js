@@ -65,15 +65,8 @@ const translateUplink = (body) => {
   feeds.time = time.format();
   feeds.solverInput.receptionTime = feeds.time;
 
-  if (body.fCnt) {
+  if ('fCnt' in body) {
     feeds.solverInput.sequenceNumber = body.fCnt;
-  } else {
-    // TODO
-    feeds.solverInput.sequenceNumber = 1;
-    // logger.error(
-    //   `Chirpstack Translator: Missing property: body.fCnt; ${body.devEUI}: ${JSON.stringify(body)}`,
-    // );
-    // throw new Error('Chirpstack Translator: Missing property: body.fCnt');
   }
 
   if (body.fPort) {
