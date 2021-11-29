@@ -53,7 +53,7 @@ const translateUplink = (body) => {
   }
 
   if (body.uplink_message) {
-    if (body.uplink_message.f_cnt) {
+    if (typeof body.uplink_message.f_cnt !== 'undefined') {
       feeds.solverInput.sequenceNumber = body.uplink_message.f_cnt;
     }
 
