@@ -45,9 +45,9 @@ const sendToTPXLEAsync = async (translatedBody, accessToken, realm, clientId) =>
     return tpxleResponseText;
   } catch (err) {
     if (httpError.isHttpError(err)) {
-      console.log('KAKUKK_CATCHED');
-      console.log(url);
-      console.log(JSON.stringify(options, null, 4));
+      // console.log('KAKUKK_CATCHED');
+      // console.log(url);
+      // console.log(JSON.stringify(options, null, 4));
 
       throw err;
     } else {
