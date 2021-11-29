@@ -55,7 +55,7 @@ const translateUplink = (body) => {
       time = moment(body.rxInfo[0].time);
     }
     if (!time?.isValid() && body.rxInfo[0].timeSinceGPSEpoch) {
-      time = moment(parseFloat(body.rxInfo[0].timeSinceGPSEpoch) * 1000);
+      time = moment(parseFloat(body.rxInfo[0].timeSinceGPSEpoch) * 1000 + 315964816000);
     }
   }
   if (!time?.isValid()) {
