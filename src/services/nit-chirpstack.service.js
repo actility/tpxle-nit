@@ -1,5 +1,7 @@
 import moment from 'moment';
 
+import logger from '../logger.js';
+
 const translateUplink = (body) => {
   const feeds = {
     // deviceEUI: "",                                     // mandatory
@@ -106,6 +108,9 @@ const translateUplink = (body) => {
       feeds.solverInput.packets.push(packet);
     });
   }
+
+  logger.debug(`Before Translate: DevEUI: ${feeds.deviceEUI}: ${JSON.stringify(body)}`);
+  logger.debug(`After Translate: DevEUI: ${feeds.deviceEUI}: ${JSON.stringify(feeds)}`);
 
   return feeds;
 };
