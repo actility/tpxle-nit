@@ -40,7 +40,7 @@ const sendToTPXLEAsync = async (translatedBody, accessToken, realm, clientId) =>
       throw httpError(500, `HTTP error happened while forwarding UL to TPXLE`);
     }
     logger.debug(
-      `UL: sendToTPXLEAsync: DevEUI: ${devEUI}: Message forwarded to TPXLE. ${tpxleResponseText}`,
+      `UL: sendToTPXLEAsync: DevEUI: ${devEUI}: Message forwarded to TPXLE. ${tpxleResponse.status}, ${tpxleResponse.statusText}, ${tpxleResponseText}`,
     );
     return tpxleResponseText;
   } catch (err) {
