@@ -1,7 +1,5 @@
 import moment from 'moment';
 
-import logger from '../logger.js';
-
 const translateUplink = (body) => {
   const feeds = {
     // deviceEUI: "",                                     // mandatory
@@ -65,7 +63,7 @@ const translateUplink = (body) => {
   feeds.time = time.format();
   feeds.solverInput.receptionTime = feeds.time;
 
-  if ('fCnt' in body) {
+  if (typeof body.fCnt !== 'undefined') {
     feeds.solverInput.sequenceNumber = body.fCnt;
   }
 

@@ -52,7 +52,7 @@ const translateUplink = (body) => {
     feeds.time = t;
     feeds.solverInput.receptionTime = t;
   }
-  if ('seqno' in body) {
+  if (typeof body.seqno !== 'undefined') {
     feeds.solverInput.sequenceNumber = body.seqno;
   }
   if ('port' in body) {

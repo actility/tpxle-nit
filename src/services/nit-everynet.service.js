@@ -51,7 +51,7 @@ const translateUplink = (body) => {
     feeds.time = moment(body.meta.time * 1000).format();
   }
 
-  if (body.params?.counter_up) {
+  if (typeof body.params?.counter_up !== 'undefined') {
     feeds.solverInput.sequenceNumber = body.params.counter_up;
   }
 
