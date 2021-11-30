@@ -135,16 +135,19 @@ export const downlinkToChirpstack = async (req, res) => {
   }
 
   /* ** Send downlink frame to NS ** */
+  const url = downlinkData.downlinkApi;
+  const options = {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${downlinkData.downlinkApikey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(translatedBody),
+  };
+  logger.debug(`DL: DevEUI: ${devEUI}: Req URL: ${url}; Req options:${JSON.stringify(options)};`);
   let nsRes;
   try {
-    nsRes = await fetch(downlinkData.downlinkApi, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${downlinkData.downlinkApikey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(translatedBody),
-    });
+    nsRes = await fetch(url, options);
   } catch (err) {
     logger.error(err.stack);
     res.status(200).end();
