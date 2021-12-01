@@ -1,7 +1,7 @@
 mosquitto_sub \
  -h DESKTOP-JE5MKR1 \
  -p 8883 \
- -u demo \
- -P securedemo \
- -t /data/sensors \
+ -u community-api%2Fnorbert.herbert%2Bcmty%40actility.com \
+ -P n0Rabab%401234 \
+ -t 2167/uplink \
  --cafile /etc/mosquitto/certs/ca.crt \
