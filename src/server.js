@@ -1,6 +1,8 @@
 import express, { json } from 'express';
 import httpError from 'http-errors';
 
+// import { createMQTTUplinkClient, createMQTTDownlinkClient } from './mqtt-client.js';
+
 import cfg from './config.js';
 import logger from './logger.js';
 import tpxleNITRouter from './routes/tpxle-nit.router.js';
@@ -52,4 +54,6 @@ app.use((err, req, res, next) => {
 
 app.listen(cfg.NIT_SERVER_PORT, () => {
   logger.info(`TPXLE NIT is listening at http://localhost:${cfg.NIT_SERVER_PORT}`);
+  // createMQTTUplinkClient();
+  // createMQTTDownlinkClient();
 });
