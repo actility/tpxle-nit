@@ -16,7 +16,7 @@ const options = {
   username: process.env.MQTT_SUPER_USER,
   password: process.env.MQTT_SUPER_PASSWD,
   rejectUnauthorized: false,
-  ca: process.env.CA_CERT_LOCATION,
+  // ca: process.env.CA_CERT_LOCATION,
 };
 
 console.log(options);
