@@ -34,8 +34,8 @@ const options = {
   // ca: process.env.CA_CERT_LOCATION,
 };
 
-// const topic = `${process.env.CLIENT_ID}/NS/${nsName}/NIT/${process.env.NIT_ID}/LE/${leId}/AS`;
-const topic = `${process.env.CLIENT_ID_KEYCLOAK}/NS/${nsName}/NIT/${process.env.NIT_ID}/LE/${leId}/AS`;
+// const topic = `${process.env.CLIENT_ID}/NS/${nsName}/NIT/LE/${leId}/AS`;
+const topic = `${process.env.CLIENT_ID_KEYCLOAK}/NS/${nsName}/NIT/LE/${leId}/AS`;
 console.log(topic);
 
 const mqttClient = mqtt.connect(url, options);

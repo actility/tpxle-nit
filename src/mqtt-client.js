@@ -21,10 +21,7 @@ const options = {
 
 console.log(options);
 
-const topics = [
-  `+/NS/+/NIT/${process.env.NIT_ID}/LE/+/AS`,
-  `+/LE/+/NIT/${process.env.NIT_ID}/NS/+`,
-];
+const topics = [`+/NS/+/NIT/LE/+/AS`, `+/LE/+/NIT/NS/+`];
 
 const createMQTTClient = () => {
   const mqttClient = mqtt.connect(url, options);
