@@ -58,7 +58,8 @@ const downlinkMQTT = (mqttClient) => async (req, res) => {
 
   // const topic = `${leId}/${subscriberId}/${linkId}/${ns}`;
 
-  const topic = `${subscriberId}/AS/LE/${leId}/NIT/${process.env.NIT_ID}/NS/${nsVendor}`;
+  // const topic = `${subscriberId}/AS/LE/${leId}/NIT/${process.env.NIT_ID}/NS/${nsVendor}`;
+  const topic = `${subscriberId}/NIT/${process.env.NIT_ID}/NS/${nsVendor}`;
   console.log(topic);
 
   mqttClient.publish(topic, JSON.stringify(translatedBody));
