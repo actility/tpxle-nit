@@ -20,8 +20,8 @@ const sendToTPXLEAsync = async (translatedBody, accessToken, realm, clientId) =>
     body: JSON.stringify(translatedBody),
   };
 
-  // console.log(`URL: ${url}`);
-  // console.log(`OPTIONS: ${JSON.stringify(options, null, 4)}`);
+  logger.silly(`URL: ${url}`);
+  logger.silly(`OPTIONS: ${JSON.stringify(options, null, 4)}`);
 
   try {
     const tpxleResponse = await fetch(url, options);

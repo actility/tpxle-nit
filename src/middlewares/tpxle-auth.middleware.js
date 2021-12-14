@@ -20,11 +20,20 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
 
   if (cfg[realm].GRANT_TYPE === 'client_credentials') {
     url = cfg[realm].TOKEN_REQUEST_URL;
+
+    const urlencoded = new URLSearchParams();
+    urlencoded.append('grant_type', cfg[realm].GRANT_TYPE);
+    urlencoded.append('client_id', clientId);
+    urlencoded.append('client_secret', clientSecret);
+
+    options.body = urlencoded;
+    /*
     options.body = stringify({
       client_id: clientId,
       client_secret: clientSecret,
       grant_type: cfg[realm].GRANT_TYPE,
     });
+    */
   } else if (cfg[realm].GRANT_TYPE === 'password') {
     options.body = stringify({
       username: clientId,
@@ -48,8 +57,8 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
   }
 
   try {
-    // console.log(url);
-    // console.log(JSON.stringify(options, null, 4));
+    logger.silly(url);
+    logger.silly(JSON.stringify(options, null, 4));
 
     const dxapiTokenResponse = await fetch(url, options);
     if (!dxapiTokenResponse.ok) {
@@ -64,7 +73,7 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
       logger.debug(
         `UL: getAccessTokenAsync: clientId: ${clientId}: Token received from token endpoint.`,
       );
-      console.log(accessToken);
+      logger.silly(accessToken);
       await AccessTokensModel.setAccessToken(realm, clientId, accessToken);
       return accessToken;
     }

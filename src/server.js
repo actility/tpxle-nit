@@ -1,14 +1,18 @@
 import express, { json } from 'express';
 import httpError from 'http-errors';
 
-// import { createMQTTUplinkClient, createMQTTDownlinkClient } from './mqtt-client.js';
+import createMQTTClient from './mqtt-client.js';
 
 import cfg from './config.js';
 import logger from './logger.js';
-import tpxleNITRouter from './routes/tpxle-nit.router.js';
-import mqttAuthProxyRouter from './routes/mqtt-auth-proxy.router.js';
+import createTPXLENITRouter from './routes/tpxle-nit.router.js';
+// import mqttAuthMosquittoRouter from './routes/mqtt-auth-mosquitto.router.js';
+import mqttAuthVMQRouter from './routes/mqtt-auth-vmq.router.js';
 
 const app = express();
+
+const mqttClient = createMQTTClient();
+const tpxleNITRouter = createTPXLENITRouter(mqttClient);
 
 // Middlewares
 
@@ -17,7 +21,8 @@ app.use(json());
 // Routes
 
 app.use('/', tpxleNITRouter);
-app.use('/mosquitto', mqttAuthProxyRouter);
+// app.use('/mosquitto', mqttAuthMosquittoRouter);
+app.use('/vmq', mqttAuthVMQRouter);
 
 // test route
 
@@ -30,12 +35,14 @@ app.get('/test', (req, res) => {
 // Error handling
 
 app.use((req, res, next) => {
+  // res.status(404).end();
   next(httpError(404));
 });
 
 /*
 app.use((err, req, res, next) => {
   logger.error(err.message);
+  // res.status(500).end();
   next(err);
 });
 */
@@ -52,8 +59,7 @@ app.use((err, req, res, next) => {
 
 // Start server
 
-app.listen(cfg.NIT_SERVER_PORT, () => {
-  logger.info(`TPXLE NIT is listening at http://localhost:${cfg.NIT_SERVER_PORT}`);
-  // createMQTTUplinkClient();
-  // createMQTTDownlinkClient();
+const server = app.listen(cfg.NIT_SERVER_PORT, () => {
+  const address = server.address();
+  logger.info(`TPXLE NIT is listening at ${address.address}:${address.port} ...`);
 });

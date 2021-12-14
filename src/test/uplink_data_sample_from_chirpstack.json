@@ -1,0 +1,50 @@
+{
+  "applicationID": "0",
+  "applicationName": "",
+  "deviceName": "",
+  "devEUI": "IGNfApEABoU=",
+  "rxInfo": [
+    {
+      "gatewayID": "cHb/AFYHAmo=",
+      "time": null,
+      "timeSinceGPSEpoch": "1322827089.515s",
+      "rssi": -45,
+      "loRaSNR": 7,
+      "channel": 2,
+      "rfChain": 0,
+      "board": 2,
+      "antenna": 0,
+      "location": {
+        "latitude": 47.43838566699402,
+        "longitude": 18.926505613096722,
+        "altitude": 10.5
+      },
+      "fineTimestampType": "NONE",
+      "context": "m7oIew==",
+      "uplinkID": "TQJKuX3MQPOFIHljn668mg==",
+      "crcStatus": "CRC_OK"
+    }
+  ],
+  "txInfo": {
+    "frequency": 867500000,
+    "modulation": "LORA",
+    "loRaModulationInfo": {
+      "bandwidth": 125,
+      "spreadingFactor": 7,
+      "codeRate": "4/5",
+      "polarizationInversion": false
+    }
+  },
+  "adr": true,
+  "dr": 5,
+  "fCnt": 1501,
+  "fPort": 18,
+  "data": "A0gmgAcOiGsPayqHy4hrD6n3mcqIaw9rLRnIiGsPqfm9xw==",
+  "objectJSON": "",
+  "tags": {},
+  "confirmedUplink": false,
+  "devAddr": "AZYVVw==",
+  "publishedAt": null,
+  "deviceProfileID": "",
+  "deviceProfileName": ""
+}

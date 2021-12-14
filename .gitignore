@@ -4,7 +4,7 @@ node_modules/
 *.log
 *-audit.json
 *.rdb
-mosquitto_publish.sh
-mosquitto_subscribe.sh
+
+*.test.sh
 
 private*/

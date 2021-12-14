@@ -1,7 +1,7 @@
 NIT_SERVER_PORT: 8081
 REDIS_HOST: "redis"
 REDIS_PORT: 6379
-LOG_LEVEL: debug # error | warn | info | http | verbose | debug | silly
+LOG_LEVEL: silly # error | warn | info | http | verbose | debug | silly
 
 # binder module (swagger)
 # https://dx-api.thingpark.io/location/latest/swagger-ui/index.html?shortUrl=tpdx-location-api-contract.json#/Feed/post_feeds

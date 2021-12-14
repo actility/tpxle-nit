@@ -13,33 +13,41 @@ import {
 import { uplinkFromEverynet, downlinkToEverynet } from '../controllers/everynet.controller.js';
 import { uplinkFromSenet, downlinkToSenet } from '../controllers/senet.controller.js';
 
-const router = express.Router();
+import downlinkMQTT from '../controllers/mqtt.controller.js';
 
-router.use('/uplink_from_*', tpxleAuth);
+const createRouter = (mqttClient) => {
+  const router = express.Router();
 
-// for legacy users that dont use nit key
+  router.use('/uplink_from_*', tpxleAuth);
 
-router.post('/uplink_from_helium', uplinkFromHelium);
-router.post('/downlink_to_helium', downlinkToHelium);
+  // for legacy users that dont use nit key
 
-router.post('/uplink_from_ttn', uplinkFromTTN);
-router.post('/downlink_to_ttn', downlinkToTTN);
+  router.post('/uplink_from_helium', uplinkFromHelium);
+  router.post('/downlink_to_helium', downlinkToHelium);
 
-// downlink secured by nitapikey
+  router.post('/uplink_from_ttn', uplinkFromTTN);
+  router.post('/downlink_to_ttn', downlinkToTTN);
 
-router.post('/uplink_from_helium/:nitapikey', uplinkFromHelium);
-router.post('/downlink_to_helium/:nitapikey', downlinkToHelium);
+  // downlink secured by nitapikey
 
-router.post('/uplink_from_ttn/:nitapikey', uplinkFromTTN);
-router.post('/downlink_to_ttn/:nitapikey', downlinkToTTN);
+  router.post('/uplink_from_helium/:nitapikey', uplinkFromHelium);
+  router.post('/downlink_to_helium/:nitapikey', downlinkToHelium);
 
-router.post('/uplink_from_chirpstack/:nitapikey', uplinkFromChirpstack);
-router.post('/downlink_to_chirpstack/:nitapikey', downlinkToChirpstack);
+  router.post('/uplink_from_ttn/:nitapikey', uplinkFromTTN);
+  router.post('/downlink_to_ttn/:nitapikey', downlinkToTTN);
 
-router.post('/uplink_from_everynet/:nitapikey', uplinkFromEverynet);
-router.post('/downlink_to_everynet/:nitapikey', downlinkToEverynet);
+  router.post('/uplink_from_chirpstack/:nitapikey', uplinkFromChirpstack);
+  router.post('/downlink_to_chirpstack/:nitapikey', downlinkToChirpstack);
 
-router.post('/uplink_from_senet/:nitapikey', uplinkFromSenet);
-router.post('/downlink_to_senet/:nitapikey', downlinkToSenet);
+  router.post('/uplink_from_everynet/:nitapikey', uplinkFromEverynet);
+  router.post('/downlink_to_everynet/:nitapikey', downlinkToEverynet);
 
-export default router;
+  router.post('/uplink_from_senet/:nitapikey', uplinkFromSenet);
+  router.post('/downlink_to_senet/:nitapikey', downlinkToSenet);
+
+  router.post('/downlink_mqtt/:subscriberId/:leId/:nsVendor', downlinkMQTT(mqttClient));
+
+  return router;
+};
+
+export default createRouter;

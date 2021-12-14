@@ -34,9 +34,14 @@ router.post('/getuser', async (req, res) => {
 router.post('/superuser', async (req, res) => {
   console.log('/mosquitto/superuser');
   console.log(req.body);
-  console.log('refused');
-  // res.status(200).end();
-  res.status(400).end();
+
+  if (req.body.username === 'community-api%2Fnorbert.herbert%2Bcmty%40actility.com') {
+    console.log('accepted');
+    res.status(200).end();
+  } else {
+    console.log('refused');
+    res.status(400).end();
+  }
 });
 
 router.post('/aclcheck', async (req, res) => {
@@ -55,14 +60,13 @@ router.post('/aclcheck', async (req, res) => {
     console.log(subscriberId);
 
     const topicElements = req.body.topic.split('/');
-    if (topicElements[0] === subscriberId && ['uplink', 'downlink'].includes(topicElements[1])) {
-      console.log('accepted');
-      res.status(200).end();
-      return;
+    if (topicElements[0] !== subscriberId) {
+      console.log('refused');
+      throw new Error('Invalid subscriberId');
     }
 
-    console.log('refused');
-    res.status(400).end();
+    console.log('accepted');
+    res.status(200).end();
   } catch (err) {
     res.status(403).end();
   }

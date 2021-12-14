@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import logger from '../logger.js';
+// import logger from '../logger.js';
 
 const translateUplink = (body) => {
   const feeds = {
@@ -69,12 +69,16 @@ const translateUplink = (body) => {
     feeds.solverInput.sequenceNumber = body.fCnt;
   }
 
-  if (body.fPort) {
+  if (typeof body.fPort !== 'undefined') {
     feeds.solverInput.port = body.fPort;
   }
 
-  if (body.txInfo?.spreadingFactor) {
-    feeds.solverInput.SF = body.body.txInfo.spreadingFactor;
+  if (typeof body.txInfo?.spreadingFactor !== 'undefined') {
+    feeds.solverInput.SF = body.txInfo.spreadingFactor;
+  }
+
+  if (typeof body.txInfo?.loRaModulationInfo?.spreadingFactor !== 'undefined') {
+    feeds.solverInput.SF = body.txInfo.loRaModulationInfo.spreadingFactor;
   }
 
   if (body.data) {
@@ -109,8 +113,8 @@ const translateUplink = (body) => {
     });
   }
 
-  // logger.debug(`Before Translate: DevEUI: ${feeds.deviceEUI}: ${JSON.stringify(body)}`);
-  // logger.debug(`After Translate: DevEUI: ${feeds.deviceEUI}: ${JSON.stringify(feeds)}`);
+  // console.log(`CHIRPSTACK: Before Translate: DevEUI: ${feeds.deviceEUI}: ${JSON.stringify(body)}`);
+  // console.log(`CHIRPSTACK: After Translate: DevEUI: ${feeds.deviceEUI}: ${JSON.stringify(feeds)}`);
 
   return feeds;
 };
