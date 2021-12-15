@@ -21,7 +21,7 @@ const options = {
 
 console.log(options);
 
-const topics = [`+/NS/+/NIT/LE/+/AS`, `+/LE/+/NIT/NS/+`];
+const topics = [`+/NS/+/NIT/+/LE/+/AS`, `+/LE/+/NIT/+/NS/+`];
 
 const createMQTTClient = () => {
   const mqttClient = mqtt.connect(url, options);
