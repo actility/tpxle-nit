@@ -1,8 +1,15 @@
-import { setAsync, getAsync, delAsync, expireAsync } from '../redis.client.js';
+import {
+  setAsync,
+  getAsync,
+  delAsync,
+  expireAsync,
+  hmsetAsync,
+  hgetallAsync,
+} from '../redis.client.js';
 import logger from '../logger.js';
 
 export default class AccessTokensModel {
-  static async setAccessToken(realm, clientId, accessToken) {
+  static async setAccessToken(realm, clientId, accessToken, clientSecret) {
     const expireTime = 240; // 4 min
     let subscriberId;
     let result;
@@ -18,11 +25,15 @@ export default class AccessTokensModel {
       await setAsync(key1, accessToken);
       expireAsync(key1, expireTime);
 
-      console.log(`KEY SAVED: ${key1}`);
+      if (clientSecret) {
+        const key2 = `credentials_by_subscriberId:${realm}:${subscriberId}`;
+        await hmsetAsync(key2, { clientId, clientSecret });
+        console.log(`KEY SAVED: ${key2}`);
+      }
 
       // logger.debug(`DBKEY: ${key}:  ${result}`);
     } catch (err) {
-      logger.error(`${clientId}: DownlinkDataModel error:\n${err.stack}`);
+      logger.error(`${clientId}: AccessTokensModel error:\n${err.stack}`);
     }
     return result;
   }
@@ -34,7 +45,7 @@ export default class AccessTokensModel {
       result = await delAsync(key);
       logger.debug(`Access Token deleted from db. DBKEY: ${key}`);
     } catch (err) {
-      logger.error(`${clientId}: DownlinkDataModel error:\n${err.stack}`);
+      logger.error(`${clientId}: AccessTokensModel error:\n${err.stack}`);
     }
     return result;
   }
@@ -49,7 +60,7 @@ export default class AccessTokensModel {
         // logger.debug(`DBKEY: ${key}:  ${result}`);
       }
     } catch (err) {
-      logger.error(`${clientId}: DownlinkDataModel error:\n${err.stack}`);
+      logger.error(`${clientId}: AccessTokensModel error:\n${err.stack}`);
     }
     return result;
   }
@@ -65,7 +76,23 @@ export default class AccessTokensModel {
         // logger.debug(`DBKEY: ${key}:  ${result}`);
       }
     } catch (err) {
-      logger.error(`SubscriberId: ${subscriberId}: DownlinkDataModel error:\n${err.stack}`);
+      logger.error(`SubscriberId: ${subscriberId}: AccessTokensModel error:\n${err.stack}`);
+    }
+    return result;
+  }
+
+  static async getCredentialsBySubscriberId(realm, subscriberId) {
+    let result;
+    try {
+      const key = `credentials_by_subscriberId:${realm}:${subscriberId}`;
+      console.log(`KEY TO RETREIVE: ${key}`);
+      result = await hgetallAsync(key);
+      if (result) {
+        logger.debug(`Cached Credentials retreived from db. DBKEY: ${key}`);
+        // logger.debug(`DBKEY: ${key}:  ${result}`);
+      }
+    } catch (err) {
+      logger.error(`SubscriberId: ${subscriberId}: AccessTokensModel error:\n${err.stack}`);
     }
     return result;
   }

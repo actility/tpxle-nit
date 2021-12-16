@@ -5,6 +5,7 @@ import logger from './logger.js';
 import accessTokensModel from './models/access-tokens.model.js';
 import sendToTPXLEAsync from './services/send-to-tpxle.js';
 import { translateUplinkAll } from './services/nit-all.service.js';
+import { getAccessTokenAsync } from './middlewares/tpxle-auth.middleware.js';
 
 dotenv.config({ path: new URL('./.env', import.meta.url) });
 
@@ -61,7 +62,25 @@ const createMQTTClient = () => {
 
         try {
           accessToken = await accessTokensModel.getAccessTokenBySubscriberId(leId, subscriberId);
-          await sendToTPXLEAsync(translatedBody, accessToken, leId, subscriberId);
+          if (!accessToken) {
+            const credentials = await accessTokensModel.getCredentialsBySubscriberId(
+              leId,
+              subscriberId,
+            );
+            if (credentials) {
+              accessToken = await getAccessTokenAsync(
+                credentials.clientId,
+                credentials.clientSecret,
+                leId,
+              );
+            }
+          }
+
+          if (accessToken) {
+            await sendToTPXLEAsync(translatedBody, accessToken, leId, subscriberId);
+          } else {
+            logger.debug(`Couldn't get Access Token with cached credentials.`);
+          }
         } catch (err) {
           logger.error(err.stack);
           break;
