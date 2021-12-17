@@ -32,24 +32,24 @@
 - In case you use the mobile app, please ask your norbert.herbert@actility.com for your subscriberId…
   We will generate a UI through which the subscriber Id can be queried.
 
-`<nitId>`  
-Possible values are: `nanothings`, `dev1`
+`<nitId>`
 
-- for testing new early releases set: `nanothings`
-- with the community platform set: `dev1` ---- NOT IN OPERATION YET! ----
+- Possible values are: `nanothings`, `dev1`
+  - for testing new early releases set: `nanothings`
+  - with the community platform set: `dev1` ---- NOT IN OPERATION YET! ----
 
-`<nsId>`:  
-It can be one of the following labels:
+`<nsId>`:
 
-- `actility`
-- `chirpstack`
-- `everynet`
-- `helium`
-- `senet`
-- `ttn`
+- It can be one of the following labels:
+  - `actility`
+  - `chirpstack`
+  - `everynet`
+  - `helium`
+  - `senet`
+  - `ttn`
 
-`<leId>`:  
-Possible values are: `dev1`, `le-lab`
+`<leId>`:
 
-- for the ecosystem TPXLE set: `dev1`
-- for R&D TPXLE set: `le-lab`
+- Possible values are: `dev1`, `le-lab`
+  - for the ecosystem TPXLE set: `dev1`
+  - for R&D TPXLE set: `le-lab`
