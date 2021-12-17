@@ -28,15 +28,15 @@
 
 `<subscriberId>`
 
-- The long subscriber id is shown in the top-right part of the ADM GUI. Here you need to use the short subscriber id that is without the leading 1000… prefix. (The number without the 1st ‘1’ and the following zeros.)
+- The long subscriber id is shown in the top-right part of the ADM GUI. Here you need to use the short subscriber id that is the number without the leading 1000… prefix. (without the number ‘1’ and whatever number of zeros following it.)
 - In case you use the mobile app, please ask your norbert.herbert@actility.com for your subscriberId…
   We will generate a UI through which the subscriber Id can be queried.
 
 `<nitId>`  
-Possible values are: nanothings, dev1
+Possible values are: `nanothings`, `dev1`
 
-- for internal or friendly user tests: `nanothings`
-- for community users: `dev1` ---- NOT IN OPERATION YET! ----
+- for testing new early releases set: `nanothings`
+- with the community platform set: `dev1` ---- NOT IN OPERATION YET! ----
 
 `<nsId>`:  
 It can be one of the following labels:
@@ -49,7 +49,7 @@ It can be one of the following labels:
 - `ttn`
 
 `<leId>`:  
-Possible values are: dev1, le-lab
+Possible values are: `dev1`, `le-lab`
 
-- for the ecosystem TPXLE: `dev1`
-- for R&D TPXLE: `le-lab`
+- for the ecosystem TPXLE set: `dev1`
+- for R&D TPXLE set: `le-lab`
