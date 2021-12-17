@@ -31,7 +31,7 @@
 
 `<subscriberId>`
 
-- The long subscriber id is shown at the top-right part of the [ADM UI](https://dev1.thingpark.com/thingpark/abeewayDeviceAnalyzer/index.php?dxprofile=community). Here you need to use the short subscriber id that is the number without the leading 1000… prefix. (without the number ‘1’ and whatever number of zeros following it.)
+- The long subscriber id is shown at the top-right part of the [ADM UI](https://dev1.thingpark.com/thingpark/abeewayDeviceAnalyzer/index.php?dxprofile=community) (You have to log-in in order to see it). Here you need to use the short subscriber id that is the number without the leading 1000… prefix. (without the number ‘1’ and whatever number of zeros following it.)
 - In case you use the mobile app, please ask your norbert.herbert@actility.com for your subscriberId…
   We will generate a UI through which the subscriber Id can be queried.
 
