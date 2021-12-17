@@ -54,17 +54,15 @@
 `<leId>`:
 
 - Possible values are: `dev1`, `le-lab`
-  - for the ecosystem TPXLE set: `dev1`
+  - for the community/ecosystem TPXLE set: `dev1`
   - for R&D TPXLE set: `le-lab`
 
 ## TPXLE Settings
 
-- Configure the Binder Module with the following parameters:
-- https://nano-things.net/tpxle-nit/downlink_mqtt/`<subscriberId>`/`<leId>`/`<nsId>`
-
-```
-{
-  "deviceEUIList": "*",
-  "callbackURL": “https://nano-things.net/tpxle-nit/downlink_mqtt/<subscriberId>/<leId>/<nsId>”
-}
-```
+- Configure the [Binder Module](https://dx-api.thingpark.io/location/latest/swagger-ui/index.html?shortUrl=tpdx-location-api-contract.json#/BinderConfig/post_binderConfigs) with the following parameters:
+  ```
+  {
+    "deviceEUIList": "*",
+    "callbackURL": “https://nano-things.net/tpxle-nit/downlink_mqtt/<subscriberId>/<leId>/<nsId>”
+  }
+  ```
