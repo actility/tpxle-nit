@@ -88,13 +88,28 @@ const translateUplink = (body) => {
 };
 
 const translateDownlink = (body) => {
+  /*
+  // https://docs.senetco.io/dev/stream/#downlink-api
+  const params_http = {
+    eui: body.deveui,
+    pdu: body.payload,
+    port: body.port,
+    confirmed: false,
+    timeoutMinutes: 1440, // 1 day, default = 5 min
+    clear: false,
+    immediate: false
+  };
+  */
+
+  // https://docs.senetco.io/dev/streaming/MQTT/
   const params = {
     eui: body.deveui,
-    value: body.payload,
-    confirmed: false,
+    pdu: body.payload,
     port: body.port,
-    timeoutMinutes: 2,
+    confirmed: false,
+    timeout: 1440, // 1 day, default = 5 min
   };
+
   // https://portal.senetco.io/rest/current/device/sendmsg?apikey={{params.apikey}}&eui={{params.eui}}&value={{params.value}}&confirmed={{params.confirmed}}&port={{params.port}}&timeoutMinutes={{params.timeoutMinutes}}
   // 'apikey' params to be added, and to convert to query string in the controller !!!
   return params;

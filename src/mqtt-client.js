@@ -11,8 +11,8 @@ dotenv.config({ path: new URL('./.env', import.meta.url) });
 
 const url = process.env.BROKER_URL;
 const options = {
-  clean: true,
-  connectTimeout: 4000,
+  clean: false,
+  connectTimeout: 30_000,
   // clientId: 'nit_mqtt_client_id',
   username: process.env.MQTT_SUPER_USER,
   password: process.env.MQTT_SUPER_PASSWD,

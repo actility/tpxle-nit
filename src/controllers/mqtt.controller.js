@@ -62,7 +62,7 @@ const downlinkMQTT = (mqttClient) => async (req, res) => {
   const topic = `${subscriberId}/NIT/${process.env.NIT_ID}/NS/${nsVendor}`;
   console.log(topic);
 
-  mqttClient.publish(topic, JSON.stringify(translatedBody));
+  mqttClient.publish(topic, JSON.stringify(translatedBody), { qos: 2 });
 
   res.status(201).end();
 };
