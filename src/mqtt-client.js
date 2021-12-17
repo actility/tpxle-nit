@@ -13,7 +13,7 @@ const url = process.env.BROKER_URL;
 const options = {
   clean: false,
   connectTimeout: 30_000,
-  // clientId: 'nit_mqtt_client_id',
+  clientId: `NIT_${process.env.NIT_ID}`,
   username: process.env.MQTT_SUPER_USER,
   password: process.env.MQTT_SUPER_PASSWD,
   rejectUnauthorized: false,
