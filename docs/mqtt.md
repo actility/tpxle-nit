@@ -14,9 +14,8 @@
     The self-signed CA file is [this one](https://nano-things.net/ca.crt).
 - MQTT User:
   - `<Your ThingPark UserId>`  
-    Examples:
+    Example:
     - `community-api/somebody@example.com`
-    - `somebody@example.com` (in case of the mobile app)
 - MQTT passwd:
 
   - `<Your ThingPark Passwd>`
@@ -26,6 +25,18 @@
     - `<subscriberId>`/NS/`<nsId>`/NIT/`<nitId>`/LE/`<leId>`/AS
   - Downlink Topic:
     - `<subscriberId>`/NIT/`<nitId>`/NS/`<nsId>`
+
+## TPXLE Settings
+
+These settings won't be needed in the future. It is a temporary solution as long as we haven't connected TPXLE to the MQTT Broker directly.
+
+- Configure the [TPXLE Binder Module](https://dx-api.thingpark.io/location/latest/swagger-ui/index.html?shortUrl=tpdx-location-api-contract.json#/BinderConfig/post_binderConfigs) with the following parameters:
+  ```
+  {
+    "deviceEUIList": "*",
+    "callbackURL": “https://nano-things.net/tpxle-nit/downlink_mqtt/<subscriberId>/<leId>/<nsId>”
+  }
+  ```
 
 ## Explanation of parameters:
 
@@ -56,13 +67,3 @@
 - Possible values are: `dev1`, `le-lab`
   - for the community/ecosystem TPXLE set: `dev1`
   - for R&D TPXLE set: `le-lab`
-
-## TPXLE Settings
-
-- Configure the [Binder Module](https://dx-api.thingpark.io/location/latest/swagger-ui/index.html?shortUrl=tpdx-location-api-contract.json#/BinderConfig/post_binderConfigs) with the following parameters:
-  ```
-  {
-    "deviceEUIList": "*",
-    "callbackURL": “https://nano-things.net/tpxle-nit/downlink_mqtt/<subscriberId>/<leId>/<nsId>”
-  }
-  ```
