@@ -1,6 +1,6 @@
 # ThingPark X Loction Engine Network Interface Translator MQTT setup guide
 
-## MQTT Broker:
+## MQTT Settings:
 
 - MQTT Broker Address:
   - Test Server: `nano-things.net`
@@ -18,14 +18,14 @@
     - `community-api/somebody@example.com`
     - `somebody@example.com` (in case of the mobile app)
 - MQTT passwd:
+
   - `<Your ThingPark Passwd>`
 
-## MQTT Topics:
-
-- Uplink Topic:
-  - `<subscriberId>`/NS/`<nsId>`/NIT/`<nitId>`/LE/`<leId>`/AS
-- Downlink Topic:
-  - `<subscriberId>`/NIT/`<nitId>`/NS/`<nsId>`
+- MQTT Topics:
+  - Uplink Topic:
+    - `<subscriberId>`/NS/`<nsId>`/NIT/`<nitId>`/LE/`<leId>`/AS
+  - Downlink Topic:
+    - `<subscriberId>`/NIT/`<nitId>`/NS/`<nsId>`
 
 ## Explanation of parameters:
 
@@ -56,3 +56,15 @@
 - Possible values are: `dev1`, `le-lab`
   - for the ecosystem TPXLE set: `dev1`
   - for R&D TPXLE set: `le-lab`
+
+## TPXLE Settings
+
+- Configure the Binder Module with the following parameters:
+- https://nano-things.net/tpxle-nit/downlink_mqtt/`<subscriberId>`/`<leId>`/`<nsId>`
+
+```
+{
+  "deviceEUIList": "*",
+  "callbackURL": “https://nano-things.net/tpxle-nit/downlink_mqtt/<subscriberId>/<leId>/<nsId>”
+}
+```
