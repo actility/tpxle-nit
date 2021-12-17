@@ -1,13 +1,13 @@
 ## MQTT Broker:
 
 - MQTT Broker Address:
-  - nano-things.net
+  - `nano-things.net`
 - MQTT Broker port:
-  - 1883 (TCP, not recommended since it has no encryprion)
-  - 8883 (SSL/TLS with Letsencrypt CA)
-  - 8884 (SSL/TLS with [this self-signed CA](https://nano-things.net/ca.crt). In case the NS is not part of the PKI infrastructure, this should be used)
+  - `1883` (TCP, not recommended since it has no encryprion)
+  - `8883` (SSL/TLS with Letsencrypt CA)
+  - `8884` (SSL/TLS with [this self-signed CA](https://nano-things.net/ca.crt). In case the NS is not part of the PKI infrastructure, this should be used)
 - CA Certificate:
-  - CE certificate is only needed for port 8884.  
+  - CA certificate is only needed for port 8884.  
     The self-signed CA file is [this one](https://nano-things.net/ca.crt).
 - MQTT User:
   - `<Your ThingPark UserId>`  
