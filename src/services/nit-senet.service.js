@@ -84,8 +84,8 @@ const translateUplink = (body) => {
     feeds.payload.payloadEncoded = body.pdu;
   }
 
-  console.log(`SENET: Before Translate: DevEUI: ${feeds.deviceEUI}: ${JSON.stringify(body)}`);
-  console.log(`SENET: After Translate: DevEUI: ${feeds.deviceEUI}: ${JSON.stringify(feeds)}`);
+  // console.log(`SENET: Before Translate: DevEUI: ${feeds.deviceEUI}: ${JSON.stringify(body)}`);
+  // console.log(`SENET: After Translate: DevEUI: ${feeds.deviceEUI}: ${JSON.stringify(feeds)}`);
 
   return feeds;
 };
