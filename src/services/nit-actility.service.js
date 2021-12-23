@@ -12,7 +12,7 @@ const translateUplink = (bdy) => {
     // coordinates: [],                                   // [longitude, latitude, altitude]
     // used if NS provides resolved coordinates
     solverInput: {
-      solverInputType: 'FeedInputForWifiSolver',
+      solverInputType: 'FeedInputForGenericSolver',
       // sequenceNumber: 1,                             // LoRaWAN FCntUp
       // port: 1,                                       // LoRaWAN FPort
       // receptionTime: "",

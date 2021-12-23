@@ -7,7 +7,7 @@ const translateUplink = (body) => {
     // coordinates: [],                                   // [longitude, latitude, altitude]
     // used if NS provides resolved coordinates
     solverInput: {
-      solverInputType: 'FeedInputForGpsSolver',
+      solverInputType: 'FeedInputForGenericSolver',
       // sequenceNumber: 1,                             // LoRaWAN FCntUp
       // port: 1,                                       // LoRaWAN FPort
       // receptionTime: "",
