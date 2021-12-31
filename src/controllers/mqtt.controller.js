@@ -5,7 +5,7 @@ import { translateDownlinkAll } from '../services/nit-all.service.js';
 
 dotenv.config({ path: new URL('../.env', import.meta.url) });
 
-const downlinkMQTT = (mqttClient) => async (req, res) => {
+export const downlinkMQTT = (mqttClient) => async (req, res) => {
   /* ** Check if request body is correct ** */
   const devEUI = req.body.deveui?.toLowerCase();
   if (!devEUI) {
@@ -67,4 +67,31 @@ const downlinkMQTT = (mqttClient) => async (req, res) => {
   res.status(201).end();
 };
 
-export default downlinkMQTT;
+export const uplinkMQTT = (mqttClient) => (req, res) => {
+  if (!req.body.deviceEUI) {
+    res.status(400).end();
+    return;
+  }
+  if (!req.body.customerId) {
+    res.status(400).end();
+    return;
+  }
+
+  // /uplink_mqtt/:subscriberId/:leId
+  const { leId, subscriberId } = req.params;
+
+  if (subscriberId !== req.body.customerId.replace(/^10+/, '')) {
+    res.status(400).end();
+    return;
+  }
+
+  mqttClient.publish(
+    `${subscriberId}/LE/${leId}/AS/${req.body.deviceEUI}`,
+    JSON.stringify(req.body),
+    {
+      qos: 0,
+      retain: true,
+    },
+  );
+  res.status(200).end();
+};

@@ -13,7 +13,7 @@ import {
 import { uplinkFromEverynet, downlinkToEverynet } from '../controllers/everynet.controller.js';
 import { uplinkFromSenet, downlinkToSenet } from '../controllers/senet.controller.js';
 
-import downlinkMQTT from '../controllers/mqtt.controller.js';
+import { downlinkMQTT, uplinkMQTT } from '../controllers/mqtt.controller.js';
 
 const createRouter = (mqttClient) => {
   const router = express.Router();
@@ -46,6 +46,7 @@ const createRouter = (mqttClient) => {
   router.post('/downlink_to_senet/:nitapikey', downlinkToSenet);
 
   router.post('/downlink_mqtt/:subscriberId/:leId/:nsVendor', downlinkMQTT(mqttClient));
+  router.post('/uplink_mqtt/:subscriberId/:leId', uplinkMQTT(mqttClient));
 
   return router;
 };
