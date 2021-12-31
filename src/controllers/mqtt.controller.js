@@ -68,8 +68,6 @@ export const downlinkMQTT = (mqttClient) => async (req, res) => {
 };
 
 export const uplinkMQTT = (mqttClient) => (req, res) => {
-  console.log('KAKUKK');
-
   if (!req.body.deviceEUI) {
     res.status(400).end();
     return;
@@ -79,8 +77,6 @@ export const uplinkMQTT = (mqttClient) => (req, res) => {
     return;
   }
 
-  console.log('KAKUKK1');
-
   // /uplink_mqtt/:subscriberId/:leId
   const { leId, subscriberId } = req.params;
 
@@ -88,8 +84,6 @@ export const uplinkMQTT = (mqttClient) => (req, res) => {
     res.status(400).end();
     return;
   }
-
-  console.log('KAKUKK2');
 
   mqttClient.publish(
     `${subscriberId}/LE/${leId}/AS/${req.body.deviceEUI}`,
