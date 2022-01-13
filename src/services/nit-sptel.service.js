@@ -1,4 +1,4 @@
-import moment from 'moment';
+// import moment from 'moment';
 
 // import logger from '../logger.js';
 
@@ -49,12 +49,9 @@ const translateUplink = (body) => {
     throw new Error('Missing property: body.devEUI');
   }
 
-  if (body.time) {
-    feeds.solverInput.receptionTime = body.time;
-  } else {
-    feeds.solverInput.receptionTime = moment().format();
-    // throw new Error('Missing property: body.time');
-  }
+  const t = body.time ? new Date(body.time).toISOString() : new Date().toISOString();
+  feeds.time = t;
+  feeds.solverInput.receptionTime = t;
 
   if (typeof body.fCnt !== 'undefined') {
     feeds.solverInput.sequenceNumber = body.fCnt;
@@ -126,6 +123,7 @@ const translateDownlink = (body) => {
 export { translateUplink, translateDownlink };
 
 /*
+
 // Testing
 
 const sampleULMsg = {
