@@ -6,7 +6,8 @@ dotenv.config({ path: new URL('./.env', import.meta.url) });
 
 // const testTarget = process.env.TEST_TARGET;
 // const nsName = 'actility'; // NS Specific !!!
-const nsName = 'senet'; // NS Specific !!!
+// const nsName = 'senet'; // NS Specific !!!
+const nsName = 'sptel'; // NS Specific !!!
 
 // const leId = 'dev1';
 const leId = 'le-lab';
@@ -19,23 +20,24 @@ const bodyDev1 = JSON.parse(bodyExampleText);
 
 // bodyDev1.DevEUI_uplink.DevEUI = process.env.DEV_EUI; // NS Specific !!! Actility
 // bodyDev1.devEui = process.env.DEV_EUI.toLowerCase(); // NS Specific !!! Senet
-bodyDev1.devEui = process.env.DEV_EUI_MOBILE_APP.toLowerCase(); // NS Specific !!! Senet
+// bodyDev1.devEui = process.env.DEV_EUI_MOBILE_APP.toLowerCase(); // NS Specific !!! Senet
+bodyDev1.devEUI = process.env.DEV_EUI.toLowerCase(); // NS Specific !!! Sptel
 
 const url = process.env.BROKER_URL;
 const options = {
   clean: true,
   connectTimeout: 4000,
   // clientId: 'emqx_test',
-  // username: process.env.DEV1_CLIENT_ID,
-  // password: process.env.DEV1_CLIENT_SECRET,
-  username: process.env.LELAB_CLIENT_ID,
-  password: process.env.LELAB_CLIENT_SECRET,
+  username: process.env.DEV1_CLIENT_ID,
+  password: process.env.DEV1_CLIENT_SECRET,
+  // username: process.env.LELAB_CLIENT_ID,
+  // password: process.env.LELAB_CLIENT_SECRET,
   rejectUnauthorized: false,
   // ca: process.env.CA_CERT_LOCATION,
 };
 
-// const topic = `${process.env.CLIENT_ID}/NS/${nsName}/NIT/${process.env.NIT_ID}/LE/${leId}/AS`;
-const topic = `${process.env.CLIENT_ID_KEYCLOAK}/NS/${nsName}/NIT/${process.env.NIT_ID}/LE/${leId}/AS`;
+const topic = `${process.env.CLIENT_ID}/NS/${nsName}/NIT/${process.env.NIT_ID}/LE/${leId}/AS`;
+// const topic = `${process.env.CLIENT_ID_KEYCLOAK}/NS/${nsName}/NIT/${process.env.NIT_ID}/LE/${leId}/AS`;
 console.log(topic);
 
 const mqttClient = mqtt.connect(url, options);

@@ -6,7 +6,8 @@ dotenv.config({ path: new URL('./.env', import.meta.url) });
 
 // const testTarget = process.env.TEST_TARGET;
 // const nsName = 'actility'; // NS Specific !!!
-const nsName = 'senet'; // NS Specific !!!
+// const nsName = 'senet'; // NS Specific !!!
+const nsName = 'sptel'; // NS Specific !!!
 
 const leId = 'dev1';
 // const leId = 'le-lab';
@@ -18,8 +19,9 @@ const bodyExampleText = fs.readFileSync(
 const bodyDev1 = JSON.parse(bodyExampleText);
 
 // bodyDev1.DevEUI_uplink.DevEUI = process.env.DEV_EUI; // NS Specific !!! Actility
-bodyDev1.devEui = process.env.DEV_EUI.toLowerCase(); // NS Specific !!! Senet
+// bodyDev1.devEui = process.env.DEV_EUI.toLowerCase(); // NS Specific !!! Senet
 // bodyDev1.devEui = process.env.DEV_EUI_MOBILE_APP.toLowerCase(); // NS Specific !!! Senet
+bodyDev1.devEUI = process.env.DEV_EUI.toLowerCase(); // NS Specific !!! Sptel
 
 const url = process.env.BROKER_URL;
 const options = {
