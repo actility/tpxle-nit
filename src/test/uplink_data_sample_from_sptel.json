@@ -1,0 +1,49 @@
+{
+  "applicationID": "1",
+  "applicationName": "testbed-app-2",
+  "deviceName": "watermeter",
+  "devEUI": "09000000ffff1033",
+  "rxInfo": [
+    {
+      "gatewayID": "7276ff000b031dc7",
+      "uplinkID": "f735f45a-65d5-4d72-92ca-d3b3d03362fc",
+      "name": "kerlink-gw-01-423",
+      "rssi": -98,
+      "loRaSNR": 9,
+      "location": {
+        "latitude": 0,
+        "longitude": 0,
+        "altitude": 0
+      }
+    },
+    {
+      "gatewayID": "24e124fffef3304f",
+      "uplinkID": "e83005f5-3685-4a99-883a-fd42a24a5b1e",
+      "name": "innomiletest-531",
+      "time": "2022-01-12T06:11:55.046425Z",
+      "rssi": -108,
+      "loRaSNR": 10.2,
+      "location": {
+        "latitude": 0,
+        "longitude": 0,
+        "altitude": 0
+      }
+    }
+  ],
+  "txInfo": {
+    "frequency": 923400000,
+    "dr": 5
+  },
+  "adr": false,
+  "fCnt": 17905,
+  "fPort": 102,
+  "data": "CAAM5EAkBgAGP9g=",
+  "object": {
+    "battery": "1.56",
+    "hum": "105.33",
+    "period": "18560 sec",
+    "temp": "-38.61"
+  },
+  "device_id": "16905f5cd1205f2b",
+  "time": "2022-01-12 06:13:56"
+}

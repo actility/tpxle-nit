@@ -28,6 +28,11 @@ import {
   translateDownlink as translateDownlinkTTN,
 } from './nit-ttn.service.js';
 
+import {
+  translateUplink as translateUplinkSptel,
+  translateDownlink as translateDownlinkSptel,
+} from './nit-sptel.service.js';
+
 export const translateUplinkAll = {
   actility: translateUplinkActility,
   chirpstack: translateUplinkChirpstack,
@@ -35,6 +40,7 @@ export const translateUplinkAll = {
   helium: translateUplinkHelium,
   senet: translateUplinkSenet,
   ttn: translateUplinkTTN,
+  sptel: translateUplinkSptel,
 };
 
 export const translateDownlinkAll = {
@@ -44,4 +50,5 @@ export const translateDownlinkAll = {
   helium: translateDownlinkHelium,
   senet: translateDownlinkSenet,
   ttn: translateDownlinkTTN,
+  sptel: translateDownlinkSptel,
 };

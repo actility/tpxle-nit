@@ -47,6 +47,7 @@ const createRouter = (mqttClient) => {
 
   router.post('/downlink_mqtt/:subscriberId/:leId/:nsVendor', downlinkMQTT(mqttClient));
   router.post('/uplink_mqtt/:subscriberId/:leId', uplinkMQTT(mqttClient));
+  // https://nano-things.net/tpxle-nit/uplink_mqtt/15499/le-lab
 
   return router;
 };
