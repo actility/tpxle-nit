@@ -102,8 +102,8 @@ const translateUplink = (body) => {
     });
   }
 
-  // console.log(`CHIRPSTACK: Before Translate: DevEUI: ${feeds.deviceEUI}: ${JSON.stringify(body)}`);
-  // console.log(`CHIRPSTACK: After Translate: DevEUI: ${feeds.deviceEUI}: ${JSON.stringify(feeds)}`);
+  console.log(`SPTEL: Before Translate: DevEUI: ${feeds.deviceEUI}: ${JSON.stringify(body)}`);
+  console.log(`SPTEL: After Translate: DevEUI: ${feeds.deviceEUI}: ${JSON.stringify(feeds)}`);
 
   return feeds;
 };
