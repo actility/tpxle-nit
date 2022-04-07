@@ -12,6 +12,7 @@ import {
 } from '../controllers/chirpstack.controller.js';
 import { uplinkFromEverynet, downlinkToEverynet } from '../controllers/everynet.controller.js';
 import { uplinkFromSenet, downlinkToSenet } from '../controllers/senet.controller.js';
+import { uplinkFromProximus } from '../controllers/proximus.controller.js';
 
 import { downlinkMQTT, uplinkMQTT } from '../controllers/mqtt.controller.js';
 
@@ -44,6 +45,8 @@ const createRouter = (mqttClient) => {
 
   router.post('/uplink_from_senet/:nitapikey', uplinkFromSenet);
   router.post('/downlink_to_senet/:nitapikey', downlinkToSenet);
+
+  router.post('/uplink_from_proximus', uplinkFromProximus);
 
   router.post('/downlink_mqtt/:subscriberId/:leId/:nsVendor', downlinkMQTT(mqttClient));
   router.post('/uplink_mqtt/:subscriberId/:leId', uplinkMQTT(mqttClient));
