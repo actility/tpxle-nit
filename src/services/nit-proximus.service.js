@@ -46,10 +46,15 @@ const translateUplink = (body) => {
   }
 
   if ('timestamp' in body) {
-    feeds.time = new Date(body.timestamp).toISOString();
+    const t = new Date(body.timestamp).toISOString();
+    feeds.time = t;
+    feeds.solverInput.receptionTime = t;
+  } else {
+    feeds.time = new Date().toISOString();
   }
-
   feeds.solverInput.sequenceNumber = 1;
+  feeds.solverInput.port = 18;
+  feeds.solverInput.SF = 10;
 
   /*
   if ('FCntUp' in body) {
