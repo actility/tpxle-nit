@@ -56,12 +56,12 @@ const method = 'POST';
 
 const urls = {
   lh: {
-    ul: `http://localhost:${cfg.NIT_SERVER_PORT}/uplink_from_${nsName}/${process.env.NITAPIKEY}`,
-    dl: `http://localhost:${cfg.NIT_SERVER_PORT}/downlink_to_${nsName}/${process.env.NITAPIKEY}`,
+    ul: `http://localhost:${cfg.NIT_SERVER_PORT}/uplink_from_${nsName}`,
+    dl: `http://localhost:${cfg.NIT_SERVER_PORT}/downlink_to_${nsName}`,
   },
   nt: {
-    ul: `https://nano-things.net/tpxle-nit/uplink_from_${nsName}/${process.env.NITAPIKEY}`,
-    dl: `https://nano-things.net/tpxle-nit/downlink_to_${nsName}/${process.env.NITAPIKEY}`,
+    ul: `https://nano-things.net/tpxle-nit/uplink_from_${nsName}`,
+    dl: `https://nano-things.net/tpxle-nit/downlink_to_${nsName}`,
   },
 };
 
