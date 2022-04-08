@@ -53,24 +53,29 @@ const translateUplink = (body) => {
     feeds.time = new Date().toISOString();
   }
 
-  feeds.solverInput.port = 18;
-  feeds.solverInput.SF = 10;
-  // workaround for sequence number
-  const n = Math.floor(new Date().getTime() / 20000);
-  feeds.solverInput.sequenceNumber = n - 100000 * Math.floor(n / 100000);
-
-  /*
-  if ('FCntUp' in body) {
-    feeds.solverInput.sequenceNumber = body.FCntUp;
-  }
   if ('FPort' in body) {
     feeds.solverInput.port = body.FPort;
+  } else {
+    feeds.solverInput.port = 18;
   }
+
+  if ('Fcntup' in body) {
+    feeds.solverInput.sequenceNumber = body.Fcntup;
+  } else {
+    // workaround for sequence number
+    const n = Math.floor(new Date().getTime() / 20000);
+    feeds.solverInput.sequenceNumber = n - 100000 * Math.floor(n / 100000);
+  }
+
+  if ('Spfact' in body) {
+    feeds.solverInput.SF = body.Spfact;
+  } else {
+    feeds.solverInput.SF = 10;
+  }
+
+  /*
   if ('Time' in body) {
     feeds.solverInput.receptionTime = body.Time;
-  }
-  if ('SpFact' in body) {
-    feeds.solverInput.SF = body.SpFact;
   }
 
   if ('Lrrs' in body && 'Lrr' in body.Lrrs && Array.isArray(body.Lrrs.Lrr)) {
