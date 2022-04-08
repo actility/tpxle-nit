@@ -49,6 +49,8 @@ const translateUplink = (body) => {
     feeds.time = new Date(body.timestamp).toISOString();
   }
 
+  feeds.solverInput.sequenceNumber = 1;
+
   /*
   if ('FCntUp' in body) {
     feeds.solverInput.sequenceNumber = body.FCntUp;
