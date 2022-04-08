@@ -52,9 +52,12 @@ const translateUplink = (body) => {
   } else {
     feeds.time = new Date().toISOString();
   }
-  feeds.solverInput.sequenceNumber = 1;
+
   feeds.solverInput.port = 18;
   feeds.solverInput.SF = 10;
+  // workaround for sequence number
+  const n = Math.floor(new Date().getTime() / 20000);
+  feeds.solverInput.sequenceNumber = n - 100000 * Math.floor(n / 100000);
 
   /*
   if ('FCntUp' in body) {
