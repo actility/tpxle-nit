@@ -1,48 +1,8 @@
 {
-  "DevEUI_uplink": {
-    "Time": "2020-01-01T21:53:13.780+01:00",
-    "DevEUI": "20635F0108000496",
-    "FPort": 17,
-    "FCntUp": 16,
-    "ADRbit": 1,
-    "MType": 2,
-    "FCntDn": 6,
-    "payload_hex": "0a50f6830000",
-    "mic_hex": "d80954bb",
-    "Lrcid": "00000211",
-    "LrrRSSI": -52,
-    "LrrSNR": 11.5,
-    "SpFact": 9,
-    "SubBand": "G2",
-    "Channel": "LC4",
-    "DevLrrCnt": 1,
-    "Lrrid": "100003ED",
-    "Late": 0,
-    "LrrLAT": 47.466702,
-    "LrrLON": 19.047592,
-    "Lrrs": {
-      "Lrr": [
-        {
-          "Lrrid": "100003ED",
-          "Chain": 0,
-          "LrrRSSI": -52,
-          "LrrSNR": 11.5,
-          "LrrESP": -52.297062
-        }
-      ]
-    },
-    "CustomerID": "100040803",
-    "CustomerData": {
-      "alr": {
-        "pro": "ABEE/APY",
-        "ver": "1"
-      }
-    },
-    "ModelCfg": "0",
-    "InstantPER": 0,
-    "MeanPER": 0,
-    "DevAddr": "05AE3D2F",
-    "TxPower": 9.75,
-    "NbTrans": 1
-  }
+  "container": "raw",
+  "locationFriendlyName1": null,
+  "companyName": "Nunya",
+  "DevEUI": "20635F0181000BF2",
+  "value": "0a48645e000502835a00000034",
+  "timestamp": "08/04/2022 10:01:23"
 }

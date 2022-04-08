@@ -1,5 +1,5 @@
 import logger from '../logger.js';
-import { translateUplink } from '../services/nit-actility.service.js';
+import { translateUplink } from '../services/nit-proximus.service.js';
 import sendToTPXLEAsync from '../services/send-to-tpxle.js';
 
 import cfg from '../config.js';
