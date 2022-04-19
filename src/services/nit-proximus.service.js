@@ -45,13 +45,14 @@ const translateUplink = (body) => {
     throw new Error('Missing property: DevEUI');
   }
 
+  let t;
   if ('timestamp' in body) {
-    const t = new Date(body.timestamp).toISOString();
-    feeds.time = t;
-    feeds.solverInput.receptionTime = t;
+    t = new Date(parseInt(body.timestamp, 10)).toISOString();
   } else {
-    feeds.time = new Date().toISOString();
+    t = new Date().toISOString();
   }
+  feeds.time = t;
+  feeds.solverInput.receptionTime = t;
 
   if ('FPort' in body) {
     feeds.solverInput.port = body.FPort;
