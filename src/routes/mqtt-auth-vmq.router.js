@@ -40,7 +40,14 @@ router.post('/lua', async (req, res) => {
     return;
   }
 
-  const realm = req.body.username.includes('/') ? 'dev1' : 'le-lab';
+  let realm;
+
+  if (req.body.username.substring(0, 4) === 'rnd/') {
+    req.body.username = req.body.username.substring(4);
+    realm = 'rnd';
+  } else {
+    realm = req.body.username.includes('/') ? 'dev1' : 'le-lab';
+  }
 
   try {
     const accessToken = await getAccessTokenAsync(req.body.username, req.body.password, realm);
