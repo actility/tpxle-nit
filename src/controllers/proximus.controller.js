@@ -43,7 +43,9 @@ export const uplinkFromProximus = async (req, res, next) => {
     return;
   }
 
-  logger.debug(`UL: DevEUI: ${devEUI}: UL message received from NS.     ${req.body}`);
+  logger.debug(
+    `UL: DevEUI: ${devEUI}: UL message received from NS.     ${JSON.stringify(req.body)}`,
+  );
 
   /* ** Translate message body ** */
   let translatedBody;
