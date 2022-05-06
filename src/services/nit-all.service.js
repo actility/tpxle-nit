@@ -29,6 +29,11 @@ import {
 } from './nit-ttn.service.js';
 
 import {
+  translateUplink as translateUplinkLoriot,
+  translateDownlink as translateDownlinkLoriot,
+} from './nit-loriot.service.js';
+
+import {
   translateUplink as translateUplinkSptel,
   translateDownlink as translateDownlinkSptel,
 } from './nit-sptel.service.js';
@@ -40,6 +45,7 @@ export const translateUplinkAll = {
   helium: translateUplinkHelium,
   senet: translateUplinkSenet,
   ttn: translateUplinkTTN,
+  loriot: translateUplinkLoriot,
   sptel: translateUplinkSptel,
 };
 
@@ -50,5 +56,6 @@ export const translateDownlinkAll = {
   helium: translateDownlinkHelium,
   senet: translateDownlinkSenet,
   ttn: translateDownlinkTTN,
+  loriot: translateDownlinkLoriot,
   sptel: translateDownlinkSptel,
 };
