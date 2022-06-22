@@ -97,6 +97,14 @@ const translateUplink = (body) => {
   return feeds;
 };
 
-const translateDownlink = (body) => body;
-
+const translateDownlink = (body) => {
+  const result = {
+    cmd: 'tx',
+    EUI: body.deveui.toLowerCase(),
+    port: body.port,
+    confirmed: false,
+    data: body.payload,
+  };
+  return result;
+};
 export { translateUplink, translateDownlink };
