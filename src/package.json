@@ -1,6 +1,6 @@
 {
   "name": "thingparkx-location-engine-helium-connector",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Helium connector for ThingPark X Location Engine",
   "main": "server.js",
   "type": "module",
