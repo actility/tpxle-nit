@@ -104,6 +104,7 @@ const translateDownlink = (body) => {
     port: body.port,
     confirmed: false,
     data: body.payload,
+    // appid: 'BE01000D',
   };
   return result;
 };

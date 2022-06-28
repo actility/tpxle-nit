@@ -15,8 +15,10 @@ export const uplinkFromLoriot = async (req, res, next) => {
   let clientSecret;
   let devEUI;
   let downlinkUrl;
+  let downlinkAPIKey;
   try {
-    [clientId, clientSecret, realm, downlinkUrl] = req.headers.authorization.split('|');
+    [clientId, clientSecret, realm, downlinkUrl, downlinkAPIKey] =
+      req.headers.authorization.split('|');
     if (clientId === '') {
       accessToken = clientSecret;
     }
@@ -57,7 +59,10 @@ export const uplinkFromLoriot = async (req, res, next) => {
   logger.debug(`UL: DevEUI: ${devEUI}: UL message received from Loriot.`);
 
   /* ** Save downlink data in db ** */
-  DownlinkDataModel.setDLData(nitapikey, devEUI, { downlinkUrl });
+  DownlinkDataModel.setDLData(nitapikey, devEUI, {
+    downlinkUrl: downlinkUrl || '',
+    downlinkAPIKey: downlinkAPIKey || '',
+  });
 
   /* ** Translate message body ** */
   let translatedBody;
@@ -134,6 +139,7 @@ export const downlinkToLoriot = async (req, res) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${downlinkData.downlinkAPIKey}`,
       },
       body: JSON.stringify(translatedBody),
     });

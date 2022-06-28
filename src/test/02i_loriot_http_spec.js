@@ -68,6 +68,7 @@ const dlBodyRnd = {
 
 const dlHeaders = {
   'content-type': 'application/json',
+  Authorization: process.env.TEST__DL_API_KEY,
 };
 
 const urls = {
