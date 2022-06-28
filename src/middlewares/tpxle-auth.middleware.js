@@ -97,10 +97,22 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
 };
 
 export const tpxleAuth = async (req, res, next) => {
-  const accessToken = req.headers['x-access-token'];
-  const clientId = req.headers['x-client-id'];
-  const clientSecret = req.headers['x-client-secret'];
-  const realm = req.headers['x-realm'] || process.env.NIT__DEFAULT_REALM;
+  let accessToken;
+  let clientId;
+  let clientSecret;
+  let realm;
+
+  if (req.headers.authorization) {
+    [clientId, clientSecret, realm] = req.headers.authorization.split('|');
+    if (clientId === '') {
+      accessToken = clientSecret;
+    }
+  } else {
+    accessToken = req.headers['x-access-token'];
+    clientId = req.headers['x-client-id'];
+    clientSecret = req.headers['x-client-secret'];
+    realm = req.headers['x-realm'] || process.env.NIT__DEFAULT_REALM;
+  }
 
   const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
@@ -108,12 +120,14 @@ export const tpxleAuth = async (req, res, next) => {
 
   if (!(accessToken || (clientId && clientSecret))) {
     logger.error(
-      `UL: ${ip}: x-access-token or (x-client-id and x-client-secret)) headers are mandatory!`,
+      `UL: ${ip}: "authorization" or ("x-access-token" or (x-client-id and x-client-secret)) headers are mandatory! ${JSON.stringify(
+        req.headers,
+      )}`,
     );
     next(
       httpError(
         400,
-        `(x-access-token or (x-client-id and x-client-secret)) headers are mandatory!`,
+        `"authorization" or ("x-access-token" or (x-client-id and x-client-secret)) headers are mandatory!`,
       ),
     );
     return;

@@ -6,7 +6,7 @@ import { tpxleAuth } from '../middlewares/tpxle-auth.middleware.js';
 
 import { uplinkFromHelium, downlinkToHelium } from '../controllers/helium.controller.js';
 import { uplinkFromTTN, downlinkToTTN } from '../controllers/ttn.controller.js';
-// import { uplinkFromLoriot, downlinkToLoriot } from '../controllers/loriot.controller.js';
+import { uplinkFromLoriot, downlinkToLoriot } from '../controllers/loriot.controller.js';
 import {
   uplinkFromChirpstack,
   downlinkToChirpstack,
@@ -38,8 +38,8 @@ const createRouter = (mqttClient) => {
   router.post('/uplink_from_ttn/:nitapikey', uplinkFromTTN);
   router.post('/downlink_to_ttn/:nitapikey', downlinkToTTN);
 
-  // router.post('/uplink_from_loriot/:nitapikey', uplinkFromLoriot);
-  // router.post('/downlink_to_loriot/:nitapikey', downlinkToLoriot);
+  router.post('/uplink_from_loriot/:nitapikey', uplinkFromLoriot);
+  router.post('/downlink_to_loriot/:nitapikey', downlinkToLoriot);
 
   router.post('/uplink_from_chirpstack/:nitapikey', uplinkFromChirpstack);
   router.post('/downlink_to_chirpstack/:nitapikey', downlinkToChirpstack);
