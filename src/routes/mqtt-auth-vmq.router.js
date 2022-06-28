@@ -1,9 +1,6 @@
 import express from 'express';
-import dotenv from 'dotenv';
 
 import { getAccessTokenAsync } from '../middlewares/tpxle-auth.middleware.js';
-
-dotenv.config({ path: new URL('../.env', import.meta.url) });
 
 const router = express.Router();
 
@@ -27,8 +24,8 @@ router.post('/lua', async (req, res) => {
   let responseBody;
 
   if (
-    req.body.username === process.env.MQTT_SUPER_USER &&
-    req.body.password === process.env.MQTT_SUPER_PASSWD
+    req.body.username === process.env.NIT__MQTT_SUPER_USER &&
+    req.body.password === process.env.NIT__MQTT_SUPER_PASSWD
   ) {
     responseBody = {
       result: 'ok',

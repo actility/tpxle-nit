@@ -1,9 +1,6 @@
-import dotenv from 'dotenv';
 import logger from '../logger.js';
 
 import { translateDownlinkAll } from '../services/nit-all.service.js';
-
-dotenv.config({ path: new URL('../.env', import.meta.url) });
 
 export const downlinkMQTT = (mqttClient) => async (req, res) => {
   /* ** Check if request body is correct ** */
@@ -58,8 +55,8 @@ export const downlinkMQTT = (mqttClient) => async (req, res) => {
 
   // const topic = `${leId}/${subscriberId}/${linkId}/${ns}`;
 
-  // const topic = `${subscriberId}/AS/LE/${leId}/NIT/${process.env.NIT_ID}/NS/${nsVendor}`;
-  const topic = `${subscriberId}/NIT/${process.env.NIT_ID}/NS/${nsVendor}`;
+  // const topic = `${subscriberId}/AS/LE/${leId}/NIT/${process.env.NIT__ID}/NS/${nsVendor}`;
+  const topic = `${subscriberId}/NIT/${process.env.NIT__ID}/NS/${nsVendor}`;
   console.log(topic);
 
   mqttClient.publish(topic, JSON.stringify(translatedBody), { qos: 2 });

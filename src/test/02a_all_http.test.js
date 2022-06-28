@@ -1,5 +1,8 @@
 import fetch from 'node-fetch';
 
+import '../config.js';
+import './test_config.js';
+
 import examplesHelium from './02b_helium_http_spec.js';
 import examplesTTN from './02c_ttn_http_spec.js';
 import examplesEverynet from './02e_everynet_http_spec.js';

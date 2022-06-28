@@ -2,14 +2,17 @@
 import fetch from 'node-fetch';
 import httpError from 'http-errors';
 
-import cfg from '../config.js';
+// import cfg from '../config.js';
 import logger from '../logger.js';
 import AccessTokensModel from '../models/access-tokens.model.js';
+
+const REALM_PREFIXES = { dev1: 'NIT__DEV1_', 'le-lab': 'NIT__LELAB_', rnd: 'NIT__RND_' };
 
 const sendToTPXLEAsync = async (translatedBody, accessToken, realm, clientId) => {
   const devEUI = translatedBody.deviceEUI;
 
-  const url = cfg[realm].FEED_URL;
+  // const url = cfg[realm].FEED_URL;
+  const url = process.env[`${REALM_PREFIXES[realm]}FEED_URL`];
 
   const options = {
     method: 'POST',

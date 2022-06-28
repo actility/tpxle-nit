@@ -3,21 +3,21 @@ import mqtt from 'mqtt';
 
 dotenv.config({ path: new URL('./.env', import.meta.url) });
 
-const url = process.env.BROKER_URL;
+const url = process.env.TEST__BROKER_URL;
 const options = {
   clean: true,
   connectTimeout: 4000,
   // clientId: 'emqx_test',
-  // username: process.env.DEV1_CLIENT_ID,
-  // password: process.env.DEV1_CLIENT_SECRET,
-  username: process.env.LELAB_CLIENT_ID,
-  password: process.env.LELAB_CLIENT_SECRET,
+  // username: process.env.TEST__DEV1_TEST__CLIENT_ID,
+  // password: process.env.TEST__DEV1_CLIENT_SECRET,
+  username: process.env.TEST__LELAB_TEST__CLIENT_ID,
+  password: process.env.TEST__LELAB_CLIENT_SECRET,
   rejectUnauthorized: false,
-  // ca: process.env.CA_CERT_LOCATION,
+  // ca: process.env.TEST__CA_CERT_LOCATION,
 };
 
-// const subscribeTopic = `${process.env.CLIENT_ID}/#`;
-const subscribeTopic = `${process.env.CLIENT_ID_KEYCLOAK}/#`;
+// const subscribeTopic = `${process.env.TEST__CLIENT_ID}/#`;
+const subscribeTopic = `${process.env.TEST__CLIENT_ID_KEYCLOAK}/#`;
 
 const mqttClient = mqtt.connect(url, options);
 mqttClient.on('connect', () => {

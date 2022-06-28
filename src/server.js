@@ -1,17 +1,25 @@
 import express, { json } from 'express';
 import httpError from 'http-errors';
 
+import './config.js';
+
 import createMQTTClient from './mqtt-client.js';
 
-import cfg from './config.js';
 import logger from './logger.js';
+
 import createTPXLENITRouter from './routes/tpxle-nit.router.js';
+
 // import mqttAuthMosquittoRouter from './routes/mqtt-auth-mosquitto.router.js';
 import mqttAuthVMQRouter from './routes/mqtt-auth-vmq.router.js';
 
 const app = express();
 
-const mqttClient = createMQTTClient();
+let mqttClient;
+
+if (process.env.NIT__MQTT_ENABLED === 'True') {
+  mqttClient = createMQTTClient();
+}
+
 const tpxleNITRouter = createTPXLENITRouter(mqttClient);
 
 // Middlewares
@@ -59,7 +67,7 @@ app.use((err, req, res, next) => {
 
 // Start server
 
-const server = app.listen(cfg.NIT_SERVER_PORT, () => {
+const server = app.listen(process.env.NIT__SERVER_PORT, () => {
   const address = server.address();
   logger.info(`TPXLE NIT is listening at ${address.address}:${address.port} ...`);
 });

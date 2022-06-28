@@ -1,5 +1,4 @@
 import mqtt from 'mqtt';
-import dotenv from 'dotenv';
 
 import logger from './logger.js';
 import accessTokensModel from './models/access-tokens.model.js';
@@ -7,20 +6,18 @@ import sendToTPXLEAsync from './services/send-to-tpxle.js';
 import { translateUplinkAll } from './services/nit-all.service.js';
 import { getAccessTokenAsync } from './middlewares/tpxle-auth.middleware.js';
 
-dotenv.config({ path: new URL('./.env', import.meta.url) });
-
-const url = process.env.BROKER_URL;
+const url = process.env.NIT__BROKER_URL;
 const options = {
   clean: false,
   connectTimeout: 30_000,
-  clientId: `NIT_${process.env.NIT_ID}`,
-  username: process.env.MQTT_SUPER_USER,
-  password: process.env.MQTT_SUPER_PASSWD,
+  clientId: `NIT_${process.env.NIT__ID}`,
+  username: process.env.NIT__MQTT_SUPER_USER,
+  password: process.env.NIT__MQTT_SUPER_PASSWD,
   rejectUnauthorized: false,
-  // ca: process.env.CA_CERT_LOCATION,
+  // ca: process.env.NIT__CA_CERT_LOCATION,
 };
 
-console.log(options);
+// console.log(options);
 
 const topics = [`+/NS/+/NIT/+/LE/+/AS`, `+/LE/+/NIT/+/NS/+`];
 

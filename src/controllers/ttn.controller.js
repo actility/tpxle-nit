@@ -5,8 +5,6 @@ import DownlinkDataModel from '../models/downlink-data.model.js';
 import { translateUplink, translateDownlink } from '../services/nit-ttn.service.js';
 import sendToTPXLEAsync from '../services/send-to-tpxle.js';
 
-import cfg from '../config.js';
-
 export const uplinkFromTTN = async (req, res, next) => {
   /* ** Check if request body is correct ** */
   const errMsg =
@@ -23,7 +21,7 @@ export const uplinkFromTTN = async (req, res, next) => {
     accessToken = req.headers['x-access-token'];
     clientId = req.headers['x-client-id'];
     clientSecret = req.headers['x-client-secret'];
-    realm = req.headers['x-realm'] || cfg.DEFAULT_REALM;
+    realm = req.headers['x-realm'] || process.env.NIT__DEFAULT_REALM;
     devEUI = req.body.end_device_ids.dev_eui;
     downlinkPush = req.headers['x-downlink-push'];
     downlinkReplace = req.headers['x-downlink-replace'];
@@ -40,7 +38,7 @@ export const uplinkFromTTN = async (req, res, next) => {
     res.status(400).send('Missing DevEUI!');
     return;
   }
-  if (!cfg.VALID_REALMS.includes(realm)) {
+  if (!process.env.NIT__VALID_REALMS.split(',').includes(realm)) {
     logger.warn('UL: Invalid realm!');
     res.status(400).send('Invalid realm!');
     return;

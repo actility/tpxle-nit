@@ -1,16 +1,10 @@
-import dotenv from 'dotenv';
-
-import cfg from '../config.js';
-
-dotenv.config({ path: new URL('./.env', import.meta.url) });
-
-const testTarget = process.env.TEST_TARGET;
+const testTarget = process.env.TEST__TARGET;
 
 const method = 'POST';
 
 const dlBodyDev1 = {
   type: 'downlink',
-  deveui: process.env.DEV_EUI,
+  deveui: process.env.TEST__DEV_EUI,
   port: '2',
   payload: '020402',
 };
@@ -21,7 +15,7 @@ const dlHeaders = {
 
 const urls = {
   lh: {
-    dl: `http://localhost:${cfg.NIT_SERVER_PORT}/downlink_mqtt`,
+    dl: `http://localhost:${process.env.NIT__SERVER_PORT}/downlink_mqtt`,
   },
   nt: {
     dl: `https://nano-things.net/tpxle-nit/downlink_mqtt`,
@@ -30,15 +24,15 @@ const urls = {
 
 const examples = [
   {
-    url: `${urls[testTarget].dl}/${process.env.CLIENT_ID}/dev1/actility`,
+    url: `${urls[testTarget].dl}/${process.env.TEST__CLIENT_ID}/dev1/actility`,
     options: { method, headers: dlHeaders, body: JSON.stringify(dlBodyDev1) },
   },
   {
-    url: `${urls[testTarget].dl}/${process.env.CLIENT_ID}/dev1/senet`,
+    url: `${urls[testTarget].dl}/${process.env.TEST__CLIENT_ID}/dev1/senet`,
     options: { method, headers: dlHeaders, body: JSON.stringify(dlBodyDev1) },
   },
   {
-    url: `${urls[testTarget].dl}/${process.env.CLIENT_ID_KEYCLOAK}/le-lab/senet`,
+    url: `${urls[testTarget].dl}/${process.env.TEST__CLIENT_ID_KEYCLOAK}/le-lab/senet`,
     options: { method, headers: dlHeaders, body: JSON.stringify(dlBodyDev1) },
   },
 ];

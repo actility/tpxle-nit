@@ -1,15 +1,14 @@
-import dotenv from 'dotenv';
+import '../config.js';
+import './test_config.js';
 
 import { getAccessTokenAsync } from '../middlewares/tpxle-auth.middleware.js';
 
-dotenv.config({ path: new URL('./.env', import.meta.url) });
-
 (async () => {
   const accessToken = await getAccessTokenAsync(
-    process.env.DEV1_CLIENT_ID,
-    process.env.DEV1_CLIENT_SECRET,
+    process.env.TEST__DEV1_TEST__CLIENT_ID,
+    process.env.TEST__DEV1_CLIENT_SECRET,
     'dev1',
-    // process.env.DEV_EUI,
+    // process.env.TEST__DEV_EUI,
   );
   console.log(accessToken);
 })();
