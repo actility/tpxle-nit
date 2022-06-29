@@ -24,22 +24,22 @@ const headerCommon = {
 };
 
 const headersDev1AccessToken = {
-  Authorization: `|${process.env.TEST__ACCESS_TOKEN}|dev1|${process.env.TEST__DL_WEBHOOK}`,
+  Authorization: `|${process.env.TEST__ACCESS_TOKEN}|dev1|${process.env.TEST__DL_WEBHOOK}|${process.env.TEST__DL_API_KEY}`,
   ...headerCommon,
 };
 
 const headersDev1Credentials = {
-  Authorization: `${process.env.TEST__DEV1_TEST__CLIENT_ID}|${process.env.TEST__DEV1_CLIENT_SECRET}|dev1|${process.env.TEST__DL_WEBHOOK}`,
+  Authorization: `${process.env.TEST__DEV1_TEST__CLIENT_ID}|${process.env.TEST__DEV1_CLIENT_SECRET}|dev1|${process.env.TEST__DL_WEBHOOK}|${process.env.TEST__DL_API_KEY}`,
   ...headerCommon,
 };
 
 const headersKeycloakCredentials = {
-  Authorization: `${process.env.TEST__LELAB_TEST__CLIENT_ID}|${process.env.TEST__LELAB_CLIENT_SECRET}|le-lab|${process.env.TEST__DL_WEBHOOK}`,
+  Authorization: `${process.env.TEST__LELAB_TEST__CLIENT_ID}|${process.env.TEST__LELAB_CLIENT_SECRET}|le-lab|${process.env.TEST__DL_WEBHOOK}|${process.env.TEST__DL_API_KEY}`,
   ...headerCommon,
 };
 
 const headersRndCredentials = {
-  Authorization: `${process.env.TEST__DEV1_TEST__CLIENT_ID}|${process.env.TEST__DEV1_CLIENT_SECRET}|rnd|${process.env.TEST__DL_WEBHOOK}`,
+  Authorization: `${process.env.TEST__DEV1_TEST__CLIENT_ID}|${process.env.TEST__DEV1_CLIENT_SECRET}|rnd|${process.env.TEST__DL_WEBHOOK}|${process.env.TEST__DL_API_KEY}`,
   ...headerCommon,
 };
 

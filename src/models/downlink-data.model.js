@@ -9,7 +9,7 @@ export default class DownlinkDataModel {
       result = await hmsetAsync(key, downlinkData);
       expireAsync(key, 2_592_000); // 30 days
       logger.debug(`UL: DevEUI: ${devEUI}: downlink Data saved to db. DBKEY: ${key}`);
-      // logger.debug(`DBKEY: ${key}:  ${JSON.stringify(downlinkData)}`);
+      logger.debug(`DBKEY: ${key}:  ${JSON.stringify(downlinkData)}`);
     } catch (err) {
       logger.error(`${devEUI} DownlinkDataModel error:\n${err.stack}`);
     }
