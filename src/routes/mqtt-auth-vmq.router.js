@@ -37,13 +37,14 @@ router.post('/lua', async (req, res) => {
     return;
   }
 
-  let { username } = req.body;
+  const { username } = req.body;
   let realm;
 
-  if (username.substring(0, 4) === 'rnd/') {
-    username = username.substring(4);
-    realm = 'rnd';
+  const r = username.split('/')[0];
+  if (process.env.NIT__VALID_REALMS.split(',').includes(r)) {
+    realm = r;
   } else {
+    // this is here for compatibility
     realm = username.includes('/') ? 'dev1' : 'le-lab';
   }
 
@@ -54,7 +55,7 @@ router.post('/lua', async (req, res) => {
       Buffer.from(accessToken.split('.')[1], 'base64').toString(),
     );
     let subscriberId;
-    if (realm === 'le-lab') {
+    if (realm === 'le-lab' || realm === 'abeeway-mobile-app') {
       // subscriberId = accessTokenDecoded.parentSubscriptions['actility-sup/tpx'][0].subscriberId;
       subscriberId = accessTokenDecoded.sub;
     } else {
