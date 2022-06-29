@@ -6,7 +6,12 @@ import logger from '../logger.js';
 
 import AccessTokensModel from '../models/access-tokens.model.js';
 
-const REALM_PREFIXES = { dev1: 'NIT__DEV1_', 'le-lab': 'NIT__LELAB_', rnd: 'NIT__RND_' };
+const REALM_PREFIXES = {
+  'abeeway-mobile-app': 'NIT__ABEEWAYMOBILEAPP_',
+  dev1: 'NIT__DEV1_',
+  'le-lab': 'NIT__LELAB_',
+  rnd: 'NIT__RND_',
+};
 
 export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
   let url;
