@@ -1,26 +1,72 @@
 version: "3.9"
 
 services:
-
   app:
     build: .
     image: actility/tpxle-nit:0.0.1
     container_name: tpxle_nit_app
 
-    volumes:
-    #  - ./src:/opt/tpxle-nit/src
-      - ./config:/opt/tpxle-nit/config
-      - ./log:/opt/tpxle-nit/log
+    # volumes:
+
     working_dir: /opt/tpxle-nit/src
 
-    #### FOR PRODUCTION ####
     environment:
-      NODE_ENV: production
-    ########################
+      # REDIS CONFIG
+      NIT__REDIS_HOST: "redis"
+      NIT__REDIS_PORT: "6379"
+
+      # MQTT BROKER CONFIG
+      NIT__MQTT_ENABLED: "False"
+      # NIT__BROKER_URL: "mqtt://localhost:1883"
+      # NIT__CA_CERT_LOCATION: "/etc/vernemq/certs/ca.crt"
+      # NIT__MQTT_SUPER_USER: "super"
+      # NIT__MQTT_SUPER_PASSWD: ""
+
+      NIT__ID: "nanothings"
+      NIT__SERVER_PORT: "8081"
+      NIT__LOG_LEVEL: "debug"
+      # error | warn | info | http | verbose | debug | silly
+
+      NIT__VALID_REALMS: "abeeway-mobile-app,dev1,le-lab,rnd"
+      NIT__DEFAULT_REALM: "dev1"
+
+      # abeeway-mobile-app
+      # Ecosystem_TPXLE with Ecosystem_Keycloak
+      NIT__ABEEWAYMOBILEAPP_SWAGGER_UI: "https://abeeway-mobile-app-eco.thingpark.com/admin/latest/swagger-ui/index.html?shortUrl=tpdx-admin-api-contract.json"
+      NIT__ABEEWAYMOBILEAPP_FEED_URL: "https://abeeway-mobile-app-eco.thingpark.com/location/latest/api/feeds"
+      NIT__ABEEWAYMOBILEAPP_TOKEN_REQUEST_URL: "https://abeeway-mobile-app-eco.thingpark.com/auth"
+      NIT__ABEEWAYMOBILEAPP_REALM: "abeeway-mobile-app"
+      NIT__ABEEWAYMOBILEAPP_GRANT_TYPE: "password"
+      NIT__ABEEWAYMOBILEAPP_SCOPE: "openid"
+      NIT__ABEEWAYMOBILEAPP_CLIENT_ID: "tpx-le-nit"
+
+      # dev1
+      # Ecosystem_TPXLE with Ecosystem_DxAdminAPI
+      NIT__DEV1_SWAGGER_UI: "https://dx-api.thingpark.io/admin/latest/swagger-ui/index.html?shortUrl=tpdx-admin-api-contract.json"
+      NIT__DEV1_FEED_URL: "https://dx-api.thingpark.io/location/latest/api/feeds"
+      NIT__DEV1_TOKEN_REQUEST_URL: "https://dx-api.thingpark.io/admin/latest/api/oauth/token"
+      NIT__DEV1_REALM: "dev1"
+      NIT__DEV1_GRANT_TYPE: "client_credentials"
+
+      # le-lab
+      # R&D_TPXLE with R&D_Keycloak
+      NIT__LELAB_SWAGGER_UI: "https://le-lab.preview.thingpark.com/admin/latest/swagger-ui/index.html?shortUrl=tpdx-admin-api-contract.json"
+      NIT__LELAB_FEED_URL: "https://le-lab.preview.thingpark.com/location/latest/api/feeds"
+      NIT__LELAB_TOKEN_REQUEST_URL: "https://le-lab.preview.thingpark.com/auth"
+      NIT__LELAB_REALM: "le-lab"
+      NIT__LELAB_GRANT_TYPE: "password"
+      NIT__LELAB_SCOPE: "openid"
+      NIT__LELAB_CLIENT_ID: "tpx-le-nit"
+
+      # rnd
+      # R&D_TPXLE with R&D_DxAdminAPI
+      NIT__RND_SWAGGER_UI: "https://dx-api.preview.thingpark.com/admin/latest/swagger-ui/index.html?shortUrl=tpdx-admin-api-contract.json"
+      NIT__RND_FEED_URL: "https://dx-api.preview.thingpark.com/location/latest/api/feeds"
+      NIT__RND_TOKEN_REQUEST_URL: "https://dx-api.preview.thingpark.com/admin/latest/api/oauth/token"
+      NIT__RND_REALM: "rnd"
+      NIT__RND_GRANT_TYPE: "client_credentials"
 
     #### FOR DEVELOPMENT ####
-    # environment:
-    #   NODE_ENV: development
     # entrypoint: ["tail"]
     # command: ["-f","/dev/null"]
     #########################
@@ -31,7 +77,7 @@ services:
   redis:
     image: redis:alpine
     container_name: tpxle_nit_redis
-    volumes:
-      - ./redis-data:/data
+#    volumes:
+#      - ./redis-data:/data
 #    ports:
 #      - 6379:6379

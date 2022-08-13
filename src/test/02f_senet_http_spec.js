@@ -96,8 +96,8 @@ const urls = {
     dl: `http://localhost:${process.env.NIT__SERVER_PORT}/downlink_to_${nsName}/${process.env.TEST__NITAPIKEY}`,
   },
   nt: {
-    ul: `https://nano-things.net/tpxle-nit/uplink_from_${nsName}/${process.env.TEST__NITAPIKEY}`,
-    dl: `https://nano-things.net/tpxle-nit/downlink_to_${nsName}/${process.env.TEST__NITAPIKEY}`,
+    ul: `https://nano-things.net:443/tpxle-nit/uplink_from_${nsName}/${process.env.TEST__NITAPIKEY}`,
+    dl: `https://nano-things.net:443/tpxle-nit/downlink_to_${nsName}/${process.env.TEST__NITAPIKEY}`,
   },
 };
 
