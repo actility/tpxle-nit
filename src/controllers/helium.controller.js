@@ -119,7 +119,7 @@ export const downlinkToHelium = async (req, res) => {
     downlinkData = await DownlinkDataModel.getDLData(nitapikey, devEUI);
   } catch (err) {
     logger.error(err.stack);
-    res.status(500).end();
+    res.status(200).end();
     return;
   }
   if (!downlinkData) {
@@ -152,6 +152,7 @@ export const downlinkToHelium = async (req, res) => {
     nsResText = await nsRes.text();
   } catch (err) {
     logger.error(err.stack);
+    res.status(200).end();
     return;
   }
   if (nsResText) {

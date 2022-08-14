@@ -60,7 +60,7 @@ app.use((err, req, res, next) => {
     res.status(err.statusCode).send(err.message);
   } else {
     logger.error(err.stack);
-    res.sendStatus(500);
+    res.sendStatus(200);
   }
   next();
 });

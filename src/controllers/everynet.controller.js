@@ -38,6 +38,7 @@ export const uplinkFromEverynet = async (req, res, next) => {
   }
   if (req.body.type !== 'uplink') {
     res.status(200).send('Only "uplink" message types are processed.');
+    return;
   }
 
   if (!devEUI) {
@@ -133,7 +134,7 @@ export const downlinkToEverynet = async (req, res) => {
     downlinkData = await DownlinkDataModel.getDLData(nitapikey, devEUI);
   } catch (err) {
     logger.error(err.stack);
-    res.status(500).end();
+    res.status(200).end();
     return;
   }
   if (!downlinkData) {
@@ -167,6 +168,7 @@ export const downlinkToEverynet = async (req, res) => {
     nsResText = await nsRes.text();
   } catch (err) {
     logger.error(err.stack);
+    res.status(200).end();
     return;
   }
   if (nsResText) {
