@@ -170,7 +170,7 @@ export const tpxleAuth = async (req, res, next) => {
   try {
     tpxleToken = await tpxleAuthAsync(req);
   } catch (err) {
-    logger.error(`tpxleAuth() error: ${err.message}`);
+    // logger.error(`tpxleAuth() error: ${err.message}`);
     next(err);
   }
   req.tpxleToken = tpxleToken;

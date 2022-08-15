@@ -47,22 +47,14 @@ app.use((req, res, next) => {
   next(httpError(404));
 });
 
-/*
-app.use((err, req, res, next) => {
-  logger.error(err.message);
-  // res.status(500).end();
-  next(err);
-});
-*/
-
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   if (httpError.isHttpError(err)) {
     res.status(err.statusCode).send(err.message);
-  } else {
-    logger.error(err.message);
-    res.sendStatus(200);
+    return;
   }
-  next();
+  logger.error(err.message);
+  res.sendStatus(200).end();
+  // res.status(404).end();
 });
 
 // Start server
