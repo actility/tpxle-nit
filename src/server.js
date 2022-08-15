@@ -1,5 +1,5 @@
 import express, { json } from 'express';
-import httpError from 'http-errors';
+// import httpError from 'http-errors';
 
 import './config.js';
 
@@ -56,16 +56,16 @@ app.get('/test', (req, res) => {
 
 // Error handling
 
-app.use((req, res, next) => {
-  // res.status(404).end();
-  next(httpError(404));
+app.use((req, res) => {
+  res.status(404).end();
+  // next(httpError(404));
 });
 
 app.use((err, req, res) => {
-  if (httpError.isHttpError(err)) {
-    res.status(err.statusCode).send(err.message);
-    return;
-  }
+  // if (httpError.isHttpError(err)) {
+  //   res.status(err.statusCode).send(err.message);
+  //   return;
+  // }
   logger.error(`express error handler: ${err.message}`);
   res.sendStatus(200).end();
   // res.status(404).end();
