@@ -137,7 +137,9 @@ export const tpxleAuthAsync = async (req) => {
 
   if (!(accessToken || (clientId && clientSecret))) {
     throw Error(
-      `UL: tpxleAuthAsync(): IP: ${ip}, "authorization" or ("x-access-token" or (x-client-id and x-client-secret)) headers are mandatory!`,
+      `UL: tpxleAuthAsync(): IP: ${ip}, "authorization" or ("x-access-token" or (x-client-id and x-client-secret)) headers are mandatory! ${JSON.stringify(
+        req.headers,
+      )}`,
       // `${JSON.stringify(req.headers,)}`,
     );
   }
@@ -168,7 +170,7 @@ export const tpxleAuth = async (req, res, next) => {
   try {
     tpxleToken = await tpxleAuthAsync(req);
   } catch (err) {
-    logger.error(`tpxleAuth() error: ${err.stack}`);
+    logger.error(`tpxleAuth() error: ${err.message}`);
     next(err);
   }
   req.tpxleToken = tpxleToken;
