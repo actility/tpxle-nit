@@ -1,11 +1,13 @@
 import fetch from 'node-fetch';
 
 import logger from '../logger.js';
+import { tpxleAuthAsync } from '../middlewares/tpxle-auth.middleware.js';
 import DownlinkDataModel from '../models/downlink-data.model.js';
 import { translateUplink, translateDownlink } from '../services/nit-senet.service.js';
 import sendToTPXLEAsync from '../services/send-to-tpxle.js';
 
-export const uplinkFromSenet = async (req, res, next) => {
+// export const uplinkFromSenet = async (req, res, next) => {
+export const uplinkFromSenetAsync = async (req, res = null, next = null) => {
   /* ** Check if request body is correct ** */
   const errMsg =
     '(x-access-token or (x-client-id and x-client-secret)), x-downlink-api, x-downlink-apikey in header and devEui in body are mandatory!';
@@ -27,27 +29,35 @@ export const uplinkFromSenet = async (req, res, next) => {
   } catch (err) {
     logger.warn(err.stack);
     logger.warn(`UL: ${errMsg}`);
-    res.status(400).send(errMsg);
+    if (res) {
+      res.status(400).send(errMsg);
+    }
     return;
   }
 
   if (!devEUI) {
     logger.warn('UL: Missing DevEUI!');
-    res.status(400).send('Missing DevEUI!');
+    if (res) {
+      res.status(400).send('Missing DevEUI!');
+    }
     return;
   }
   if (!process.env.NIT__VALID_REALMS.split(',').includes(realm)) {
     logger.warn('UL: Invalid realm!');
-    res.status(400).send('Invalid realm!');
+    if (res) {
+      res.status(400).send('Invalid realm!');
+    }
     return;
   }
   if (!((accessToken || (clientId && clientSecret)) && devEUI && downlinkApi && downlinkApikey)) {
     logger.warn(`UL: DevEUI: ${devEUI}: ${errMsg}`);
-    res.status(400).send(errMsg);
+    if (res) {
+      res.status(400).send(errMsg);
+    }
     return;
   }
 
-  const nitapikey = req.params.nitapikey || 'everynet'; // For backward compatibility, we allow not specifying nitapikey in the url!
+  const nitapikey = req.params.nitapikey || 'senet'; // For backward compatibility, we allow not specifying nitapikey in the url!
   /*
   if (!nitapikey) {
     logger.warn(`UL: There is no "nitapikey" parameter in the url.`);
@@ -71,7 +81,9 @@ export const uplinkFromSenet = async (req, res, next) => {
     translatedBody = translateUplink(req.body);
   } catch (err) {
     logger.error(err.stack);
-    res.status(400).send('Invalid request body. (Failed to translate request body.)\n');
+    if (res) {
+      res.status(400).send('Invalid request body. (Failed to translate request body.)\n');
+    }
     return;
   }
 
@@ -79,24 +91,32 @@ export const uplinkFromSenet = async (req, res, next) => {
   try {
     await sendToTPXLEAsync(translatedBody, req.tpxleToken, realm, clientId);
   } catch (err) {
-    next(err);
+    logger.error(err.stack);
+    if (next) {
+      next(err);
+    }
     return;
   }
 
-  res.status(200).end();
+  if (res) {
+    res.status(200).end();
+  }
 };
 
-export const downlinkToSenet = async (req, res) => {
+// export const downlinkToSenet = async (req, res) => {
+export const downlinkToSenetAsync = async (req, res) => {
   /* ** Check if request body is correct ** */
   const devEUI = req.body.deveui?.toLowerCase();
   if (!devEUI) {
     logger.warn(`DL: There is no "deveui" field in request body.`);
-    res.write('There is no "deveui" field in request body.');
-    res.status(400).end();
+    if (res) {
+      res.write('There is no "deveui" field in request body.');
+      res.status(400).end();
+    }
     return;
   }
 
-  const nitapikey = req.params.nitapikey || 'everynet'; // For backward compatibility, we allow not specifying nitapikey in the url!
+  const nitapikey = req.params.nitapikey || 'senet'; // For backward compatibility, we allow not specifying nitapikey in the url!
   /*
   if (!nitapikey) {
     logger.warn(`DL: There is no "nitapikey" parameter in the url.`);
@@ -114,7 +134,9 @@ export const downlinkToSenet = async (req, res) => {
     translatedBody = translateDownlink(req.body);
   } catch (err) {
     logger.error(err.stack);
-    res.status(400).send('Invalid request body. (Failed to translate request body.)\n');
+    if (res) {
+      res.status(400).send('Invalid request body. (Failed to translate request body.)\n');
+    }
     return;
   }
 
@@ -124,12 +146,16 @@ export const downlinkToSenet = async (req, res) => {
     downlinkData = await DownlinkDataModel.getDLData(nitapikey, devEUI);
   } catch (err) {
     logger.error(err.stack);
-    res.status(200).end();
+    if (res) {
+      res.status(200).end();
+    }
     return;
   }
   if (!downlinkData) {
     logger.warn(`DL: DevEUI: ${devEUI}: DownlinkData does not exists in the db yet.`);
-    res.status(404).send(`DL: DevEUI: ${devEUI}: DownlinkData does not exists in the db yet.\n`);
+    if (res) {
+      res.status(404).send(`DL: DevEUI: ${devEUI}: DownlinkData does not exists in the db yet.\n`);
+    }
     return;
   }
 
@@ -145,9 +171,16 @@ export const downlinkToSenet = async (req, res) => {
     });
   } catch (err) {
     logger.error(err.stack);
-    res.status(200).end();
+    if (res) {
+      res.status(200).end();
+    }
     return;
   }
+  logger.debug(
+    `DL: DevEUI: ${devEUI}: Downlink forwarded to NS: ${
+      downlinkData.downlinkApi
+    }?${urlSearchParams.toString()}`,
+  );
   logger.debug(
     `DL: DevEUI: ${devEUI}: Downlink forwarded to NS. Response status: ${nsRes.status} ${nsRes.statusText}`,
   );
@@ -157,12 +190,45 @@ export const downlinkToSenet = async (req, res) => {
     nsResText = await nsRes.text();
   } catch (err) {
     logger.error(err.stack);
-    res.status(200).end();
+    if (res) {
+      res.status(200).end();
+    }
     return;
   }
   if (nsResText) {
     logger.debug(nsResText);
   }
 
-  res.status(200).end();
+  if (res) {
+    res.status(200).end();
+  }
+};
+
+export const uplinkFromSenet = (req, res) => {
+  (async () => {
+    let tpxleToken;
+    try {
+      tpxleToken = await tpxleAuthAsync(req);
+    } catch (err) {
+      logger.error(`uplinkFromSenet() error: ${err.stack}`);
+    }
+    req.tpxleToken = tpxleToken;
+    try {
+      await uplinkFromSenetAsync(req);
+    } catch (err) {
+      logger.error(`uplinkFromSenet() error: ${err.stack}`);
+    }
+  })();
+  res.status(200).send('This is an async response. See details in server logs.');
+};
+
+export const downlinkToSenet = (req, res) => {
+  (async () => {
+    try {
+      await downlinkToSenetAsync(req);
+    } catch (err) {
+      logger.error(`downlinkToSenet() error: ${err.stack}`);
+    }
+  })();
+  res.status(200).send('This is an async response. See details in server logs.');
 };

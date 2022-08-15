@@ -20,6 +20,9 @@ import { downlinkMQTT, uplinkMQTT } from '../controllers/mqtt.controller.js';
 const createRouter = (mqttClient) => {
   const router = express.Router();
 
+  router.post('/uplink_from_senet/:nitapikey', uplinkFromSenet);
+  router.post('/downlink_to_senet/:nitapikey', downlinkToSenet);
+
   router.use('/uplink_from_*', tpxleAuth);
 
   // for legacy users that dont use nit key
@@ -47,8 +50,8 @@ const createRouter = (mqttClient) => {
   router.post('/uplink_from_everynet/:nitapikey', uplinkFromEverynet);
   router.post('/downlink_to_everynet/:nitapikey', downlinkToEverynet);
 
-  router.post('/uplink_from_senet/:nitapikey', uplinkFromSenet);
-  router.post('/downlink_to_senet/:nitapikey', downlinkToSenet);
+  // router.post('/uplink_from_senet/:nitapikey', uplinkFromSenet);
+  // router.post('/downlink_to_senet/:nitapikey', downlinkToSenet);
 
   router.post('/uplink_from_proximus', uplinkFromProximus);
 

@@ -8,6 +8,7 @@ import examplesSenet from './02f_senet_http_spec.js';
 (async () => {
   console.log('\nSenet tests:');
   for (let i = 0; i < examplesSenet.length; i += 1) {
+    // for (let i = 2; i < 4; i += 1) {
     // eslint-disable-next-line no-await-in-loop
     const res = await fetch(examplesSenet[i].url, examplesSenet[i].options);
     // console.log(JSON.stringify(examplesSenet[i], null, 4));

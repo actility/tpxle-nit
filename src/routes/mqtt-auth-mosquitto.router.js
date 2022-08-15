@@ -4,7 +4,7 @@ import { getAccessTokenAsync } from '../middlewares/tpxle-auth.middleware.js';
 
 // import logger from '../logger.js';
 
-// import { tpxleAuth } from '../middlewares/tpxle-auth.middleware.js';
+// import { tpxleAuthAsync } from '../middlewares/tpxle-auth.middleware.js';
 
 const router = express.Router();
 
