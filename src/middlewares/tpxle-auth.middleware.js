@@ -137,9 +137,8 @@ export const tpxleAuthAsync = async (req) => {
 
   if (!(accessToken || (clientId && clientSecret))) {
     throw Error(
-      `UL: tpxleAuthAsync(): IP: ${ip}, "authorization" or ("x-access-token" or (x-client-id and x-client-secret)) headers are mandatory! ${JSON.stringify(
-        req.headers,
-      )}`,
+      `UL: tpxleAuthAsync(): IP: ${ip}, "authorization" or ("x-access-token" or (x-client-id and x-client-secret)) headers are mandatory!`,
+      // `${JSON.stringify(req.headers,)}`,
     );
   }
 
