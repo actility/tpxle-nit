@@ -59,7 +59,7 @@ app.use((err, req, res, next) => {
   if (httpError.isHttpError(err)) {
     res.status(err.statusCode).send(err.message);
   } else {
-    logger.error(err.stack);
+    logger.error(err.message);
     res.sendStatus(200);
   }
   next();
