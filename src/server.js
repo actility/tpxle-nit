@@ -10,7 +10,7 @@ import logger from './logger.js';
 import createTPXLENITRouter from './routes/tpxle-nit.router.js';
 
 // import mqttAuthMosquittoRouter from './routes/mqtt-auth-mosquitto.router.js';
-import mqttAuthVMQRouter from './routes/mqtt-auth-vmq.router.js';
+// import mqttAuthVMQRouter from './routes/mqtt-auth-vmq.router.js';
 
 const app = express();
 
@@ -24,19 +24,19 @@ const tpxleNITRouter = createTPXLENITRouter(mqttClient);
 
 // Middlewares
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Content-Type, Authorization, Content-Length, X-Requested-With',
-  );
-  if (req.method === 'OPTIONS') {
-    res.send(200);
-  } else {
-    next();
-  }
-});
+// app.use((req, res, next) => {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+//   res.header(
+//     'Access-Control-Allow-Headers',
+//     'Content-Type, Authorization, Content-Length, X-Requested-With',
+//   );
+//   if (req.method === 'OPTIONS') {
+//     res.send(200);
+//   } else {
+//     next();
+//   }
+// });
 
 app.use(json());
 
@@ -44,7 +44,7 @@ app.use(json());
 
 app.use('/', tpxleNITRouter);
 // app.use('/mosquitto', mqttAuthMosquittoRouter);
-app.use('/vmq', mqttAuthVMQRouter);
+// app.use('/vmq', mqttAuthVMQRouter);
 
 // test route
 
