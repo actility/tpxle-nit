@@ -2,25 +2,20 @@ import express, { json } from 'express';
 // import httpError from 'http-errors';
 
 import './config.js';
-
-import createMQTTClient from './mqtt-client.js';
-
 import logger from './logger.js';
 
-import createTPXLENITRouter from './routes/tpxle-nit.router.js';
+import mqttClientFactory from './mqtt-client.js';
 
+import tpxleNITRouterFactory from './routes/tpxle-nit.router.js';
 // import mqttAuthMosquittoRouter from './routes/mqtt-auth-mosquitto.router.js';
-// import mqttAuthVMQRouter from './routes/mqtt-auth-vmq.router.js';
+import mqttAuthVMQRouter from './routes/mqtt-auth-vmq.router.js';
 
 const app = express();
 
 let mqttClient;
-
 if (process.env.NIT__MQTT_ENABLED === 'True') {
-  mqttClient = createMQTTClient();
+  mqttClient = mqttClientFactory();
 }
-
-const tpxleNITRouter = createTPXLENITRouter(mqttClient);
 
 // Middlewares
 
@@ -42,9 +37,9 @@ app.use(json());
 
 // Routes
 
-app.use('/', tpxleNITRouter);
+app.use('/', tpxleNITRouterFactory(mqttClient));
 // app.use('/mosquitto', mqttAuthMosquittoRouter);
-// app.use('/vmq', mqttAuthVMQRouter);
+app.use('/vmq', mqttAuthVMQRouter);
 
 // test route
 

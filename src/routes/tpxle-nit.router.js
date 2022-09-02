@@ -12,16 +12,22 @@ import express from 'express';
 //   downlinkToChirpstack,
 // } from '../controllers/chirpstack.controller.js';
 // import { uplinkFromEverynet, downlinkToEverynet } from '../controllers/everynet.controller.js';
-import { uplinkFromSenet, downlinkToSenet } from '../controllers/senet.controller.js';
+
+import {
+  uplinkControllerFactory,
+  downlinkControllerFactory,
+} from '../controllers/ctrl-factories.controller.js';
+import { uplinkFromSenetAsync, downlinkToSenetAsync } from '../controllers/senet.controller.js';
+
 // import { uplinkFromProximus } from '../controllers/proximus.controller.js';
 
 import { downlinkMQTT, uplinkMQTT } from '../controllers/mqtt.controller.js';
 
-const createRouter = (mqttClient) => {
+const tpxleNITRouterFactory = (mqttClient) => {
   const router = express.Router();
 
-  router.post('/uplink_from_senet/:nitapikey', uplinkFromSenet);
-  router.post('/downlink_to_senet/:nitapikey', downlinkToSenet);
+  router.post('/uplink_from_senet/:nitapikey', uplinkControllerFactory(uplinkFromSenetAsync));
+  router.post('/downlink_to_senet/:nitapikey', downlinkControllerFactory(downlinkToSenetAsync));
 
   // // router.use('/uplink_from_*', tpxleAuth);
 
@@ -73,4 +79,4 @@ const createRouter = (mqttClient) => {
   return router;
 };
 
-export default createRouter;
+export default tpxleNITRouterFactory;

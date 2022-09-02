@@ -21,7 +21,7 @@ const options = {
 
 const topics = [`+/NS/+/NIT/+/LE/+/AS`, `+/LE/+/NIT/+/NS/+`];
 
-const createMQTTClient = () => {
+const mqttClientFactory = () => {
   const mqttClient = mqtt.connect(url, options);
   mqttClient.on('connect', () => {
     console.log('MQTT Uplink Client Connected');
@@ -96,4 +96,4 @@ const createMQTTClient = () => {
   return mqttClient;
 };
 
-export default createMQTTClient;
+export default mqttClientFactory;
