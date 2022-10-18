@@ -2,10 +2,11 @@ import fetch from 'node-fetch';
 
 import logger from '../logger.js';
 import DownlinkDataModel from '../models/downlink-data.model.js';
+import { tpxleAuthAsync } from '../middlewares/tpxle-auth.middleware.js';
 import { translateUplink, translateDownlink } from '../services/nit-chirpstack.service.js';
 import sendToTPXLEAsync from '../services/send-to-tpxle.js';
 
-export const uplinkFromChirpstack = async (req, res, next) => {
+export const uplinkFromChirpstackAsync = async (req) => {
   /* ** Check if request body is correct ** */
   const errMsg =
     '(x-access-token or (x-client-id and x-client-secret)), x-downlink-api, x-downlink-apikey in header and devEUI in body are mandatory!';
@@ -21,40 +22,29 @@ export const uplinkFromChirpstack = async (req, res, next) => {
     clientId = req.headers['x-client-id'];
     clientSecret = req.headers['x-client-secret'];
     realm = req.headers['x-realm'] || process.env.NIT__DEFAULT_REALM;
-    devEUI = Buffer.from(req.body.devEUI, 'base64').toString('hex');
+    devEUI = Buffer.from(req.body.devEUI, 'base64').toString('hex'); // NS Specific !!!
     downlinkApi = req.headers['x-downlink-api'];
     downlinkApikey = req.headers['x-downlink-apikey'];
   } catch (err) {
     logger.warn(err.stack);
     logger.warn(`UL: ${errMsg}`);
-    res.status(400).send(errMsg);
     return;
   }
+
   if (!devEUI) {
     logger.warn('UL: Missing DevEUI!');
-    res.status(400).send('Missing DevEUI!');
     return;
   }
   if (!process.env.NIT__VALID_REALMS.split(',').includes(realm)) {
     logger.warn('UL: Invalid realm!');
-    res.status(400).send('Invalid realm!');
     return;
   }
   if (!((accessToken || (clientId && clientSecret)) && devEUI && downlinkApi && downlinkApikey)) {
     logger.warn(`UL: DevEUI: ${devEUI}: ${errMsg}`);
-    res.status(400).send(errMsg);
     return;
   }
 
   const nitapikey = req.params.nitapikey || 'chirpstack'; // For backward compatibility, we allow not specifying nitapikey in the url!
-  /*
-  if (!nitapikey) {
-    logger.warn(`UL: There is no "nitapikey" parameter in the url.`);
-    res.write('There is no "nitapikey" parameter in the url.');
-    res.status(400).end();
-    return;
-  }
-  */
 
   logger.debug(`UL: DevEUI: ${devEUI}: UL message received from NS.`);
 
@@ -70,7 +60,6 @@ export const uplinkFromChirpstack = async (req, res, next) => {
     translatedBody = translateUplink(req.body);
   } catch (err) {
     logger.error(err.stack);
-    res.status(400).send('Invalid request body. (Failed to translate request body.)\n');
     return;
   }
 
@@ -78,32 +67,19 @@ export const uplinkFromChirpstack = async (req, res, next) => {
   try {
     await sendToTPXLEAsync(translatedBody, req.tpxleToken, realm, clientId);
   } catch (err) {
-    next(err);
-    return;
+    logger.error(err.stack);
   }
-
-  res.status(200).end();
 };
 
-export const downlinkToChirpstack = async (req, res) => {
+export const downlinkToChirpstackAsync = async (req) => {
   /* ** Check if request body is correct ** */
   const devEUI = req.body.deveui?.toLowerCase();
   if (!devEUI) {
     logger.warn(`DL: There is no "deveui" field in request body.`);
-    res.write('There is no "deveui" field in request body.');
-    res.status(400).end();
     return;
   }
 
   const nitapikey = req.params.nitapikey || 'chirpstack'; // For backward compatibility, we allow not specifying nitapikey in the url!
-  /*
-  if (!nitapikey) {
-    logger.warn(`DL: There is no "nitapikey" parameter in the url.`);
-    res.write('There is no "nitapikey" parameter in the url.');
-    res.status(400).end();
-    return;
-  }
-  */
 
   logger.debug(`DL: DevEUI: ${devEUI}: DL message received from TPXLE.`);
 
@@ -113,7 +89,6 @@ export const downlinkToChirpstack = async (req, res) => {
     translatedBody = translateDownlink(req.body);
   } catch (err) {
     logger.error(err.stack);
-    res.status(400).send('Invalid request body. (Failed to translate request body.)\n');
     return;
   }
 
@@ -123,12 +98,10 @@ export const downlinkToChirpstack = async (req, res) => {
     downlinkData = await DownlinkDataModel.getDLData(nitapikey, devEUI);
   } catch (err) {
     logger.error(err.stack);
-    res.status(200).end();
     return;
   }
   if (!downlinkData) {
     logger.warn(`DL: DevEUI: ${devEUI}: DownlinkData does not exists in the db yet.`);
-    res.status(404).send(`DL: DevEUI: ${devEUI}: DownlinkData does not exists in the db yet.\n`);
     return;
   }
 
@@ -143,12 +116,12 @@ export const downlinkToChirpstack = async (req, res) => {
     body: JSON.stringify(translatedBody),
   };
   logger.debug(`DL: DevEUI: ${devEUI}: Req URL: ${url}; Req options:${JSON.stringify(options)};`);
+
   let nsRes;
   try {
     nsRes = await fetch(url, options);
   } catch (err) {
     logger.error(err.stack);
-    res.status(200).end();
     return;
   }
   logger.debug(
@@ -165,6 +138,33 @@ export const downlinkToChirpstack = async (req, res) => {
   if (nsResText) {
     logger.debug(nsResText);
   }
+};
 
-  res.status(200).end();
+export const uplinkFromChirpstack = (req, res) => {
+  (async () => {
+    let tpxleToken;
+    try {
+      tpxleToken = await tpxleAuthAsync(req);
+    } catch (err) {
+      logger.error(`uplinkFromSenet() error: ${err.stack}`);
+    }
+    req.tpxleToken = tpxleToken;
+    try {
+      await uplinkFromChirpstackAsync(req);
+    } catch (err) {
+      logger.error(`uplinkFromSenet() error: ${err.stack}`);
+    }
+  })();
+  res.status(200).send('This is an async response. See details in server logs.');
+};
+
+export const downlinkToChirpstack = (req, res) => {
+  (async () => {
+    try {
+      await downlinkToChirpstackAsync(req);
+    } catch (err) {
+      logger.error(`downlinkToSenet() error: ${err.stack}`);
+    }
+  })();
+  res.status(200).send('This is an async response. See details in server logs.');
 };

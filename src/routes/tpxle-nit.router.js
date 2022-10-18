@@ -7,10 +7,10 @@ import express from 'express';
 // import { uplinkFromHelium, downlinkToHelium } from '../controllers/helium.controller.js';
 // import { uplinkFromTTN, downlinkToTTN } from '../controllers/ttn.controller.js';
 // import { uplinkFromLoriot, downlinkToLoriot } from '../controllers/loriot.controller.js';
-// import {
-//   uplinkFromChirpstack,
-//   downlinkToChirpstack,
-// } from '../controllers/chirpstack.controller.js';
+import {
+  uplinkFromChirpstackAsync,
+  downlinkToChirpstackAsync,
+} from '../controllers/chirpstack.controller.js';
 // import { uplinkFromEverynet, downlinkToEverynet } from '../controllers/everynet.controller.js';
 
 import {
@@ -55,9 +55,14 @@ const tpxleNITRouterFactory = (mqttClient) => {
   // router.post('/uplink_from_loriot/:nitapikey', uplinkFromLoriot);
   // router.post('/downlink_to_loriot/:nitapikey', downlinkToLoriot);
 
-  // router.use('/uplink_from_chirpstack', tpxleAuth);
-  // router.post('/uplink_from_chirpstack/:nitapikey', uplinkFromChirpstack);
-  // router.post('/downlink_to_chirpstack/:nitapikey', downlinkToChirpstack);
+  router.post(
+    '/uplink_from_chirpstack/:nitapikey',
+    uplinkControllerFactory(uplinkFromChirpstackAsync),
+  );
+  router.post(
+    '/downlink_to_chirpstack/:nitapikey',
+    downlinkControllerFactory(downlinkToChirpstackAsync),
+  );
 
   // router.use('/uplink_from_everynet', tpxleAuth);
   // router.post('/uplink_from_everynet/:nitapikey', uplinkFromEverynet);
