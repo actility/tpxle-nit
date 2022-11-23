@@ -6,22 +6,27 @@ import express from 'express';
 
 // import { uplinkFromHelium, downlinkToHelium } from '../controllers/helium.controller.js';
 // import { uplinkFromTTN, downlinkToTTN } from '../controllers/ttn.controller.js';
+
 // import { uplinkFromLoriot, downlinkToLoriot } from '../controllers/loriot.controller.js';
+import { uplinkFromLoriotAsync, downlinkToLoriotAsync } from '../controllers/loriot.controller.js';
+
 import {
   uplinkFromChirpstackAsync,
   downlinkToChirpstackAsync,
 } from '../controllers/chirpstack.controller.js';
+
 // import { uplinkFromEverynet, downlinkToEverynet } from '../controllers/everynet.controller.js';
 
-import {
-  uplinkControllerFactory,
-  downlinkControllerFactory,
-} from '../controllers/ctrl-factories.controller.js';
 import { uplinkFromSenetAsync, downlinkToSenetAsync } from '../controllers/senet.controller.js';
 
 // import { uplinkFromProximus } from '../controllers/proximus.controller.js';
 
 import { downlinkMQTT, uplinkMQTT } from '../controllers/mqtt.controller.js';
+
+import {
+  uplinkControllerFactory,
+  downlinkControllerFactory,
+} from '../controllers/ctrl-factories.controller.js';
 
 const tpxleNITRouterFactory = (mqttClient) => {
   const router = express.Router();
@@ -54,6 +59,8 @@ const tpxleNITRouterFactory = (mqttClient) => {
   // router.use('/uplink_from_loriot', tpxleAuth);
   // router.post('/uplink_from_loriot/:nitapikey', uplinkFromLoriot);
   // router.post('/downlink_to_loriot/:nitapikey', downlinkToLoriot);
+  router.post('/uplink_from_loriot/:nitapikey', uplinkControllerFactory(uplinkFromLoriotAsync));
+  router.post('/downlink_to_loriot/:nitapikey', downlinkControllerFactory(downlinkToLoriotAsync));
 
   router.post(
     '/uplink_from_chirpstack/:nitapikey',

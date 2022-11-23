@@ -2,17 +2,18 @@ import fetch from 'node-fetch';
 
 import logger from '../logger.js';
 import DownlinkDataModel from '../models/downlink-data.model.js';
+import { tpxleAuthAsync } from '../middlewares/tpxle-auth.middleware.js';
 import { translateUplink, translateDownlink } from '../services/nit-loriot.service.js';
 import sendToTPXLEAsync from '../services/send-to-tpxle.js';
 
-export const uplinkFromLoriot = async (req, res, next) => {
+export const uplinkFromLoriotAsync = async (req) => {
   /* ** Check if request body is correct ** */
   const errMsg =
     'The format of "authorization" header must be either "clientId|clientSecret|realm|downlinkUrl" or "|accessToken|realm|downlinkUrl"! "EUI field in body is mandatory!';
   let accessToken;
   let clientId;
-  let realm;
   let clientSecret;
+  let realm;
   let devEUI;
   let downlinkUrl;
   let downlinkAPIKey;
@@ -25,24 +26,20 @@ export const uplinkFromLoriot = async (req, res, next) => {
     devEUI = req.body.EUI?.toLowerCase();
   } catch (err) {
     logger.warn(err.stack);
-    logger.warn(errMsg);
-    res.status(400).send(errMsg);
+    logger.warn(`UL: ${errMsg}`);
     return;
   }
 
   if (!devEUI) {
     logger.warn('UL: Missing DevEUI!');
-    res.status(400).send('Missing DevEUI!');
     return;
   }
   if (!process.env.NIT__VALID_REALMS.split(',').includes(realm)) {
     logger.warn('UL: Invalid realm!');
-    res.status(400).send('Invalid realm!');
     return;
   }
   if (!((accessToken || (clientId && clientSecret)) && devEUI && downlinkUrl)) {
     logger.warn(`UL: DevEUI: ${devEUI}: ${errMsg}`);
-    res.status(400).send(errMsg);
     return;
   }
 
@@ -70,28 +67,22 @@ export const uplinkFromLoriot = async (req, res, next) => {
     translatedBody = translateUplink(req.body);
   } catch (err) {
     logger.error(err.stack);
-    res.status(400).send('Invalid request body. (Failed to translate request body.)\n');
     return;
   }
 
-  // sendToTPXLEAsync(translatedBody, accessToken, clientId, clientSecret, realm);
+  /* ** Forward message to TPXLE ** */
   try {
     await sendToTPXLEAsync(translatedBody, req.tpxleToken, realm, clientId);
   } catch (err) {
-    next(err);
-    return;
+    logger.error(err.stack);
   }
-
-  res.status(200).end();
 };
 
-export const downlinkToLoriot = async (req, res) => {
+export const downlinkToLoriotAsync = async (req) => {
   /* ** Check if request body is correct ** */
   const devEUI = req.body.deveui?.toLowerCase();
   if (!devEUI) {
     logger.warn(`DL: There is no "deveui" field in request body.`);
-    res.write('There is no "deveui" field in request body.');
-    res.status(400).end();
     return;
   }
 
@@ -113,7 +104,6 @@ export const downlinkToLoriot = async (req, res) => {
     translatedBody = translateDownlink(req.body);
   } catch (err) {
     logger.error(err.stack);
-    res.status(400).send('Invalid request body. (Failed to translate request body.)\n');
     return;
   }
 
@@ -123,12 +113,10 @@ export const downlinkToLoriot = async (req, res) => {
     downlinkData = await DownlinkDataModel.getDLData(nitapikey, devEUI);
   } catch (err) {
     logger.error(err.stack);
-    res.status(200).end();
     return;
   }
   if (!downlinkData) {
     logger.warn(`DL: DevEUI: ${devEUI}: DownlinkData does not exists in the db yet.`);
-    res.status(404).send(`DL: DevEUI: ${devEUI}: DownlinkData does not exists in the db yet.\n`);
     return;
   }
 
@@ -145,7 +133,6 @@ export const downlinkToLoriot = async (req, res) => {
     });
   } catch (err) {
     logger.error(err.stack);
-    res.status(200).end();
     return;
   }
   logger.debug(
@@ -157,12 +144,38 @@ export const downlinkToLoriot = async (req, res) => {
     nsResText = await nsRes.text();
   } catch (err) {
     logger.error(err.stack);
-    res.status(200).end();
     return;
   }
   if (nsResText) {
     logger.debug(nsResText);
   }
+};
 
-  res.status(200).end();
+export const uplinkFromLoriot = (req, res) => {
+  (async () => {
+    let tpxleToken;
+    try {
+      tpxleToken = await tpxleAuthAsync(req);
+    } catch (err) {
+      logger.error(`uplinkFromLoriot() error: ${err.stack}`);
+    }
+    req.tpxleToken = tpxleToken;
+    try {
+      await uplinkFromLoriotAsync(req);
+    } catch (err) {
+      logger.error(`uplinkFromLoriot() error: ${err.stack}`);
+    }
+  })();
+  res.status(200).send('This is an async response. See details in server logs.');
+};
+
+export const downlinkToLoriot = (req, res) => {
+  (async () => {
+    try {
+      await downlinkToLoriotAsync(req);
+    } catch (err) {
+      logger.error(`downlinkToLoriot() error: ${err.stack}`);
+    }
+  })();
+  res.status(200).send('This is an async response. See details in server logs.');
 };
