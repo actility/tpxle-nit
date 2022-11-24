@@ -1,5 +1,8 @@
 import fetch from 'node-fetch';
 
+import '../config.js';
+import './test_config.js';
+
 import examplesProximus from './02h_proximus_http_spec.js';
 
 (async () => {

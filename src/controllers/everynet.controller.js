@@ -2,10 +2,11 @@ import fetch from 'node-fetch';
 
 import logger from '../logger.js';
 import DownlinkDataModel from '../models/downlink-data.model.js';
+import { tpxleAuthAsync } from '../middlewares/tpxle-auth.middleware.js';
 import { translateUplink, translateDownlink } from '../services/nit-everynet.service.js';
 import sendToTPXLEAsync from '../services/send-to-tpxle.js';
 
-export const uplinkFromEverynet = async (req, res, next) => {
+export const uplinkFromEverynetAsync = async (req) => {
   /* ** Check if request body is correct ** */
   const errMsg =
     '(x-access-token or (x-client-id and x-client-secret)), x-downlink-api, x-downlink-apikey in header and devEUI in body are mandatory!';
@@ -27,33 +28,27 @@ export const uplinkFromEverynet = async (req, res, next) => {
   } catch (err) {
     logger.warn(err.stack);
     logger.warn(`UL: ${errMsg}`);
-    res.status(400).send(errMsg);
     return;
   }
 
   if (!req.body.type) {
     logger.error('Missing "type" from POST body!');
-    res.status(400).send('Missing "type" from POST body!');
     return;
   }
   if (req.body.type !== 'uplink') {
-    res.status(200).send('Only "uplink" message types are processed.');
     return;
   }
 
   if (!devEUI) {
     logger.warn('UL: Missing DevEUI!');
-    res.status(400).send('Missing DevEUI!');
     return;
   }
   if (!process.env.NIT__VALID_REALMS.split(',').includes(realm)) {
     logger.warn('UL: Invalid realm!');
-    res.status(400).send('Invalid realm!');
     return;
   }
   if (!((accessToken || (clientId && clientSecret)) && devEUI && downlinkApi && downlinkApikey)) {
     logger.warn(`UL: DevEUI: ${devEUI}: ${errMsg}`);
-    res.status(400).send(errMsg);
     return;
   }
 
@@ -81,28 +76,22 @@ export const uplinkFromEverynet = async (req, res, next) => {
     translatedBody = translateUplink(req.body);
   } catch (err) {
     logger.error(err.stack);
-    res.status(400).send('Invalid request body. (Failed to translate request body.)\n');
     return;
   }
 
-  // sendToTPXLEAsync(translatedBody, accessToken, clientId, clientSecret, realm);
+  /* ** Forward message to TPXLE ** */
   try {
     await sendToTPXLEAsync(translatedBody, req.tpxleToken, realm, clientId);
   } catch (err) {
-    next(err);
-    return;
+    logger.error(err.stack);
   }
-
-  res.status(200).end();
 };
 
-export const downlinkToEverynet = async (req, res) => {
+export const downlinkToEverynetAsync = async (req) => {
   /* ** Check if request body is correct ** */
   const devEUI = req.body.deveui?.toLowerCase();
   if (!devEUI) {
     logger.warn(`DL: There is no "deveui" field in request body.`);
-    res.write('There is no "deveui" field in request body.');
-    res.status(400).end();
     return;
   }
 
@@ -124,7 +113,6 @@ export const downlinkToEverynet = async (req, res) => {
     translatedBody = translateDownlink(req.body);
   } catch (err) {
     logger.error(err.stack);
-    res.status(400).send('Invalid request body. (Failed to translate request body.)\n');
     return;
   }
 
@@ -134,12 +122,10 @@ export const downlinkToEverynet = async (req, res) => {
     downlinkData = await DownlinkDataModel.getDLData(nitapikey, devEUI);
   } catch (err) {
     logger.error(err.stack);
-    res.status(200).end();
     return;
   }
   if (!downlinkData) {
     logger.warn(`DL: DevEUI: ${devEUI}: DownlinkData does not exists in the db yet.`);
-    res.status(404).send(`DL: DevEUI: ${devEUI}: DownlinkData does not exists in the db yet.\n`);
     return;
   }
 
@@ -156,7 +142,6 @@ export const downlinkToEverynet = async (req, res) => {
     });
   } catch (err) {
     logger.error(err.stack);
-    res.status(200).end();
     return;
   }
   logger.debug(
@@ -168,12 +153,38 @@ export const downlinkToEverynet = async (req, res) => {
     nsResText = await nsRes.text();
   } catch (err) {
     logger.error(err.stack);
-    res.status(200).end();
     return;
   }
   if (nsResText) {
     logger.debug(nsResText);
   }
+};
 
-  res.status(200).end();
+export const uplinkFromEverynet = (req, res) => {
+  (async () => {
+    let tpxleToken;
+    try {
+      tpxleToken = await tpxleAuthAsync(req);
+    } catch (err) {
+      logger.error(`uplinkFromEverynet() error: ${err.stack}`);
+    }
+    req.tpxleToken = tpxleToken;
+    try {
+      await uplinkFromEverynetAsync(req);
+    } catch (err) {
+      logger.error(`uplinkFromEverynet() error: ${err.stack}`);
+    }
+  })();
+  res.status(200).send('This is an async response. See details in server logs.');
+};
+
+export const downlinkToEverynet = (req, res) => {
+  (async () => {
+    try {
+      await downlinkToEverynetAsync(req);
+    } catch (err) {
+      logger.error(`downlinkToEverynet() error: ${err.stack}`);
+    }
+  })();
+  res.status(200).send('This is an async response. See details in server logs.');
 };

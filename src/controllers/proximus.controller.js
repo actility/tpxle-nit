@@ -1,9 +1,12 @@
+// import fetch from 'node-fetch';  // FOR DOWNLINK ONLY!
+
 import logger from '../logger.js';
-import { translateUplink } from '../services/nit-proximus.service.js';
+// import DownlinkDataModel from '../models/downlink-data.model.js';  // FOR DOWNLINK ONLY!
+import { tpxleAuthAsync } from '../middlewares/tpxle-auth.middleware.js';
+import { translateUplink /* translateDownlink */ } from '../services/nit-proximus.service.js';
 import sendToTPXLEAsync from '../services/send-to-tpxle.js';
 
-// eslint-disable-next-line import/prefer-default-export
-export const uplinkFromProximus = async (req, res, next) => {
+export const uplinkFromProximusAsync = async (req) => {
   /* ** Check if request body is correct ** */
   const errMsg =
     '(x-access-token or (x-client-id and x-client-secret)) in header and DevEUI_uplink.DevEUI in body are mandatory!';
@@ -21,23 +24,19 @@ export const uplinkFromProximus = async (req, res, next) => {
   } catch (err) {
     logger.warn(err.stack);
     logger.warn(`UL: ${errMsg}`);
-    logger.warn(`UL: ${JSON.stringify(req.body)}`);
-    res.status(400).send(errMsg);
+    // logger.warn(`UL: ${JSON.stringify(req.body)}`);
     return;
   }
   if (!devEUI) {
     logger.warn('UL: Missing DevEUI!');
-    res.status(400).send('Missing DevEUI!');
     return;
   }
   if (!process.env.NIT__VALID_REALMS.split(',').includes(realm)) {
     logger.warn('UL: Invalid realm!');
-    res.status(400).send('Invalid realm!');
     return;
   }
   if (!((accessToken || (clientId && clientSecret)) && devEUI)) {
     logger.warn(`UL: DevEUI: ${devEUI}: ${errMsg}`);
-    res.status(400).send(errMsg);
     return;
   }
 
@@ -52,17 +51,47 @@ export const uplinkFromProximus = async (req, res, next) => {
     translatedBody = translateUplink(req.body);
   } catch (err) {
     logger.error(err.stack);
-    res.status(400).send('Invalid request body. (Failed to translate request body.)\n');
     return;
   }
 
-  // sendToTPXLEAsync(translatedBody, accessToken, clientId, clientSecret, realm);
+  /* ** Forward message to TPXLE ** */
   try {
     await sendToTPXLEAsync(translatedBody, req.tpxleToken, realm, clientId);
   } catch (err) {
-    next(err);
-    return;
+    logger.error(err.stack);
   }
+};
 
-  res.status(200).end();
+export const downlinkToProximusAsync = async (req) => {
+  /* ** Check if request body is correct ** */
+  logger.debug(`DL: Poximus Downlink is not implemented!.\n${req.body}`);
+};
+
+export const uplinkFromProximus = (req, res) => {
+  (async () => {
+    let tpxleToken;
+    try {
+      tpxleToken = await tpxleAuthAsync(req);
+    } catch (err) {
+      logger.error(`uplinkFromProximus() error: ${err.stack}`);
+    }
+    req.tpxleToken = tpxleToken;
+    try {
+      await uplinkFromProximusAsync(req);
+    } catch (err) {
+      logger.error(`uplinkFromProximus() error: ${err.stack}`);
+    }
+  })();
+  res.status(200).send('This is an async response. See details in server logs.');
+};
+
+export const downlinkToProximus = (req, res) => {
+  (async () => {
+    try {
+      await downlinkToProximusAsync(req);
+    } catch (err) {
+      logger.error(`downlinkToProximus() error: ${err.stack}`);
+    }
+  })();
+  res.status(200).send('This is an async response. See details in server logs.');
 };
