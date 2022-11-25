@@ -1,6 +1,12 @@
 import express from 'express';
 
+import {
+  uplinkFromActilityAsync,
+  downlinkToActilityAsync,
+} from '../controllers/actility.controller.js';
+
 import { uplinkFromHeliumAsync, downlinkToHeliumAsync } from '../controllers/helium.controller.js';
+
 import { uplinkFromTTNAsync, downlinkToTTNAsync } from '../controllers/ttn.controller.js';
 
 import { uplinkFromLoriotAsync, downlinkToLoriotAsync } from '../controllers/loriot.controller.js';
@@ -44,6 +50,12 @@ const tpxleNITRouterFactory = (mqttClient) => {
   router.post('/downlink_to_proximus', downlinkControllerFactory(downlinkToProximusAsync));
 
   // // downlink secured by nitapikey
+
+  router.post('/uplink_from_actility/:nitapikey', uplinkControllerFactory(uplinkFromActilityAsync));
+  router.post(
+    '/downlink_to_actility/:nitapikey',
+    downlinkControllerFactory(downlinkToActilityAsync),
+  );
 
   router.post('/uplink_from_helium/:nitapikey', uplinkControllerFactory(uplinkFromHeliumAsync));
   router.post('/downlink_to_helium/:nitapikey', downlinkControllerFactory(downlinkToHeliumAsync));

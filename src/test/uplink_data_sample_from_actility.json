@@ -44,5 +44,6 @@
     "DevAddr": "05AE3D2F",
     "TxPower": 9.75,
     "NbTrans": 1
-  }
+  },
+  "downlinkUrl": "https://community.thingpark.io/iot-flow/downlinkMessages/98739c3d-14e2-4b72-ae0f-ef700b5cf6b8"
 }
