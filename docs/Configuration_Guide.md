@@ -1,8 +1,0 @@
-[Actility](Actility.md)
-[Chirpstack](Chirpstack.md)
-[Everynet](Everynet.md)
-[Helium](Helium.md)
-[Loriot](Loriot.md)
-[Proximus](Proximus.md)
-[Senet](Senet.md)
-[TTN](TTN.md)
