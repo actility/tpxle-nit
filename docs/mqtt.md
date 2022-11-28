@@ -1,5 +1,8 @@
 # ThingPark X Loction Engine Network Interface Translator MQTT setup guide
 
+> This document has to be updated!!!
+> The MQTT configuration must be tested on a production platform.
+
 ## MQTT Settings:
 
 - MQTT Broker Address:
