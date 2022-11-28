@@ -96,4 +96,4 @@
 
    - There is an online version of this Interface Translator at https://community.thingpark.io/tpxle-nit/
 
-2. Set up your connectivity using TPXLE-NIT according to [TPXLE-NIT Setup Guide](LNS_Setup_Guide.md)
+2. Set up your connectivity using TPXLE-NIT according to [TPXLE-NIT LNS Connectivity Setup Guide](LNS_Connectivity_Setup_Guide.md)
