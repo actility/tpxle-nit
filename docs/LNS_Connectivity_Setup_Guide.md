@@ -1,4 +1,4 @@
-# TPXLE-NIT LNS Setup Guide
+# TPXLE-NIT LNS Connectivity Setup Guide
 
 The ThingPark X Location Engine Network Interface Translator can be used with the following LoRaWAN Network Servers.
 
