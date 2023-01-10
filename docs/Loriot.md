@@ -1,8 +1,8 @@
 # Loriot
 
-### 1. Connection with User Credentials
+## 1. Connection with User Credentials
 
-#### 1.1. Uplink connection
+### 1.1. Uplink connection
 
 **Target URL:**
 
@@ -23,7 +23,7 @@
 `<realm>` must be equal to 'dev1'
 `<downlinkUrl>` the downlink API URL of the Loriot server instance
 
-#### 1.2. Downlink connection
+### 1.2. Downlink connection
 
 **Downlink Target URL:**
 
@@ -31,12 +31,12 @@
   https://nano-things.net/tpxle-nit/downlink_to_loriot/<YOUR_NIT_API_ID>
 ```
 
-### 2. Connection with API Key
+## 2. Connection with API Key
 
 > This option is currently available only on our Preview environment!
 > API keys will be supported in Q1 2023
 
-#### 2.1. Uplink connection
+### 2.1. Uplink connection
 
 **Target URL:**
 
@@ -56,7 +56,7 @@
 `<realm>` must be equal to 'dev1'
 `<downlinkUrl>` the downlink API URL of the Loriot server instance
 
-#### 2.2. Downlink connection
+### 2.2. Downlink connection
 
 **Downlink Target URL:**
 
