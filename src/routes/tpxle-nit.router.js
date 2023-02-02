@@ -28,12 +28,13 @@ import {
   downlinkToProximusAsync,
 } from '../controllers/proximus.controller.js';
 
-import { downlinkMQTT, uplinkMQTT } from '../controllers/mqtt.controller.js';
+import uplinkMQTT1 from '../controllers/mqtt1.controller.js';
+import { uplinkMQTT, downlinkMQTT } from '../controllers/mqtt.controller.js';
 
 import {
   uplinkControllerFactory,
   downlinkControllerFactory,
-} from '../controllers/ctrl-factories.controller.js';
+} from '../controllers/controller-factories.js';
 
 const tpxleNITRouterFactory = (mqttClient) => {
   const router = express.Router();
@@ -63,6 +64,12 @@ const tpxleNITRouterFactory = (mqttClient) => {
   router.post('/uplink_from_ttn/:nitapikey', uplinkControllerFactory(uplinkFromTTNAsync));
   router.post('/downlink_to_ttn/:nitapikey', downlinkControllerFactory(downlinkToTTNAsync));
 
+  router.post('/uplink_from_proximus/:nitapikey', uplinkControllerFactory(uplinkFromProximusAsync));
+  router.post(
+    '/downlink_to_proximus/:nitapikey',
+    downlinkControllerFactory(downlinkToProximusAsync),
+  );
+
   router.post('/uplink_from_loriot/:nitapikey', uplinkControllerFactory(uplinkFromLoriotAsync));
   router.post('/downlink_to_loriot/:nitapikey', downlinkControllerFactory(downlinkToLoriotAsync));
 
@@ -85,6 +92,8 @@ const tpxleNITRouterFactory = (mqttClient) => {
   );
 
   if (mqttClient) {
+    router.post('/mqtt/:userId/LE_AS/:asId', uplinkControllerFactory(uplinkMQTT1(mqttClient)));
+
     router.post('/downlink_mqtt/:subscriberId/:leId/:nsVendor', downlinkMQTT(mqttClient));
     router.post('/uplink_mqtt/:subscriberId/:leId', uplinkMQTT(mqttClient));
   }

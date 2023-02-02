@@ -1,5 +1,4 @@
 import express, { json } from 'express';
-// import httpError from 'http-errors';
 
 import './config.js';
 import logger from './logger.js';
@@ -7,8 +6,15 @@ import logger from './logger.js';
 import mqttClientFactory from './mqtt-client.js';
 
 import tpxleNITRouterFactory from './routes/tpxle-nit.router.js';
-// import mqttAuthMosquittoRouter from './routes/mqtt-auth-mosquitto.router.js';
+
 import mqttAuthVMQRouter from './routes/mqtt-auth-vmq.router.js';
+
+import getConfParam from './config/get-conf-params.js';
+import {
+  getAPIKeysAsync,
+  getAccessTokenAsync,
+  createUserIdFromAccessToken,
+} from './middlewares/tpxle-auth.middleware.js';
 
 const app = express();
 
@@ -17,28 +23,12 @@ if (process.env.NIT__MQTT_ENABLED === 'True') {
   mqttClient = mqttClientFactory();
 }
 
-// Middlewares
-
-// app.use((req, res, next) => {
-//   res.header('Access-Control-Allow-Origin', '*');
-//   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-//   res.header(
-//     'Access-Control-Allow-Headers',
-//     'Content-Type, Authorization, Content-Length, X-Requested-With',
-//   );
-//   if (req.method === 'OPTIONS') {
-//     res.send(200);
-//   } else {
-//     next();
-//   }
-// });
-
 app.use(json());
 
 // Routes
 
 app.use('/', tpxleNITRouterFactory(mqttClient));
-// app.use('/mosquitto', mqttAuthMosquittoRouter);
+
 app.use('/vmq', mqttAuthVMQRouter);
 
 // test route
@@ -47,6 +37,35 @@ app.get('/test', (req, res) => {
   logger.debug('Test request received on server');
   res.write('The server works\n');
   res.status(200).end();
+});
+
+app.post('/get-topic', async (req, res) => {
+  let accessToken;
+  let apiKeys;
+  let userId;
+  let err;
+
+  const { clientId, clientSecret, architectureId, nsVendor, asId } = req.body;
+
+  try {
+    accessToken = await getAccessTokenAsync(clientId, clientSecret, architectureId);
+    userId = await createUserIdFromAccessToken(accessToken, req.body.architectureId);
+    apiKeys = await getAPIKeysAsync(accessToken, architectureId);
+  } catch (e) {
+    err = e.message;
+    console.log(err);
+  }
+
+  const uplinkTopic = `${userId}/NS_LE/${nsVendor}/${asId}`;
+  const downlinkTopic = `${userId}/LE_NS/${nsVendor}`;
+
+  const publishedNITURL = getConfParam(architectureId, 'PUBLISHED_NIT_URL');
+  const ns2nitURL = `${publishedNITURL}/uplink_from_${nsVendor}/${asId}`;
+  const le2nitURL = `${publishedNITURL}/downlink_to_${nsVendor}/${asId}`;
+  const le2asURL = `${publishedNITURL}/mqtt/${userId}/LE_AS/${asId}`;
+
+  res.json({ uplinkTopic, downlinkTopic, ns2nitURL, le2nitURL, le2asURL, apiKeys });
+  // res.status(200).end();
 });
 
 // Error handling

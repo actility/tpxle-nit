@@ -6,18 +6,12 @@ import httpError from 'http-errors';
 import logger from '../logger.js';
 import AccessTokensModel from '../models/access-tokens.model.js';
 
-const REALM_PREFIXES = {
-  'abeeway-mobile-app': 'NIT__ABEEWAYMOBILEAPP_',
-  dev1: 'NIT__DEV1_',
-  'le-lab': 'NIT__LELAB_',
-  rnd: 'NIT__RND_',
-};
+import getConfParam from '../config/get-conf-params.js';
 
-const sendToTPXLEAsync = async (translatedBody, accessToken, realm, clientId) => {
+const sendToTPXLEAsync = async (translatedBody, accessToken, architectureId, clientId) => {
   const devEUI = translatedBody.deviceEUI;
 
-  // const url = cfg[realm].FEED_URL;
-  const url = process.env[`${REALM_PREFIXES[realm]}FEED_URL`];
+  const url = getConfParam(architectureId, 'FEED_URL');
 
   const options = {
     method: 'POST',
@@ -42,7 +36,7 @@ const sendToTPXLEAsync = async (translatedBody, accessToken, realm, clientId) =>
       logger.error(`UL: sendToTPXLEAsync: DevEUI: ${devEUI}: Response Text: ${tpxleResponseText}`);
 
       if (tpxleResponse.status === 401) {
-        AccessTokensModel.deleteAccessToken(realm, clientId);
+        AccessTokensModel.deleteAccessToken(architectureId, clientId);
       }
 
       throw httpError(500, `HTTP error happened while forwarding UL to TPXLE`);

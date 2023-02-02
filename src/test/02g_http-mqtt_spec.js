@@ -2,14 +2,14 @@ const testTarget = process.env.TEST__TARGET;
 
 const method = 'POST';
 
-const dlBodyDev1 = {
+const bodyEcoDxDl = {
   type: 'downlink',
-  deveui: process.env.TEST__DEV_EUI,
+  deveui: process.env.TEST__ECODX_DEVEUI,
   port: '2',
   payload: '020402',
 };
 
-const dlHeaders = {
+const headerCommonDl = {
   'content-type': 'application/json',
 };
 
@@ -25,15 +25,15 @@ const urls = {
 const examples = [
   {
     url: `${urls[testTarget].dl}/${process.env.TEST__CLIENT_ID}/dev1/actility`,
-    options: { method, headers: dlHeaders, body: JSON.stringify(dlBodyDev1) },
+    options: { method, headers: headerCommonDl, body: JSON.stringify(bodyEcoDxDl) },
   },
   {
     url: `${urls[testTarget].dl}/${process.env.TEST__CLIENT_ID}/dev1/senet`,
-    options: { method, headers: dlHeaders, body: JSON.stringify(dlBodyDev1) },
+    options: { method, headers: headerCommonDl, body: JSON.stringify(bodyEcoDxDl) },
   },
   {
     url: `${urls[testTarget].dl}/${process.env.TEST__CLIENT_ID_KEYCLOAK}/le-lab/senet`,
-    options: { method, headers: dlHeaders, body: JSON.stringify(dlBodyDev1) },
+    options: { method, headers: headerCommonDl, body: JSON.stringify(bodyEcoDxDl) },
   },
 ];
 

@@ -1,10 +1,8 @@
 import mqtt from 'mqtt';
 
 import logger from './logger.js';
-import accessTokensModel from './models/access-tokens.model.js';
-import sendToTPXLEAsync from './services/send-to-tpxle.js';
-import { translateUplinkAll } from './services/nit-all.service.js';
-import { getAccessTokenAsync } from './middlewares/tpxle-auth.middleware.js';
+import { translateUplinkAll, translateDownlinkAll } from './services/nit-all.service.js';
+import NSVendorsModel from './models/ns-vendors.model.js';
 
 const url = process.env.NIT__BROKER_URL;
 const options = {
@@ -19,77 +17,138 @@ const options = {
 
 // console.log(options);
 
-const topics = [`+/NS/+/NIT/+/LE/+/AS`, `+/LE/+/NIT/+/NS/+`];
+const topics = [`+/NS_LE/+/+/#`, `+/leSolver_leNIT/#`];
+// {userId}/NS_LE/{nsVendor}/{asId}
+// {userId}/leSolver_leNIT
 
 const mqttClientFactory = () => {
   const mqttClient = mqtt.connect(url, options);
+
+  const handleError = (err, text, feedbackTopic) => {
+    logger.error(
+      `MQTT Error reported; feedbackTopic: ${feedbackTopic}; text: ${text};\n${err.stack}`,
+    );
+    mqttClient.publish(feedbackTopic, text);
+  };
+
   mqttClient.on('connect', () => {
-    console.log('MQTT Uplink Client Connected');
+    logger.info('MQTT client connected!');
     mqttClient.subscribe(topics, (err) => {
       if (!err) {
-        console.log(`You subscribed to the "${JSON.stringify(topics)}" topics.`);
+        logger.info(`MQTT Client subscribed to the "${JSON.stringify(topics)}" topics.`);
       }
     });
   });
 
-  mqttClient.on('message', async (topic, message) => {
-    console.log(topic);
-    console.log(message.toString());
+  mqttClient.on('message', async (incomingTopic, msgBytes) => {
+    const topicSegments = incomingTopic.split('/');
+    // {userId}/NS_LE/{nsVendor}/{asId}
+    // {userId}/leSolver_leNIT
+    let feedbackTopic;
+    let forwardTopic;
 
-    const topicSegments = topic.split('/');
-    // {subscriberId}/NS/{nsVendor}/NIT/{nitId}/LE/{leId}/AS
-    // {subscriberId}/LE/{leId}/NIT/{nitId}/NS/{nsVendor}
+    const [userId, linkId] = topicSegments;
 
-    const [subscriberId, sendingNode, nsVendor, , , , leId] = topicSegments;
+    let nsVendor;
+    let asId;
 
-    // console.log({ subscriberId, sendingNode, nsVendor, leId });
+    const msgString = msgBytes.toString();
+    let msg;
+    let translatedMsg;
+    let translatedMsgString;
 
-    let translatedBody;
-    let accessToken;
+    logger.debug(`MQTT msg received from topic: "${incomingTopic}"!\n${msgString}`);
 
-    switch (sendingNode) {
-      case 'NS':
-        try {
-          translatedBody = translateUplinkAll[nsVendor](JSON.parse(message));
-        } catch (err) {
-          logger.error(err.stack);
+    switch (linkId) {
+      case 'NS_LE': {
+        [, , nsVendor, asId] = topicSegments;
+
+        if (!(nsVendor && asId)) {
+          handleError(new Error('Invalid topic pattern!'), 'Invalid topic pattern!', feedbackTopic);
           break;
-          // res.status(400).send('Invalid request body. (Failed to translate request body.)\n');
+        }
+
+        feedbackTopic = `${userId}/LE_NS_feedback/${nsVendor}`;
+        forwardTopic = `${userId}/leNIT_leSolver/${asId}`;
+
+        try {
+          msg = JSON.parse(msgString);
+        } catch (err) {
+          handleError(err, 'Error while parsing JSON string!', feedbackTopic);
+          break;
         }
 
         try {
-          accessToken = await accessTokensModel.getAccessTokenBySubscriberId(leId, subscriberId);
-          if (!accessToken) {
-            const credentials = await accessTokensModel.getCredentialsBySubscriberId(
-              leId,
-              subscriberId,
-            );
-            if (credentials) {
-              accessToken = await getAccessTokenAsync(
-                credentials.clientId,
-                credentials.clientSecret,
-                leId,
-              );
-            }
-          }
-
-          if (accessToken) {
-            await sendToTPXLEAsync(translatedBody, accessToken, leId, subscriberId);
-          } else {
-            logger.debug(`Couldn't get Access Token with cached credentials.`);
-          }
+          translatedMsg = translateUplinkAll[nsVendor](msg);
         } catch (err) {
-          logger.error(err.stack);
+          handleError(err, 'Error while translating message!', feedbackTopic);
+          break;
+        }
+
+        translatedMsgString = JSON.stringify(translatedMsg, null, 2);
+
+        try {
+          mqttClient.publish(forwardTopic, translatedMsgString);
+          logger.debug(
+            `Translated MQTT msg forwarded to topic: "${forwardTopic}"!\n${translatedMsgString}`,
+          );
+        } catch (err) {
+          handleError(err, `Error while publishing to topic: "${forwardTopic}"!`, feedbackTopic);
+          break;
+        }
+
+        try {
+          await NSVendorsModel.setNSVendor(userId, translatedMsg.deviceEUI, nsVendor);
+        } catch (err) {
+          handleError(err, `Cannot save NSVendor to cache: "${forwardTopic}"!`, feedbackTopic);
           break;
         }
 
         break;
+      }
 
-      case 'LE':
-        // TODO: Code to be written!!!
+      case 'leSolver_leNIT':
+        feedbackTopic = `${userId}/leNIT_leSolver_feedback`;
+
+        try {
+          msg = JSON.parse(msgString);
+        } catch (err) {
+          handleError(err, 'Error while parsing JSON string!', feedbackTopic);
+          break;
+        }
+
+        try {
+          nsVendor = await NSVendorsModel.getNSVendor(userId, msg.deveui);
+        } catch (err) {
+          handleError(err, 'Error while getting NSVendor from Cache!', feedbackTopic);
+          break;
+        }
+
+        forwardTopic = `${userId}/LE_NS/${nsVendor}`;
+
+        try {
+          translatedMsg = translateDownlinkAll[nsVendor](msg);
+        } catch (err) {
+          handleError(err, 'Error while translating message!', feedbackTopic);
+          break;
+        }
+
+        translatedMsgString = JSON.stringify(translatedMsg, null, 2);
+
+        try {
+          mqttClient.publish(forwardTopic, translatedMsgString);
+          logger.debug(
+            `Translated MQTT msg forwarded to topic: "${forwardTopic}"!\n${translatedMsgString}`,
+          );
+        } catch (err) {
+          handleError(err, `Error while publishing to topic: "${forwardTopic}"!`, feedbackTopic);
+          break;
+        }
+
         break;
 
       default:
+        handleError(new Error('Invalid topic pattern!'), 'Invalid topic pattern!', feedbackTopic);
     }
   });
 

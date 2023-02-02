@@ -50,7 +50,7 @@ const translateUplink = (body) => {
     // example: timestamp = '22/04/2022 12:56:20'
     const segments1 = body.timestamp.split(' ');
     const segments2 = segments1[0].split('/');
-    t = `${segments2[2]}-${segments2[1]}-${segments2[0]}T${segments1[1]}.000`;
+    t = `${segments2[2]}-${segments2[1]}-${segments2[0]}T${segments1[1]}.000Z`;
   } else {
     t = new Date().toISOString();
   }

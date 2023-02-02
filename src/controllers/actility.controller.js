@@ -2,47 +2,19 @@ import fetch from 'node-fetch';
 
 import logger from '../logger.js';
 import DownlinkDataModel from '../models/downlink-data.model.js';
-import { tpxleAuthAsync } from '../middlewares/tpxle-auth.middleware.js';
 import { translateUplink, translateDownlink } from '../services/nit-actility.service.js';
 import sendToTPXLEAsync from '../services/send-to-tpxle.js';
 
 export const uplinkFromActilityAsync = async (req) => {
-  /* ** Check if request body is correct ** */
-  const errMsg =
-    '(x-access-token or (x-client-id and x-client-secret)) in header and devEui, downlinkUrlin in body are mandatory!';
-  let accessToken;
-  let clientId;
-  let clientSecret;
-  let realm;
-  let devEUI;
-  let downlinkUrl;
-  try {
-    accessToken = req.headers['x-access-token'];
-    clientId = req.headers['x-client-id'];
-    clientSecret = req.headers['x-client-secret'];
-    realm = req.headers['x-realm'] || process.env.NIT__DEFAULT_REALM;
-    devEUI = req.body.DevEUI_uplink?.DevEUI; // NS Specific !!!
-    downlinkUrl = req.body.DevEUI_uplink?.downlinkUrl;
-  } catch (err) {
-    logger.warn(err.stack);
-    logger.warn(`UL: ${errMsg}`);
-    return;
-  }
+  const devEUI = req.body.DevEUI_uplink?.DevEUI; // NS Specific !!!
+  const downlinkUrl = req.body.DevEUI_uplink?.downlinkUrl;
 
   if (!devEUI) {
-    logger.warn('UL: Missing DevEUI!');
+    logger.warn('UL: Missing "DevEUI_uplink.DevEUI" from request body!');
     return;
   }
   if (!downlinkUrl) {
-    logger.warn('UL: Missing downlinkUrl!');
-    return;
-  }
-  if (!process.env.NIT__VALID_REALMS.split(',').includes(realm)) {
-    logger.warn('UL: Invalid realm!');
-    return;
-  }
-  if (!((accessToken || (clientId && clientSecret)) && devEUI && downlinkUrl)) {
-    logger.warn(`UL: DevEUI: ${devEUI}: ${errMsg}`);
+    logger.warn('UL: Missing "DevEUI_uplink.downlinkUrl" from request body!');
     return;
   }
 
@@ -66,7 +38,12 @@ export const uplinkFromActilityAsync = async (req) => {
 
   /* ** Forward message to TPXLE ** */
   try {
-    await sendToTPXLEAsync(translatedBody, req.tpxleToken, realm, clientId);
+    await sendToTPXLEAsync(
+      translatedBody,
+      req.middleware.tpxleToken,
+      req.middleware.architectureId,
+      req.middleware.clientId,
+    );
   } catch (err) {
     logger.error(err.stack);
   }
@@ -135,33 +112,4 @@ export const downlinkToActilityAsync = async (req) => {
   if (nsResText) {
     logger.debug(nsResText);
   }
-};
-
-export const uplinkFromActility = (req, res) => {
-  (async () => {
-    let tpxleToken;
-    try {
-      tpxleToken = await tpxleAuthAsync(req);
-    } catch (err) {
-      logger.error(`uplinkFromActility() error: ${err.stack}`);
-    }
-    req.tpxleToken = tpxleToken;
-    try {
-      await uplinkFromActilityAsync(req);
-    } catch (err) {
-      logger.error(`uplinkFromActility() error: ${err.stack}`);
-    }
-  })();
-  res.status(200).send('This is an async response. See details in server logs.');
-};
-
-export const downlinkToActility = (req, res) => {
-  (async () => {
-    try {
-      await downlinkToActilityAsync(req);
-    } catch (err) {
-      logger.error(`downlinkToActility() error: ${err.stack}`);
-    }
-  })();
-  res.status(200).send('This is an async response. See details in server logs.');
 };

@@ -111,7 +111,7 @@ const translateUplink = (body) => {
 const translateDownlink = (body) => {
   const result = {
     // "dev_eui": body.deveui.toLowerCase(),
-    port: body.port,
+    port: parseInt(body.port, 10),
     confirmed: false,
     payload_raw: Buffer.from(body.payload, 'hex').toString('base64'),
   };

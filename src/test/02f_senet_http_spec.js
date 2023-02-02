@@ -3,92 +3,107 @@ import fs from 'fs';
 const testTarget = process.env.TEST__TARGET; // 'nt' for nano-things, 'lh' for localhost
 const nsName = 'senet'; // NS Specific !!!
 
+// *****************************
+// PREPARE UPLINK REQUEST BODIES
+// *****************************
+
 const bodyExampleText = fs.readFileSync(
   new URL(`./uplink_data_sample_from_${nsName}.json`, import.meta.url),
 );
 
-const bodyDev1 = JSON.parse(bodyExampleText);
-bodyDev1.devEui = process.env.TEST__DEV_EUI.toLowerCase(); // NS Specific !!! "meta.device" field
+const bodyEcoKcUl = JSON.parse(bodyExampleText);
+bodyEcoKcUl.devEui = process.env.TEST__ECOKC_DEVEUI.toLowerCase(); // NS Specific !!! ".devEui" field
 
-const bodyMobileApp = JSON.parse(bodyExampleText);
-bodyMobileApp.devEui = process.env.TEST__DEV_EUI_MOBILE_APP.toLowerCase(); // NS Specific !!! "meta.device" field
+const bodyEcoDxUl = JSON.parse(bodyExampleText);
+bodyEcoDxUl.devEui = process.env.TEST__ECODX_DEVEUI.toLowerCase(); // NS Specific !!! ".devEui" field
 
-const bodyRnd = JSON.parse(bodyExampleText);
-bodyRnd.devEui = process.env.TEST__DEV_EUI_RND.toLowerCase(); // NS Specific !!! "meta.device" field
+const bodyPrevKcUl = JSON.parse(bodyExampleText);
+bodyPrevKcUl.devEui = process.env.TEST__PREVKC_DEVEUI.toLowerCase(); // NS Specific !!! ".devEui" field
 
-const headerCommon = {
+const bodyPrevDxUl = JSON.parse(bodyExampleText);
+bodyPrevDxUl.devEui = process.env.TEST__PREVDX_DEVEUI.toLowerCase(); // NS Specific !!! ".devEui" field
+
+// *****************************
+// PREPARE UPLINK REQUEST HEADERS
+// *****************************
+
+const headerCommonUl = {
+  'content-type': 'application/json',
+  'x-downlink-api': process.env.TEST__DL_WEBHOOK, // NS Specific !!!
+  'x-downlink-apikey': 'myDownlinkApiKey', // NS Specific !!!
+};
+
+const headersEcoKcUl = {
+  'x-client-id': process.env.TEST__ECOKC_CLIENT_ID,
+  'x-client-secret': process.env.TEST__ECOKC_CLIENT_SECRET,
+  'x-architecture-id': 'ECOKC',
+  ...headerCommonUl,
+};
+
+const headersEcoDxUl = {
+  'x-client-id': process.env.TEST__ECODX_CLIENT_ID,
+  'x-client-secret': process.env.TEST__ECODX_CLIENT_SECRET,
+  'x-architecture-id': 'ECODX',
+  ...headerCommonUl,
+};
+
+const headersPrevKcUl = {
+  'x-client-id': process.env.TEST__PREVKC_CLIENT_ID,
+  'x-client-secret': process.env.TEST__PREVKC_CLIENT_SECRET,
+  'x-architecture-id': 'PREVKC',
+  ...headerCommonUl,
+};
+
+const headersPrevDxUl = {
+  'x-client-id': process.env.TEST__PREVDX_CLIENT_ID,
+  'x-client-secret': process.env.TEST__PREVDX_CLIENT_SECRET,
+  'x-architecture-id': 'PREVDX',
+  ...headerCommonUl,
+};
+
+// *****************************
+// PREPARE DOWNLINK REQUEST BODYS
+// *****************************
+
+const bodyEcoKcDl = {
+  type: 'downlink',
+  deveui: process.env.TEST__ECOKC_DEVEUI,
+  port: '2',
+  payload: '020402',
+};
+
+const bodyEcoDxDl = {
+  type: 'downlink',
+  deveui: process.env.TEST__ECODX_DEVEUI,
+  port: '2',
+  payload: '020402',
+};
+
+const bodyPrevKcDl = {
+  type: 'downlink',
+  deveui: process.env.TEST__PREVKC_DEVEUI,
+  port: '2',
+  payload: '020402',
+};
+
+const bodyPrevDxDl = {
+  type: 'downlink',
+  deveui: process.env.TEST__PREVDX_DEVEUI,
+  port: '2',
+  payload: '020402',
+};
+
+// *****************************
+// PREPARE DOWNLINK REQUEST HEADERS
+// *****************************
+
+const headerCommonDl = {
   'content-type': 'application/json',
 };
 
-const headersDev1AccessToken = {
-  'x-access-token': process.env.TEST__ACCESS_TOKEN,
-  'x-realm': 'dev1',
-
-  'x-downlink-api': process.env.TEST__DL_WEBHOOK, // NS Specific !!!
-  'x-downlink-apikey': 'myDownlinkApiKey', // NS Specific !!!
-
-  ...headerCommon,
-};
-
-const headersDev1Credentials = {
-  'x-client-id': process.env.TEST__DEV1_TEST__CLIENT_ID,
-  'x-client-secret': process.env.TEST__DEV1_CLIENT_SECRET,
-  'x-realm': 'dev1',
-
-  'x-downlink-api': process.env.TEST__DL_WEBHOOK, // NS Specific !!!
-  'x-downlink-apikey': 'myDownlinkApiKey', // NS Specific !!!
-
-  ...headerCommon,
-};
-
-const headersKeycloakCredentials = {
-  'x-client-id': process.env.TEST__LELAB_TEST__CLIENT_ID,
-  'x-client-secret': process.env.TEST__LELAB_CLIENT_SECRET,
-  'x-realm': 'le-lab',
-
-  'x-downlink-api': process.env.TEST__DL_WEBHOOK, // NS Specific !!!
-  'x-downlink-apikey': 'myDownlinkApiKey', // NS Specific !!!
-
-  ...headerCommon,
-};
-
-const headersRndCredentials = {
-  'x-client-id': process.env.TEST__DEV1_TEST__CLIENT_ID,
-  'x-client-secret': process.env.TEST__DEV1_CLIENT_SECRET,
-  'x-realm': 'rnd',
-
-  'x-downlink-api': process.env.TEST__DL_WEBHOOK, // NS Specific !!!
-  'x-downlink-apikey': 'myDownlinkApiKey', // NS Specific !!!
-
-  ...headerCommon,
-};
-
-const method = 'POST';
-
-const dlBodyDev1 = {
-  type: 'downlink',
-  deveui: process.env.TEST__DEV_EUI,
-  port: '2',
-  payload: '020402',
-};
-
-const dlBodyMobileApp = {
-  type: 'downlink',
-  deveui: process.env.TEST__DEV_EUI_MOBILE_APP,
-  port: '2',
-  payload: '020402',
-};
-
-const dlBodyRnd = {
-  type: 'downlink',
-  deveui: process.env.TEST__DEV_EUI_RND,
-  port: '2',
-  payload: '020402',
-};
-
-const dlHeaders = {
-  'content-type': 'application/json',
-};
+// *****************************
+// PREPARE URLS
+// *****************************
 
 const urls = {
   lh: {
@@ -96,51 +111,65 @@ const urls = {
     dl: `http://localhost:${process.env.NIT__SERVER_PORT}/downlink_to_${nsName}/${process.env.TEST__NITAPIKEY}`,
   },
   nt: {
-    ul: `https://nano-things.net:443/tpxle-nit/uplink_from_${nsName}/${process.env.TEST__NITAPIKEY}`,
-    dl: `https://nano-things.net:443/tpxle-nit/downlink_to_${nsName}/${process.env.TEST__NITAPIKEY}`,
+    ul: `https://nano-things.net/tpxle-nit/uplink_from_${nsName}/${process.env.TEST__NITAPIKEY}`,
+    dl: `https://nano-things.net/tpxle-nit/downlink_to_${nsName}/${process.env.TEST__NITAPIKEY}`,
+  },
+  community: {
+    ul: `https://community.thingpark.io/tpxle-nit/uplink_from_${nsName}/${process.env.TEST__NITAPIKEY}`,
+    dl: `https://community.thingpark.io/tpxle-nit/downlink_to_${nsName}/${process.env.TEST__NITAPIKEY}`,
   },
 };
 
-const examples = [
-  // Dev1 - Access Token
-  {
+// *****************************
+// DEFINE TEST EXAMPLES
+// *****************************
+
+const method = 'POST';
+
+const examples = {
+  ECOKC_UL: {
+    name: 'ECOKC_UL',
     url: urls[testTarget].ul,
-    options: { method, headers: headersDev1AccessToken, body: JSON.stringify(bodyDev1) },
+    options: { method, headers: headersEcoKcUl, body: JSON.stringify(bodyEcoKcUl) },
   },
-  {
+  ECOKC_DL: {
+    name: 'ECOKC_DL',
     url: urls[testTarget].dl,
-    options: { method, headers: dlHeaders, body: JSON.stringify(dlBodyDev1) },
+    options: { method, headers: headerCommonDl, body: JSON.stringify(bodyEcoKcDl) },
   },
 
-  // Dev1 - Credentials
-  {
+  ECODX_UL: {
+    name: 'ECODX_UL',
     url: urls[testTarget].ul,
-    options: { method, headers: headersDev1Credentials, body: JSON.stringify(bodyDev1) },
+    options: { method, headers: headersEcoDxUl, body: JSON.stringify(bodyEcoDxUl) },
   },
-  {
+  ECODX_DL: {
+    name: 'ECODX_DL',
     url: urls[testTarget].dl,
-    options: { method, headers: dlHeaders, body: JSON.stringify(dlBodyDev1) },
+    options: { method, headers: headerCommonDl, body: JSON.stringify(bodyEcoDxDl) },
   },
 
-  // Mobile App
-  {
+  PREVKC_UL: {
+    name: 'PREVKC_UL',
     url: urls[testTarget].ul,
-    options: { method, headers: headersKeycloakCredentials, body: JSON.stringify(bodyMobileApp) },
+    options: { method, headers: headersPrevKcUl, body: JSON.stringify(bodyPrevKcUl) },
   },
-  {
+  PREVKC_DL: {
+    name: 'PREVKC_DL',
     url: urls[testTarget].dl,
-    options: { method, headers: dlHeaders, body: JSON.stringify(dlBodyMobileApp) },
+    options: { method, headers: headerCommonDl, body: JSON.stringify(bodyPrevKcDl) },
   },
 
-  // RnD
-  {
+  PREVDX_UL: {
+    name: 'PREVDX_UL',
     url: urls[testTarget].ul,
-    options: { method, headers: headersRndCredentials, body: JSON.stringify(bodyRnd) },
+    options: { method, headers: headersPrevDxUl, body: JSON.stringify(bodyPrevDxUl) },
   },
-  {
+  PREVDX_DL: {
+    name: 'PREVDX_DL',
     url: urls[testTarget].dl,
-    options: { method, headers: dlHeaders, body: JSON.stringify(dlBodyRnd) },
+    options: { method, headers: headerCommonDl, body: JSON.stringify(bodyPrevDxDl) },
   },
-];
+};
 
 export default examples;

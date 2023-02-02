@@ -4,6 +4,8 @@
 
 ### 1.1. Uplink connection
 
+_(To be configured on the LNS.)_
+
 **Target URL:**
 
 ```
@@ -15,15 +17,17 @@
 **HTTP Headers:**:
 
 ```
-  Authorization: <clientId>|<clientSecret>|<realm>|<downlinkUrl>
+  Authorization: <clientId>|<clientSecret>|<architectureId>|<downlinkUrl>
 ```
 
 `<clientId>` is the thingpark community username in the following format: 'community-api/`email-address`'
 `<clientSecret>` is the thingpark community password
-`<realm>` must be equal to 'dev1'
+`<architectureId>` must be equal to 'ECODX'
 `<downlinkUrl>` the downlink API URL of the Loriot server instance
 
 ### 1.2. Downlink connection
+
+_(To be configured on TPX Location Engine.)_
 
 **Downlink Target URL:**
 
@@ -38,6 +42,8 @@
 
 ### 2.1. Uplink connection
 
+_(To be configured on the LNS.)_
+
 **Target URL:**
 
 ```
@@ -49,14 +55,16 @@
 **HTTP Headers:**
 
 ```
-  Authorization: |<YOUR_API_KEY>|<realm>|<downlinkUrl>
+  Authorization: |<YOUR_API_KEY>|<architectureId>|<downlinkUrl>
 ```
 
 `<YOUR_API_KEY>` is an API key that you can generate [here][1].
-`<realm>` must be equal to 'dev1'
+`<architectureId>` must be equal to 'ECODX'
 `<downlinkUrl>` the downlink API URL of the Loriot server instance
 
 ### 2.2. Downlink connection
+
+_(To be configured on TPX Location Engine.)_
 
 **Downlink Target URL:**
 

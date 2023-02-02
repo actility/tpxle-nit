@@ -5,14 +5,39 @@ import logger from '../logger.js';
 
 import AccessTokensModel from '../models/access-tokens.model.js';
 
-const REALM_PREFIXES = {
-  'abeeway-mobile-app': 'NIT__ABEEWAYMOBILEAPP_',
-  dev1: 'NIT__DEV1_',
-  'le-lab': 'NIT__LELAB_',
-  rnd: 'NIT__RND_',
+import getConfParam from '../config/get-conf-params.js';
+
+export const getAPIKeysAsync = async (accessToken, architectureId) => {
+  const url = getConfParam(architectureId, 'APIKEY_MGMT_URL');
+  console.log(architectureId, url);
+
+  const options = {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+
+  /*
+  options.method = 'POST';
+  options.body = {
+    "scope": "ALL",
+    "name": "Example API key"
+  }
+  */
+
+  let resultJSON;
+  try {
+    const res = await fetch(url, options);
+    resultJSON = await res.json();
+  } catch (err) {
+    throw Error(`UL: getAPIKeysAsync(): Cannot get API Keys: ${err.stack}`);
+  }
+  return resultJSON;
 };
 
-export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
+export const getAccessTokenAsync = async (clientId, clientSecret, architectureId) => {
   let url;
 
   const options = {
@@ -23,34 +48,42 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
     },
   };
 
-  if (process.env[`${REALM_PREFIXES[realm]}GRANT_TYPE`] === 'client_credentials') {
-    url = process.env[`${REALM_PREFIXES[realm]}TOKEN_REQUEST_URL`];
+  switch (getConfParam(architectureId, 'GRANT_TYPE')) {
+    case 'client_credentials': {
+      url = getConfParam(architectureId, 'TOKEN_REQUEST_URL');
 
-    const urlencoded = new URLSearchParams();
-    urlencoded.append('grant_type', 'client_credentials');
-    urlencoded.append('client_id', clientId);
-    urlencoded.append('client_secret', clientSecret);
+      const urlencoded = new URLSearchParams();
+      urlencoded.append('grant_type', 'client_credentials');
+      urlencoded.append('client_id', clientId);
+      urlencoded.append('client_secret', clientSecret);
 
-    options.body = urlencoded;
-  } else if (process.env[`${REALM_PREFIXES[realm]}GRANT_TYPE`] === 'password') {
-    options.body = stringify({
-      username: clientId,
-      password: clientSecret,
-      grant_type: 'password',
-      scope: process.env[`${REALM_PREFIXES[realm]}SCOPE`],
-      client_id: process.env[`${REALM_PREFIXES[realm]}CLIENT_ID`],
-    });
-    url = `${
-      process.env[`${REALM_PREFIXES[realm]}TOKEN_REQUEST_URL`]
-    }/realms/${realm}/protocol/openid-connect/token`;
-  } else {
-    throw Error(`UL: getAccessTokenAsync(): clientId: ${clientId}: Invalid realm/grant_time`);
+      options.body = urlencoded;
+
+      break;
+    }
+    case 'password': {
+      options.body = stringify({
+        username: clientId,
+        password: clientSecret,
+        grant_type: 'password',
+        scope: getConfParam(architectureId, 'SCOPE'),
+        client_id: getConfParam(architectureId, 'CLIENT_ID'),
+      });
+      url = `${getConfParam(architectureId, 'TOKEN_REQUEST_URL')}/realms/${getConfParam(
+        architectureId,
+        'REALM',
+      )}/protocol/openid-connect/token`;
+      break;
+    }
+    default: {
+      throw Error(`UL: getAccessTokenAsync(): clientId: ${clientId}: Invalid grant_time`);
+    }
   }
 
   let accessToken;
 
   try {
-    accessToken = await AccessTokensModel.getAccessToken(realm, clientId);
+    accessToken = await AccessTokensModel.getAccessToken(architectureId, clientId);
   } catch (err) {
     throw Error(
       `UL: getAccessTokenAsync(): clientId: ${clientId}, AccessTokensModel.getAccessToken: ${err.stack}`,
@@ -66,6 +99,9 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
   logger.silly(JSON.stringify(options, null, 4));
 
   let dxapiTokenResponse;
+
+  console.log(url);
+  console.log(options);
 
   try {
     dxapiTokenResponse = await fetch(url, options);
@@ -103,7 +139,7 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
   logger.silly(accessToken);
 
   try {
-    await AccessTokensModel.setAccessToken(realm, clientId, accessToken, clientSecret);
+    await AccessTokensModel.setAccessToken(architectureId, clientId, accessToken, clientSecret);
   } catch (err) {
     logger.warning(
       `UL: getAccessTokenAsync: clientId: ${clientId}: error whiile saving accessToken: ${err.staack}`,
@@ -113,14 +149,39 @@ export const getAccessTokenAsync = async (clientId, clientSecret, realm) => {
   return accessToken;
 };
 
-export const tpxleAuthAsync = async (req) => {
+export const createUserIdFromAccessToken = async (accessToken, architectureId) => {
+  let decodedAccessToken;
+  try {
+    decodedAccessToken = JSON.parse(Buffer.from(accessToken.split('.')[1], 'base64'));
+  } catch (err) {
+    throw Error(`UL: createUserIdFromAccessToken(): ${err.stack}`);
+  }
+
+  let userId;
+  const operatorId = getConfParam(architectureId, 'OPERATOR_ID');
+  let subscriberId;
+
+  if (decodedAccessToken.parentSubscriptions) {
+    subscriberId = decodedAccessToken.parentSubscriptions['actility-sup/tpx'][0].subscriberId;
+    const realm = getConfParam(architectureId, 'REALM');
+    const enduserId = decodedAccessToken.sub;
+    userId = `${operatorId}|${subscriberId}|${realm}|${enduserId}`;
+  } else {
+    subscriberId = (100000000 + parseInt(decodedAccessToken.scope[0].split(':')[1], 10)).toString();
+    userId = `${operatorId}|${subscriberId}`;
+  }
+
+  return userId;
+};
+
+export const tpxleAuthMiddlewareAsync = async (req) => {
   let accessToken;
   let clientId;
   let clientSecret;
-  let realm;
+  let architectureId;
 
   if (req.headers.authorization) {
-    [clientId, clientSecret, realm] = req.headers.authorization.split('|');
+    [clientId, clientSecret, architectureId] = req.headers.authorization.split('|');
     if (clientId === '') {
       accessToken = clientSecret;
     }
@@ -128,7 +189,9 @@ export const tpxleAuthAsync = async (req) => {
     accessToken = req.headers['x-access-token'];
     clientId = req.headers['x-client-id'];
     clientSecret = req.headers['x-client-secret'];
-    realm = req.headers['x-realm'] || process.env.NIT__DEFAULT_REALM;
+    architectureId =
+      req.headers['x-architecture-id'] || req.headers['x-realm'] || process.env.NIT__DEFAULT_REALM;
+    // 'x-realm' is here for historical reasons
   }
 
   const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -137,15 +200,15 @@ export const tpxleAuthAsync = async (req) => {
 
   if (!(accessToken || (clientId && clientSecret))) {
     throw Error(
-      `UL: tpxleAuthAsync(): IP: ${ip}, "authorization" or ("x-access-token" or (x-client-id and x-client-secret)) headers are mandatory! ${JSON.stringify(
+      `UL: tpxleAuthMiddlewareAsync(): IP: ${ip}, "authorization" or ("x-access-token" or (x-client-id and x-client-secret)) headers are mandatory! ${JSON.stringify(
         req.headers,
       )}`,
       // `${JSON.stringify(req.headers,)}`,
     );
   }
 
-  if (!process.env.NIT__VALID_REALMS.split(',').includes(realm)) {
-    throw Error(`UL: tpxleAuthAsync(): IP: ${ip}, invalid realm!`);
+  if (!process.env.NIT__VALID_ARCHITECTURE_IDS.split(',').includes(architectureId)) {
+    throw Error(`UL: tpxleAuthMiddlewareAsync(): IP: ${ip}, invalid architectureId!`);
   }
 
   let accessTokenValidated;
@@ -154,25 +217,23 @@ export const tpxleAuthAsync = async (req) => {
     accessTokenValidated = accessToken;
   } else {
     try {
-      accessTokenValidated = await getAccessTokenAsync(clientId, clientSecret, realm);
+      accessTokenValidated = await getAccessTokenAsync(clientId, clientSecret, architectureId);
     } catch (err) {
-      throw Error(`UL: tpxleAuthAsync(): IP: ${ip}, ${err.stack}`);
+      throw Error(`UL: tpxleAuthMiddlewareAsync(): IP: ${ip}, ${err.stack}`);
     }
   }
 
-  // req.tpxleToken = accessTokenValidated;
-
-  return accessTokenValidated;
-};
-
-export const tpxleAuth = async (req, res, next) => {
-  let tpxleToken;
+  let userId;
   try {
-    tpxleToken = await tpxleAuthAsync(req);
+    userId = createUserIdFromAccessToken(accessTokenValidated, architectureId);
   } catch (err) {
-    logger.error(`tpxleAuth() error: ${err.message}`);
-    next(err);
+    throw Error(`UL: tpxleAuthMiddlewareAsync(): IP: ${ip}, ${err.stack}`);
   }
-  req.tpxleToken = tpxleToken;
-  next();
+
+  req.middleware = {
+    tpxleToken: accessTokenValidated,
+    userId,
+    architectureId,
+    clientId,
+  };
 };

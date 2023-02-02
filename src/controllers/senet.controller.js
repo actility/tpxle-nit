@@ -2,45 +2,24 @@ import fetch from 'node-fetch';
 
 import logger from '../logger.js';
 import DownlinkDataModel from '../models/downlink-data.model.js';
-import { tpxleAuthAsync } from '../middlewares/tpxle-auth.middleware.js';
 import { translateUplink, translateDownlink } from '../services/nit-senet.service.js';
 import sendToTPXLEAsync from '../services/send-to-tpxle.js';
 
 export const uplinkFromSenetAsync = async (req) => {
-  /* ** Check if request body is correct ** */
-  const errMsg =
-    '(x-access-token or (x-client-id and x-client-secret)), x-downlink-api, x-downlink-apikey in header and devEui in body are mandatory!';
-  let accessToken;
-  let clientId;
-  let clientSecret;
-  let realm;
-  let devEUI;
-  let downlinkApi;
-  let downlinkApikey;
-  try {
-    accessToken = req.headers['x-access-token'];
-    clientId = req.headers['x-client-id'];
-    clientSecret = req.headers['x-client-secret'];
-    realm = req.headers['x-realm'] || process.env.NIT__DEFAULT_REALM;
-    devEUI = req.body.devEui; // NS Specific !!!
-    downlinkApi = req.headers['x-downlink-api'];
-    downlinkApikey = req.headers['x-downlink-apikey'];
-  } catch (err) {
-    logger.warn(err.stack);
-    logger.warn(`UL: ${errMsg}`);
-    return;
-  }
+  const devEUI = req.body.devEui; // NS Specific !!!
+  const downlinkApi = req.headers['x-downlink-api'];
+  const downlinkApikey = req.headers['x-downlink-apikey'];
 
   if (!devEUI) {
-    logger.warn('UL: Missing DevEUI!');
+    logger.warn('UL: Missing "devEUI" from request body!');
     return;
   }
-  if (!process.env.NIT__VALID_REALMS.split(',').includes(realm)) {
-    logger.warn('UL: Invalid realm!');
+  if (!downlinkApi) {
+    logger.warn('UL: Missing "x-downlink-api" from request header!');
     return;
   }
-  if (!((accessToken || (clientId && clientSecret)) && devEUI && downlinkApi && downlinkApikey)) {
-    logger.warn(`UL: DevEUI: ${devEUI}: ${errMsg}`);
+  if (!downlinkApikey) {
+    logger.warn('UL: Missing "x-downlink-apikey" from request header!');
     return;
   }
 
@@ -65,7 +44,12 @@ export const uplinkFromSenetAsync = async (req) => {
 
   /* ** Forward message to TPXLE ** */
   try {
-    await sendToTPXLEAsync(translatedBody, req.tpxleToken, realm, clientId);
+    await sendToTPXLEAsync(
+      translatedBody,
+      req.middleware.tpxleToken,
+      req.middleware.architectureId,
+      req.middleware.clientId,
+    );
   } catch (err) {
     logger.error(err.stack);
   }
@@ -138,33 +122,4 @@ export const downlinkToSenetAsync = async (req) => {
   if (nsResText) {
     logger.debug(nsResText);
   }
-};
-
-export const uplinkFromSenet = (req, res) => {
-  (async () => {
-    let tpxleToken;
-    try {
-      tpxleToken = await tpxleAuthAsync(req);
-    } catch (err) {
-      logger.error(`uplinkFromSenet() error: ${err.stack}`);
-    }
-    req.tpxleToken = tpxleToken;
-    try {
-      await uplinkFromSenetAsync(req);
-    } catch (err) {
-      logger.error(`uplinkFromSenet() error: ${err.stack}`);
-    }
-  })();
-  res.status(200).send('This is an async response. See details in server logs.');
-};
-
-export const downlinkToSenet = (req, res) => {
-  (async () => {
-    try {
-      await downlinkToSenetAsync(req);
-    } catch (err) {
-      logger.error(`downlinkToSenet() error: ${err.stack}`);
-    }
-  })();
-  res.status(200).send('This is an async response. See details in server logs.');
 };

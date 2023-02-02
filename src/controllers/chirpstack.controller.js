@@ -2,45 +2,24 @@ import fetch from 'node-fetch';
 
 import logger from '../logger.js';
 import DownlinkDataModel from '../models/downlink-data.model.js';
-import { tpxleAuthAsync } from '../middlewares/tpxle-auth.middleware.js';
 import { translateUplink, translateDownlink } from '../services/nit-chirpstack.service.js';
 import sendToTPXLEAsync from '../services/send-to-tpxle.js';
 
 export const uplinkFromChirpstackAsync = async (req) => {
-  /* ** Check if request body is correct ** */
-  const errMsg =
-    '(x-access-token or (x-client-id and x-client-secret)), x-downlink-api, x-downlink-apikey in header and devEUI in body are mandatory!';
-  let accessToken;
-  let clientId;
-  let clientSecret;
-  let realm;
-  let devEUI;
-  let downlinkApi;
-  let downlinkApikey;
-  try {
-    accessToken = req.headers['x-access-token'];
-    clientId = req.headers['x-client-id'];
-    clientSecret = req.headers['x-client-secret'];
-    realm = req.headers['x-realm'] || process.env.NIT__DEFAULT_REALM;
-    devEUI = Buffer.from(req.body.devEUI, 'base64').toString('hex'); // NS Specific !!!
-    downlinkApi = req.headers['x-downlink-api'];
-    downlinkApikey = req.headers['x-downlink-apikey'];
-  } catch (err) {
-    logger.warn(err.stack);
-    logger.warn(`UL: ${errMsg}`);
-    return;
-  }
+  const devEUI = Buffer.from(req.body.devEUI, 'base64').toString('hex'); // NS Specific !!!
+  const downlinkApi = req.headers['x-downlink-api'];
+  const downlinkApikey = req.headers['x-downlink-apikey'];
 
   if (!devEUI) {
-    logger.warn('UL: Missing DevEUI!');
+    logger.warn('UL: Missing "devEUI" from request body!');
     return;
   }
-  if (!process.env.NIT__VALID_REALMS.split(',').includes(realm)) {
-    logger.warn('UL: Invalid realm!');
+  if (!downlinkApi) {
+    logger.warn('UL: Missing "x-downlink-api" from request header!');
     return;
   }
-  if (!((accessToken || (clientId && clientSecret)) && devEUI && downlinkApi && downlinkApikey)) {
-    logger.warn(`UL: DevEUI: ${devEUI}: ${errMsg}`);
+  if (!downlinkApikey) {
+    logger.warn('UL: Missing "x-downlink-apikey" from request header!');
     return;
   }
 
@@ -63,9 +42,14 @@ export const uplinkFromChirpstackAsync = async (req) => {
     return;
   }
 
-  // sendToTPXLEAsync(translatedBody, accessToken, clientId, clientSecret, realm);
+  /* ** Forward message to TPXLE ** */
   try {
-    await sendToTPXLEAsync(translatedBody, req.tpxleToken, realm, clientId);
+    await sendToTPXLEAsync(
+      translatedBody,
+      req.middleware.tpxleToken,
+      req.middleware.architectureId,
+      req.middleware.clientId,
+    );
   } catch (err) {
     logger.error(err.stack);
   }
@@ -138,33 +122,4 @@ export const downlinkToChirpstackAsync = async (req) => {
   if (nsResText) {
     logger.debug(nsResText);
   }
-};
-
-export const uplinkFromChirpstack = (req, res) => {
-  (async () => {
-    let tpxleToken;
-    try {
-      tpxleToken = await tpxleAuthAsync(req);
-    } catch (err) {
-      logger.error(`uplinkFromSenet() error: ${err.stack}`);
-    }
-    req.tpxleToken = tpxleToken;
-    try {
-      await uplinkFromChirpstackAsync(req);
-    } catch (err) {
-      logger.error(`uplinkFromSenet() error: ${err.stack}`);
-    }
-  })();
-  res.status(200).send('This is an async response. See details in server logs.');
-};
-
-export const downlinkToChirpstack = (req, res) => {
-  (async () => {
-    try {
-      await downlinkToChirpstackAsync(req);
-    } catch (err) {
-      logger.error(`downlinkToSenet() error: ${err.stack}`);
-    }
-  })();
-  res.status(200).send('This is an async response. See details in server logs.');
 };

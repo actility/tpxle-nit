@@ -4,6 +4,8 @@
 
 ### 1.1. Uplink connection
 
+_(To be configured on the LNS.)_
+
 **Target URL:**
 
 ```
@@ -17,12 +19,14 @@
 ```
   x-client-id:       community-api/<YOUR_EMAIL_LIKE_USER_ID>
   x-client-secret:   <YOUR_PASSWORD>
-  x-realm:           dev1
+  x-architecture-id: 'ECODX'
   x-downlink-api:    <DOWNLINK_API_URL>
   x-downlink-apikey: <DOWNLINK_API_KEY>
 ```
 
 ### 1.2. Downlink connection
+
+_(To be configured on TPX Location Engine.)_
 
 **Downlink Target URL:**
 
@@ -37,6 +41,8 @@
 
 ### 2.1. Uplink connection
 
+_(To be configured on the LNS.)_
+
 **Target URL:**
 
 ```
@@ -49,7 +55,7 @@
 
 ```
   x-access-token:    <YOUR_API_KEY>
-  x-realm:           dev1
+  x-architecture-id: 'ECODX'
   x-downlink-api:    <DOWNLINK_API_URL>
   x-downlink-apikey: <DOWNLINK_API_KEY>
 ```
@@ -57,6 +63,8 @@
 `<YOUR_API_KEY>` is an API key that you can generate [here][1].
 
 ### 2.2. Downlink connection
+
+_(To be configured on TPX Location Engine.)_
 
 **Downlink Target URL:**
 

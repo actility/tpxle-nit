@@ -2,55 +2,23 @@ import fetch from 'node-fetch';
 
 import logger from '../logger.js';
 import DownlinkDataModel from '../models/downlink-data.model.js';
-import { tpxleAuthAsync } from '../middlewares/tpxle-auth.middleware.js';
 import { translateUplink, translateDownlink } from '../services/nit-helium.service.js';
 import sendToTPXLEAsync from '../services/send-to-tpxle.js';
 
 export const uplinkFromHeliumAsync = async (req) => {
-  /* ** Check if request body is correct ** */
-  const errMsg =
-    '(accessToken or (clientId and clientSecret)) in header and devEUI, downlinkUrl in body are mandatory!';
-  let accessToken;
-  let clientId;
-  let realm;
-  let clientSecret;
-  let devEUI;
-  let downlinkUrl;
-  try {
-    accessToken = req.headers['x-access-token'];
-    clientId = req.headers['x-client-id'];
-    clientSecret = req.headers['x-client-secret'];
-    realm = req.headers['x-realm'] || process.env.NIT__DEFAULT_REALM;
-    devEUI = req.body.dev_eui?.toLowerCase();
-    downlinkUrl = req.body.downlink_url;
-  } catch (err) {
-    logger.warn(err.stack);
-    logger.warn(`UL: ${errMsg}`);
-    return;
-  }
+  const devEUI = req.body.dev_eui?.toLowerCase();
+  const downlinkUrl = req.body.downlink_url;
 
   if (!devEUI) {
-    logger.warn('UL: Missing DevEUI!');
+    logger.warn('UL: Missing "dev_eui" from request body!');
     return;
   }
-  if (!process.env.NIT__VALID_REALMS.split(',').includes(realm)) {
-    logger.warn('UL: Invalid realm!');
-    return;
-  }
-  if (!((accessToken || (clientId && clientSecret)) && devEUI && downlinkUrl)) {
-    logger.warn(`UL: DevEUI: ${devEUI}: ${errMsg}`);
+  if (!downlinkUrl) {
+    logger.warn('UL: Missing "downlink_url" from request body!');
     return;
   }
 
   const nitapikey = req.params.nitapikey || 'helium'; // For backward compatibility, we allow not specifying nitapikey in the url!
-  /*
-  if (!nitapikey) {
-    logger.warn(`DL: There is no "nitapikey" parameter in the url.`);
-    res.write('There is no "nitapikey" parameter in the url.');
-    res.status(400).end();
-    return;
-  }
-  */
 
   logger.debug(`UL: DevEUI: ${devEUI}: UL message received from Helium.`);
 
@@ -68,7 +36,12 @@ export const uplinkFromHeliumAsync = async (req) => {
 
   /* ** Forward message to TPXLE ** */
   try {
-    await sendToTPXLEAsync(translatedBody, req.tpxleToken, realm, clientId);
+    await sendToTPXLEAsync(
+      translatedBody,
+      req.middleware.tpxleToken,
+      req.middleware.architectureId,
+      req.middleware.clientId,
+    );
   } catch (err) {
     logger.error(err.stack);
   }
@@ -144,33 +117,4 @@ export const downlinkToHeliumAsync = async (req) => {
   if (nsResText) {
     logger.debug(nsResText);
   }
-};
-
-export const uplinkFromHelium = (req, res) => {
-  (async () => {
-    let tpxleToken;
-    try {
-      tpxleToken = await tpxleAuthAsync(req);
-    } catch (err) {
-      logger.error(`uplinkFromHelium() error: ${err.stack}`);
-    }
-    req.tpxleToken = tpxleToken;
-    try {
-      await uplinkFromHeliumAsync(req);
-    } catch (err) {
-      logger.error(`uplinkFromHelium() error: ${err.stack}`);
-    }
-  })();
-  res.status(200).send('This is an async response. See details in server logs.');
-};
-
-export const downlinkToHelium = (req, res) => {
-  (async () => {
-    try {
-      await downlinkToHeliumAsync(req);
-    } catch (err) {
-      logger.error(`downlinkToHelium() error: ${err.stack}`);
-    }
-  })();
-  res.status(200).send('This is an async response. See details in server logs.');
 };
