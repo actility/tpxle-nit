@@ -92,7 +92,10 @@ const tpxleNITRouterFactory = (mqttClient) => {
   );
 
   if (mqttClient) {
-    router.post('/mqtt/:userId/LE_AS/:asId', uplinkControllerFactory(uplinkMQTT1(mqttClient)));
+    router.post(
+      '/mqtt/:operatorId/:subscriberId/LE_AS/:asId',
+      uplinkControllerFactory(uplinkMQTT1(mqttClient)),
+    );
 
     router.post('/downlink_mqtt/:subscriberId/:leId/:nsVendor', downlinkMQTT(mqttClient));
     router.post('/uplink_mqtt/:subscriberId/:leId', uplinkMQTT(mqttClient));

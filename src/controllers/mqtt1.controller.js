@@ -1,25 +1,19 @@
 import logger from '../logger.js';
 
 const uplinkMQTT1 = (mqttClient) => async (req) => {
-  /* ****************************** *
-   * URL Pattern:                   *
-   *   '/mqtt/:userId/LE_AS/:asId'  *
-   * TOPIC Pattern:                 *
-   *   `${userId}/LE_AS/${asId}`    *
-   * ****************************** */
+  /* ********************************************************** *
+   * URL Pattern:                                               *
+   *   '/mqtt/:operatorId/:subscriberId/LE_AS/:asId'            *
+   * TOPIC Pattern:                                             *
+   *   `${operatorId}|${subscriberId}/LE_AS/${asId}/${devEUI}`  *
+   * ********************************************************** */
 
-  const { userId, asId } = req.params;
+  const { operatorId, subscriberId, asId } = req.params;
   const devEUI = req.body.deviceEUI;
-  const topic = `${userId}/LE_AS/${asId}/${devEUI}`;
-  // const topic = `${userId}/AS_LE/${asId}`;
+  const topic = `${operatorId}|${subscriberId}/LE_AS/${asId}/${devEUI}`;
 
   logger.info(`LE_AS: ${devEUI} : Message received and need to be forwarded to topic: ${topic}`);
-  // logger.info(`LE_AS: ${devEUI} : ${req.middleware?.userId}`);
 
-  // if (userId !== req.middleware?.userId) {
-  //   logger.warn(`LE_AS: The user does not have right to publish to topic: "${topic}"`);
-  //   return;
-  // }
   if (!devEUI) {
     logger.warn(`LE_AS: Missing "deviceEUI" field from request body.`);
     return;

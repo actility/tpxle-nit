@@ -3,9 +3,13 @@ import mqtt from 'mqtt';
 import '../config.js';
 import './test_config.js';
 
+// const topics = [
+//   'dev-ope|100001180|le-lab|dc76a497-f97b-418e-a621-5ea2ecd0b74e/#',
+//   'dev-ope|100001180/#',
+// ];
 const topics = [
-  'dev-ope|100001180|le-lab|dc76a497-f97b-418e-a621-5ea2ecd0b74e/#',
-  'dev-ope|100001180/#',
+  'dev-ope|100023878/#',
+  // 'dev-ope|100023878/LE_AS/abeemap',
 ];
 
 const line = '-------------------------------------------------------------------------------';
