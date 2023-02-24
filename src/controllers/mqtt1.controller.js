@@ -14,6 +14,7 @@ const uplinkMQTT1 = (mqttClient) => async (req) => {
   const topic = `${userId}/AS_LE/${asId}`;
 
   logger.info(`LE_AS: ${devEUI} : Message received and need to be forwarded to topic: ${topic}`);
+  logger.info(`LE_AS: ${devEUI} : ${req.middleware?.userId}`);
 
   if (userId !== req.middleware?.userId) {
     logger.warn(`LE_AS: The user does not have right to publish to topic: "${topic}"`);
