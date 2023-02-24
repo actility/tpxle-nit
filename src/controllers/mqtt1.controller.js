@@ -11,7 +11,7 @@ const uplinkMQTT1 = (mqttClient) => async (req) => {
   const { userId, asId } = req.params;
   const devEUI = req.body.deviceEUI;
   // const topic = `${userId}/LE_AS/${asId}/${devEUI}`;
-  const topic = `${userId}/LE_AS/${asId}`;
+  const topic = `${userId}/AS_LE/${asId}`;
 
   logger.info(`LE_AS: ${devEUI} : Message received and need to be forwarded to topic: ${topic}`);
 
