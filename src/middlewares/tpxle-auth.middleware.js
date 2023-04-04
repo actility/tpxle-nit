@@ -180,17 +180,19 @@ export const tpxleAuthMiddlewareAsync = async (req) => {
   let clientSecret;
   let architectureId;
 
-  if (accessToken || (clientId && clientSecret)) {
-    accessToken = req.headers['x-access-token'];
-    clientId = req.headers['x-client-id'];
-    clientSecret = req.headers['x-client-secret'];
-    architectureId =
-      req.headers['x-architecture-id'] || req.headers['x-realm'] || process.env.NIT__DEFAULT_REALM;
-    // 'x-realm' is here for historical reasons
-  } else if (req.headers.authorization) {
-    [clientId, clientSecret, architectureId] = req.headers.authorization.split('|');
-    if (clientId === '') {
-      accessToken = clientSecret;
+  accessToken = req.headers['x-access-token'];
+  clientId = req.headers['x-client-id'];
+  clientSecret = req.headers['x-client-secret'];
+  architectureId =
+    req.headers['x-architecture-id'] || req.headers['x-realm'] || process.env.NIT__DEFAULT_REALM;
+  // 'x-realm' is here for historical reasons
+
+  if (!(accessToken || (clientId && clientSecret))) {
+    if (req.headers.authorization) {
+      [clientId, clientSecret, architectureId] = req.headers.authorization.split('|');
+      if (clientId === '') {
+        accessToken = clientSecret;
+      }
     }
   }
 
