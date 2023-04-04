@@ -194,6 +194,10 @@ export const tpxleAuthMiddlewareAsync = async (req) => {
     // 'x-realm' is here for historical reasons
   }
 
+  logger.debug(`*****************************************`);
+  logger.debug(`accessToken:${accessToken}, clientId:${clientId}, clientSecret:${clientSecret}`);
+  logger.debug(`*****************************************`);
+
   const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
   logger.debug(`UL: Message received from NS: "${ip}"`);
