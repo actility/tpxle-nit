@@ -202,7 +202,7 @@ export const tpxleAuthMiddlewareAsync = async (req) => {
     throw Error(
       `UL: tpxleAuthMiddlewareAsync(): IP: ${ip}, "authorization" or ("x-access-token" or (x-client-id and x-client-secret)) headers are mandatory! ${JSON.stringify(
         req.headers,
-      )}`,
+      )}    accessToken:${accessToken}, clientId:${clientId}, clientSecret:${clientSecret}`,
       // `${JSON.stringify(req.headers,)}`,
     );
   }
