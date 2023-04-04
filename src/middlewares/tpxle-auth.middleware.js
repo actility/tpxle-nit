@@ -175,15 +175,10 @@ export const createUserIdFromAccessToken = async (accessToken, architectureId) =
 };
 
 export const tpxleAuthMiddlewareAsync = async (req) => {
-  let accessToken;
-  let clientId;
-  let clientSecret;
-  let architectureId;
-
-  accessToken = req.headers['x-access-token'];
-  clientId = req.headers['x-client-id'];
-  clientSecret = req.headers['x-client-secret'];
-  architectureId =
+  let accessToken = req.headers['x-access-token'];
+  let clientId = req.headers['x-client-id'];
+  let clientSecret = req.headers['x-client-secret'];
+  let architectureId =
     req.headers['x-architecture-id'] || req.headers['x-realm'] || process.env.NIT__DEFAULT_REALM;
   // 'x-realm' is here for historical reasons
 
@@ -196,29 +191,7 @@ export const tpxleAuthMiddlewareAsync = async (req) => {
     }
   }
 
-  // if (req.headers.authorization) {
-  //   [clientId, clientSecret, architectureId] = req.headers.authorization.split('|');
-  //   if (clientId === '') {
-  //     accessToken = clientSecret;
-  //   }
-  // } else {
-  //   accessToken = req.headers['x-access-token'];
-  //   clientId = req.headers['x-client-id'];
-  //   clientSecret = req.headers['x-client-secret'];
-  //   architectureId =
-  //     req.headers['x-architecture-id'] || req.headers['x-realm'] || process.env.NIT__DEFAULT_REALM;
-  //   // 'x-realm' is here for historical reasons
-  // }
-
-  logger.debug(`*****************************************`);
-  logger.debug(`accessToken:${accessToken}, clientId:${clientId}, clientSecret:${clientSecret}`);
-  logger.debug(
-    `x-access-token :${req.headers['x-access-token']}, x-client-id: ${req.headers['x-client-id']}, x-client-secret: ${req.headers['x-client-secret']}`,
-  );
-  logger.debug(`*****************************************`);
-
   const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-
   logger.debug(`UL: Message received from NS: "${ip}"`);
 
   if (!(accessToken || (clientId && clientSecret))) {
