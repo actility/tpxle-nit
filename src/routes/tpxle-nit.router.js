@@ -7,6 +7,11 @@ import {
 
 import { uplinkFromHeliumAsync, downlinkToHeliumAsync } from '../controllers/helium.controller.js';
 
+import {
+  uplinkFromKerlinkAsync,
+  downlinkToKerlinkAsync,
+} from '../controllers/kerlink.controller.js';
+
 import { uplinkFromTTNAsync, downlinkToTTNAsync } from '../controllers/ttn.controller.js';
 
 import { uplinkFromLoriotAsync, downlinkToLoriotAsync } from '../controllers/loriot.controller.js';
@@ -43,6 +48,9 @@ const tpxleNITRouterFactory = (mqttClient) => {
 
   router.post('/uplink_from_helium', uplinkControllerFactory(uplinkFromHeliumAsync));
   router.post('/downlink_to_helium', downlinkControllerFactory(downlinkToHeliumAsync));
+
+  router.post('/uplink_from_kerlink', uplinkControllerFactory(uplinkFromKerlinkAsync));
+  router.post('/downlink_to_kerlink', downlinkControllerFactory(downlinkToKerlinkAsync));
 
   router.post('/uplink_from_ttn', uplinkControllerFactory(uplinkFromTTNAsync));
   router.post('/downlink_to_ttn', downlinkControllerFactory(downlinkToTTNAsync));

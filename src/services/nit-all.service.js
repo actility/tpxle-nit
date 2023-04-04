@@ -19,6 +19,11 @@ import {
 } from './nit-helium.service.js';
 
 import {
+  translateUplink as translateUplinkKerlink,
+  translateDownlink as translateDownlinkKerlink,
+} from './nit-kerlink.service.js';
+
+import {
   translateUplink as translateUplinkSenet,
   translateDownlink as translateDownlinkSenet,
 } from './nit-senet.service.js';
@@ -43,6 +48,7 @@ export const translateUplinkAll = {
   chirpstack: translateUplinkChirpstack,
   everynet: translateUplinkEverynet,
   helium: translateUplinkHelium,
+  kerlink: translateUplinkKerlink,
   senet: translateUplinkSenet,
   ttn: translateUplinkTTN,
   loriot: translateUplinkLoriot,
@@ -54,6 +60,7 @@ export const translateDownlinkAll = {
   chirpstack: translateDownlinkChirpstack,
   everynet: translateDownlinkEverynet,
   helium: translateDownlinkHelium,
+  kerlink: translateDownlinkKerlink,
   senet: translateDownlinkSenet,
   ttn: translateDownlinkTTN,
   loriot: translateDownlinkLoriot,

@@ -1,27 +1,25 @@
 {
-  "id": "5da03ee3a96ab200018d5f3c",
+  "id": "642beaccd03c4a000169f047",
   "endDevice": {
-    "devEui": "20635F0108001158",
-    "devAddr": "0204E05E",
+    "devEui": "20635F028100003E",
+    "devAddr": "02597230",
     "cluster": {
-      "id": 345
+      "id": 1422
     }
   },
-  "fPort": 17,
-  "fCntDown": 1,
-  "fCntUp": 9,
-  "adr": true,
+  "fPort": 18,
+  "fCntDown": 2,
+  "fCntUp": 11790,
+  "adr": false,
   "confirmed": false,
   "encrypted": false,
-  "payload": "0a50f6830000",
-  "recvTime": 1570782946959,
+  "payload": "034c649d090014ebb6adad4be600ad24ba311acfe063da03a2becd908d7863ff3cca",
+  "encodingType": "HEXA",
+  "recvTime": 1680599756526,
+  "gwRecvTime": 1680599756526,
   "classB": false,
   "delayed": false,
-  "ulFrequency": 868.5,
-  "modulation": "LORA",
-  "dataRate": "SF10BW125",
-  "codingRate": "4/5",
-  "gwCnt": 1,
+  "gwCnt": "2",
   "gwInfo": [
     {
       "gwEui": "7276FF0039030872",
@@ -29,7 +27,25 @@
       "rssi": -47,
       "snr": 7.5,
       "channel": 7,
-      "radioId": 1
+      "radioId": 1,
+      "latitude": 0,
+      "longitude": 0,
+      "altitude": 0
+    },
+    {
+      "gwEui": "7276FF0039030873",
+      "rfRegion": "EU868",
+      "rssi": -44,
+      "snr": 7.4,
+      "channel": 7,
+      "radioId": 1,
+      "latitude": 1,
+      "longitude": 2,
+      "altitude": 3
     }
-  ]
+  ],
+  "codingRate": "4/5",
+  "dataRate": "SF10BW125",
+  "modulation": "LORA",
+  "ulFrequency": "868.5"
 }
