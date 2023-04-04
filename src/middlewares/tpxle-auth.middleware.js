@@ -196,6 +196,10 @@ export const tpxleAuthMiddlewareAsync = async (req) => {
 
   logger.debug(`*****************************************`);
   logger.debug(`accessToken:${accessToken}, clientId:${clientId}, clientSecret:${clientSecret}`);
+  logger.debug(JSON.stringify(req.headers, null, 4));
+  logger.debug(
+    `x-access-token :${req.headers['x-access-token']}, x-client-id: ${req.headers['x-client-id']}, x-client-secret: ${req.headers['x-client-secret']}`,
+  );
   logger.debug(`*****************************************`);
 
   const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
