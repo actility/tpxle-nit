@@ -180,23 +180,36 @@ export const tpxleAuthMiddlewareAsync = async (req) => {
   let clientSecret;
   let architectureId;
 
-  if (req.headers.authorization) {
-    [clientId, clientSecret, architectureId] = req.headers.authorization.split('|');
-    if (clientId === '') {
-      accessToken = clientSecret;
-    }
-  } else {
+  if (accessToken || (clientId && clientSecret)) {
     accessToken = req.headers['x-access-token'];
     clientId = req.headers['x-client-id'];
     clientSecret = req.headers['x-client-secret'];
     architectureId =
       req.headers['x-architecture-id'] || req.headers['x-realm'] || process.env.NIT__DEFAULT_REALM;
     // 'x-realm' is here for historical reasons
+  } else if (req.headers.authorization) {
+    [clientId, clientSecret, architectureId] = req.headers.authorization.split('|');
+    if (clientId === '') {
+      accessToken = clientSecret;
+    }
   }
+
+  // if (req.headers.authorization) {
+  //   [clientId, clientSecret, architectureId] = req.headers.authorization.split('|');
+  //   if (clientId === '') {
+  //     accessToken = clientSecret;
+  //   }
+  // } else {
+  //   accessToken = req.headers['x-access-token'];
+  //   clientId = req.headers['x-client-id'];
+  //   clientSecret = req.headers['x-client-secret'];
+  //   architectureId =
+  //     req.headers['x-architecture-id'] || req.headers['x-realm'] || process.env.NIT__DEFAULT_REALM;
+  //   // 'x-realm' is here for historical reasons
+  // }
 
   logger.debug(`*****************************************`);
   logger.debug(`accessToken:${accessToken}, clientId:${clientId}, clientSecret:${clientSecret}`);
-  logger.debug(JSON.stringify(req.headers, null, 4));
   logger.debug(
     `x-access-token :${req.headers['x-access-token']}, x-client-id: ${req.headers['x-client-id']}, x-client-secret: ${req.headers['x-client-secret']}`,
   );
