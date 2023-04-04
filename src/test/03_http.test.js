@@ -4,18 +4,19 @@ import '../config.js';
 import './test_config.js';
 
 // import examples from './02b_helium_http_spec.js';
-import examples from './02c_ttn_http_spec.js';
+// import examples from './02c_ttn_http_spec.js';
 // import examples from './02d_chirpstack_http_spec.js';
 // import examples from './02e_everynet_http_spec.js';
 // import examples from './02f_senet_http_spec.js';
 // import examples from './02h_proximus_http_spec.js'; // /////////////////
 // import examples from './02i_loriot_http_spec.js';
 // import examples from './02j_actility_http_spec.js';
+import examples from './02k_kerlink_http_spec.js';
 
 describe('Translator tests', () => {
   // const examples = examplesHelium;
 
-  test.only('ECOKC_UL', async () => {
+  test('ECOKC_UL', async () => {
     const res = await fetch(examples.ECOKC_UL.url, examples.ECOKC_UL.options);
     console.log(`Response status: ${res.status} ${res.statusText}`);
     expect(res.status).toBe(200);
@@ -26,7 +27,9 @@ describe('Translator tests', () => {
     expect(res.status).toBe(200);
   });
 
-  test('ECODX_UL', async () => {
+  test.only('ECODX_UL', async () => {
+    console.log(examples.ECODX_UL.url);
+    console.log(examples.ECODX_UL.options);
     const res = await fetch(examples.ECODX_UL.url, examples.ECODX_UL.options);
     console.log(`Response status: ${res.status} ${res.statusText}`);
     expect(res.status).toBe(200);

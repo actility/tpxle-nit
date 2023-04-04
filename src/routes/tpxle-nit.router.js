@@ -49,9 +49,6 @@ const tpxleNITRouterFactory = (mqttClient) => {
   router.post('/uplink_from_helium', uplinkControllerFactory(uplinkFromHeliumAsync));
   router.post('/downlink_to_helium', downlinkControllerFactory(downlinkToHeliumAsync));
 
-  router.post('/uplink_from_kerlink', uplinkControllerFactory(uplinkFromKerlinkAsync));
-  router.post('/downlink_to_kerlink', downlinkControllerFactory(downlinkToKerlinkAsync));
-
   router.post('/uplink_from_ttn', uplinkControllerFactory(uplinkFromTTNAsync));
   router.post('/downlink_to_ttn', downlinkControllerFactory(downlinkToTTNAsync));
 
@@ -68,6 +65,9 @@ const tpxleNITRouterFactory = (mqttClient) => {
 
   router.post('/uplink_from_helium/:nitapikey', uplinkControllerFactory(uplinkFromHeliumAsync));
   router.post('/downlink_to_helium/:nitapikey', downlinkControllerFactory(downlinkToHeliumAsync));
+
+  router.post('/uplink_from_kerlink/:nitapikey', uplinkControllerFactory(uplinkFromKerlinkAsync));
+  router.post('/downlink_to_kerlink/:nitapikey', downlinkControllerFactory(downlinkToKerlinkAsync));
 
   router.post('/uplink_from_ttn/:nitapikey', uplinkControllerFactory(uplinkFromTTNAsync));
   router.post('/downlink_to_ttn/:nitapikey', downlinkControllerFactory(downlinkToTTNAsync));
